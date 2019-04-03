@@ -2,7 +2,7 @@
 #define HEADER_TASK_READER
 
 #include <string>
-#include <tasktable.h>
+#include "../ds/tasktable.h"
 
 namespace io
 {
@@ -11,6 +11,7 @@ class TaskReader
     std::string fpath;
     task::TaskTable table;
 
+    int is_fist_line(std::string line);
     task::TaskTable import_to_tasktable();
 
   public:

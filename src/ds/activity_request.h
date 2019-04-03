@@ -12,8 +12,12 @@ class Request : public Activity
     int request_resource_type; 
     int request_count;
   public:
-    Request(std::string type, int target_id, int delay, int request_resource_type, int request_count) 
-    : Activity(type, target_id, delay) {}
+    Request(int target_id, int delay, int request_resource_type, int request_count) 
+    : Activity("request", target_id, delay) 
+    {
+        this->request_resource_type = request_resource_type;
+        this->request_count = request_count;
+    }
 };
 
 } // namespace task

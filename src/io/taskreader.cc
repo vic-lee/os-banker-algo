@@ -22,11 +22,28 @@ int TaskReader::is_fist_line(std::string line)
     return isdigit(line[0]);
 }
 
+task::ResourceTable generate_resource_table_from_input(std::string buffer)
+{
+    task::ResourceTable resource_table;
+    int resource_type_count = buffer[1] - 48;
+
+    for (int id = 1; id < (resource_type_count + 1); id++)
+    {
+        int unit_count = buffer[1+id];
+        task::Resource new_resource(id, unit_count);
+        resource_table.add(new_resource); 
+    }
+
+    resource_table.print();
+    return resource_table;
+}
 
 task::TaskTable TaskReader::import_to_tasktable()
 {
     task::TaskTable task_table;
     task::ResourceTable resource_table;
+    int task_count;
+    int resource_type_count;
 
     std::fstream input_file(fpath);
     if (input_file.is_open())
@@ -37,19 +54,11 @@ task::TaskTable TaskReader::import_to_tasktable()
             if (is_fist_line(line))
             {
                 std::string buffer = remove_spaces(line);
-                // int first_line_len = buffer.length();
 
-                // int task_count = buffer[0];
-                int resource_type_count = buffer[1] - 48;
+                task_count = buffer[0] - 48;
+                resource_type_count = buffer[1] - 48;
 
-                for (int id = 1; id < (resource_type_count + 1); id++)
-                {
-                    int unit_count = buffer[1+id];
-                    task::Resource new_resource(id, unit_count);
-                    resource_table.add(new_resource); 
-                }
-
-                resource_table.print();
+                resource_table = generate_resource_table_from_input(buffer);
             }
             else
             {

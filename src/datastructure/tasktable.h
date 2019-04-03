@@ -1,3 +1,6 @@
+#ifndef HEADER_TASKTABLE
+#define HEADER_TASKTABLE
+
 #include <vector>
 #include <task.h>
 
@@ -8,3 +11,5 @@ class TaskTable
     std::vector<Task> table;
 };
 }
+
+#endif

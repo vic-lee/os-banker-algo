@@ -1,3 +1,6 @@
+#ifndef HEADER_TASK
+#define HEADER_TASK
+
 #include <string>
 #include <map>
 #include <vector> 
@@ -14,3 +17,5 @@ class Task
     std::vector<Activity> activities_table;
 };
 } // namespace Task
+
+#endif

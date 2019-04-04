@@ -1,6 +1,8 @@
 #ifndef HEADER_ACTIVITY
 #define HEADER_ACTIVITY
 
+#include <string>
+
 namespace task
 {
 class Activity

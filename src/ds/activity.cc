@@ -4,6 +4,11 @@
 namespace task
 {
 
+void Activity::set_to_complete()
+{
+    completed = true;
+}
+
 int Activity::get_target_id()
 {
     return target_id;

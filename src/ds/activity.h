@@ -20,6 +20,9 @@ class Activity
     std::string type;
     int target_id;
     int delay;
+    bool completed;
+
+    void set_to_complete();
 
   public:
     Activity(std::string type, int target_id, int delay)
@@ -27,6 +30,7 @@ class Activity
         this->type = type;
         this->target_id = target_id;
         this->delay = delay;
+        this->completed = false;
     }
     int get_target_id();
     void print();

@@ -14,12 +14,13 @@ class Activity
   public:
     Activity(std::string type, int target_id, int delay)
     {
-        this->target_id = target_id;
         this->type = type;
+        this->target_id = target_id;
         this->delay = delay;
     }
     
     int get_target_id();
+    void print();
 };
 } // namespace task
 

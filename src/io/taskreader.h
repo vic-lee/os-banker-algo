@@ -3,6 +3,7 @@
 
 #include <string>
 #include "../ds/tasktable.h"
+#include "../ds/resourcetable.h"
 
 namespace io
 {

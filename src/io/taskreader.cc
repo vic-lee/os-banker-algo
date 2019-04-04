@@ -7,6 +7,7 @@
 #include <algorithm> 
 
 #include "taskreader.h"
+#include "../ds/claim.h"
 #include "../ds/tasktable.h"
 #include "../ds/resourcetable.h"
 #include "../ds/activity_request.h"
@@ -15,6 +16,11 @@
 
 namespace io
 {
+
+int str_to_int(std::string s)
+{
+    return atoi(s.c_str());
+}
 
 std::string remove_spaces(std::string str)  
 { 
@@ -31,11 +37,6 @@ std::vector<std::string> parse_line(std::string line)
     while (stream >> word)
     {
         parsed_line.push_back(word);
-    }
-
-    for (int i = 0; i < parsed_line.size(); i++)
-    {
-        std::cout << parsed_line[i] << std::endl;
     }
 
     return parsed_line;
@@ -89,7 +90,12 @@ task::TaskTable TaskReader::import_to_tasktable()
                 if (line.find("initiate") != std::string::npos)
                 {
                     std::vector<std::string> parsed_line = parse_line(line);
-                    // task::Task new_task()
+                    int task_id = str_to_int(parsed_line[1]);
+                    int claimed_resource_type = str_to_int(parsed_line[3]);
+                    int claimed_resource_count = str_to_int(parsed_line[4]);
+                    task::Claim claim(claimed_resource_type, claimed_resource_count);
+                    task::Task new_task(task_id, claim);
+                    task_table.add(new_task);
                 }
                 else if (line.find("request") != std::string::npos)
                 {

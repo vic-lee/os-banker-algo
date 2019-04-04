@@ -110,6 +110,7 @@ task::TaskTable TaskReader::import_to_tasktable()
     {
         std::cout << "Cannot open file." << std::endl;
     }
+    task_table.print();
     return task_table;
 }
 

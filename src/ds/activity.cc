@@ -12,8 +12,8 @@ int Activity::get_target_id()
 void Activity::print()
 {
     std::cout << type << ":\t"
-              << "Target ID: " << target_id
-              << "Delay: " << delay << std::endl;
+              << " Target ID: " << target_id
+              << " Delay: " << delay << std::endl;
 }
 
 } // namespace task

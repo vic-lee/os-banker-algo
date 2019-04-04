@@ -58,7 +58,7 @@ task::ResourceTable generate_resource_table_from_input(std::string buffer)
     return resource_table;
 }
 
-void TaskReader::read_in_new_activities(task::TaskTable& task_table, std::vector<std::string> parsed_line)
+void TaskReader::read_in_new_activities(task::TaskTable &task_table, std::vector<std::string> parsed_line)
 {
     if (parsed_line[0] == "initiate")
         task_table.create_task_from_input(parsed_line);
@@ -71,38 +71,34 @@ void TaskReader::read_in_new_activities(task::TaskTable& task_table, std::vector
 
     else if (parsed_line[0] == "terminate")
         task_table.add_termination_to_task(parsed_line);
+}
 
+task::ResourceTable TaskReader::read_in_resource_table(std::string line)
+{
+    std::string buffer = remove_spaces(line);
+    task::ResourceTable resource_table = generate_resource_table_from_input(buffer);
+    return resource_table;
 }
 
 task::TaskTable TaskReader::import_to_tasktable()
 {
     task::TaskTable task_table;
     task::ResourceTable resource_table;
-    int task_count;
-    int resource_type_count;
 
     std::fstream input_file(fpath);
     if (input_file.is_open())
     {
         std::string line;
+
         while (std::getline(input_file, line))
         {
             std::vector<std::string> parsed_line = parse_line(line);
             if (is_fist_line(line))
-            {
-                std::string buffer = remove_spaces(line);
-
-                task_count = buffer[0] - 48;
-                resource_type_count = buffer[1] - 48;
-
-                resource_table = generate_resource_table_from_input(buffer);
-            }
+                resource_table = read_in_resource_table(line);
             else
-            {
                 read_in_new_activities(task_table, parsed_line);
-            }
         }
-
+        
         input_file.close();
     }
     else

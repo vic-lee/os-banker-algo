@@ -2,11 +2,16 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <regex>
+#include <vector>
 #include <algorithm> 
 
 #include "taskreader.h"
 #include "../ds/tasktable.h"
 #include "../ds/resourcetable.h"
+#include "../ds/activity_request.h"
+#include "../ds/activity_release.h"
+#include "../ds/activity_terminate.h"
 
 namespace io
 {
@@ -16,6 +21,25 @@ std::string remove_spaces(std::string str)
     str.erase(remove(str.begin(), str.end(), ' '), str.end()); 
     return str; 
 } 
+
+std::vector<std::string> parse_line(std::string line)
+{
+    std::vector<std::string> parsed_line;
+    std::stringstream stream(line);
+    std::string word;
+
+    while (stream >> word)
+    {
+        parsed_line.push_back(word);
+    }
+
+    for (int i = 0; i < parsed_line.size(); i++)
+    {
+        std::cout << parsed_line[i] << std::endl;
+    }
+
+    return parsed_line;
+}
 
 int TaskReader::is_fist_line(std::string line)
 {
@@ -62,7 +86,23 @@ task::TaskTable TaskReader::import_to_tasktable()
             }
             else
             {
+                if (line.find("initiate") != std::string::npos)
+                {
+                    std::vector<std::string> parsed_line = parse_line(line);
+                    // task::Task new_task()
+                }
+                else if (line.find("request") != std::string::npos)
+                {
 
+                }
+                else if (line.find("release") != std::string::npos)
+                {
+
+                }
+                else if (line.find("terminate") != std::string::npos)
+                {
+
+                }
             }
         }
 

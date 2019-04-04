@@ -18,6 +18,7 @@ class Release : public Activity
         this->release_resource_type = release_resource_type;
         this->release_count = release_count;
     }
+    void print();
 };
 
 } // namespace task

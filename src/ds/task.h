@@ -17,7 +17,7 @@ typedef int resource_id, claim_count;
 class Task
 {
     int id;
-    std::map<int, int> claims_table;
+    std::map<int, Claim> claims_table;
     std::vector<Activity> activities_table;
 
   public:
@@ -25,11 +25,12 @@ class Task
     {
         this->id = id;
         claims_table.insert(
-            std::pair<int, int>(claim.claimed_resource_id, claim.claim_count));
+            std::pair<int, Claim>(claim.claimed_resource_id, claim));
     }
     void add_new_activity(Activity activity);
     int get_id();
     std::string to_string();
+    void print();
 };
 } // namespace task
 

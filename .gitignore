@@ -1,7 +1,14 @@
 .DS_Store
 *.out
+<<<<<<< HEAD
 .vscode/
 *.o
 bin/
 *.zip
 exec
+=======
+/.vscode
+*.o
+bin/
+*.zip
+>>>>>>> ebcabfdbe8482c3811bc510b8e7bd789857a93ab

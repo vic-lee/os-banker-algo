@@ -63,13 +63,12 @@ void TaskTable::add_termination_to_task(std::vector<std::string> parsed_line)
 
 void TaskTable::print()
 {
-    // for (auto const &x : task_table)
-    // {
-    //     std::cout << x.first // string (key)
-    //               << ':'
-    //               << x.second.to_string() // string's value
-    //               << std::endl;
-    // }
+    std::map<int, Task>::iterator it;
+
+    for (it = task_table.begin(); it != task_table.end(); it++)
+    {
+        it->second.print();
+    }
 }
 
 void TaskTable::add_new_activity_to_task(Activity activity)

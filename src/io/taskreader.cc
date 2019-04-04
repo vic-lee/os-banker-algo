@@ -17,10 +17,6 @@
 namespace io
 {
 
-int str_to_int(std::string s)
-{
-    return atoi(s.c_str());
-}
 
 std::string remove_spaces(std::string str)  
 { 
@@ -87,27 +83,23 @@ task::TaskTable TaskReader::import_to_tasktable()
             }
             else
             {
+                std::vector<std::string> parsed_line = parse_line(line);
+
                 if (line.find("initiate") != std::string::npos)
                 {
-                    std::vector<std::string> parsed_line = parse_line(line);
-                    int task_id = str_to_int(parsed_line[1]);
-                    int claimed_resource_type = str_to_int(parsed_line[3]);
-                    int claimed_resource_count = str_to_int(parsed_line[4]);
-                    task::Claim claim(claimed_resource_type, claimed_resource_count);
-                    task::Task new_task(task_id, claim);
-                    task_table.add(new_task);
+                    task_table.create_task_from_input(parsed_line);
                 }
                 else if (line.find("request") != std::string::npos)
                 {
-
+                    task_table.add_new_request_to_task(parsed_line);
                 }
                 else if (line.find("release") != std::string::npos)
                 {
-
+                    task_table.add_new_release_to_task(parsed_line);
                 }
                 else if (line.find("terminate") != std::string::npos)
                 {
-
+                    task_table.add_termination_to_task(parsed_line);
                 }
             }
         }

@@ -10,7 +10,8 @@ namespace io
 class TaskReader
 {
     std::string fpath;
-    task::TaskTable table;
+    task::TaskTable task_table;
+    task::ResourceTable resource_table;
 
     std::string remove_spaces(std::string str);
     std::vector<std::string> parse_line(std::string line);
@@ -20,13 +21,13 @@ class TaskReader
     task::TaskTable import_to_tasktable();
 
   public:
-    task::TaskTable to_tasktable();
-
     TaskReader(std::string fp)
     {
         fpath = fp;
-        table = import_to_tasktable();
+        task_table = import_to_tasktable();
     }
+    task::TaskTable to_tasktable();
+    task::ResourceTable to_resourcetable();
 };
 } // namespace io
 

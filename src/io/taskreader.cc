@@ -111,7 +111,12 @@ task::TaskTable TaskReader::import_to_tasktable()
 
 task::TaskTable TaskReader::to_tasktable()
 {
-    return table;
+    return task_table;
+}
+
+task::ResourceTable TaskReader::to_resourcetable()
+{
+    return resource_table;
 }
 
 } // namespace io

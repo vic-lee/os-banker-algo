@@ -33,6 +33,7 @@ class Task
             std::pair<int, Claim>(claim.claimed_resource_id, claim));
     }
     void add_new_activity(Activity activity);
+    void do_latest_activity();
     int get_id();
     std::string to_string();
     bool is_terminated();

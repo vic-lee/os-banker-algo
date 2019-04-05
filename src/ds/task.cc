@@ -21,6 +21,16 @@ void Task::add_new_activity(Activity activity)
     activities_table.push_back(activity);
 }
 
+void Task::do_latest_activity()
+{
+    set_latest_activity();
+    
+    if (latest_activity == -1)
+        return;
+    
+    activities_table[latest_activity].do_activity();
+}
+
 int Task::get_id()
 {
     return id;

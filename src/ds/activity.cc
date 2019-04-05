@@ -16,6 +16,11 @@ int Activity::get_target_id()
 
 void Activity::do_activity() {}
 
+bool Activity::is_active()
+{
+    return !completed;
+}
+
 void Activity::print()
 {
     std::cout << type << ":\t"

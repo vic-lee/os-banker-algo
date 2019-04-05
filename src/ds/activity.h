@@ -35,6 +35,7 @@ class Activity
     virtual ~Activity() {}
     int get_target_id();
     virtual void do_activity();
+    bool is_active();
     void print();
 };
 } // namespace task

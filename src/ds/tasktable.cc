@@ -74,6 +74,11 @@ bool TaskTable::is_all_task_terminated()
     return true;
 }
 
+int TaskTable::size()
+{
+    return task_table.size();
+}
+
 void TaskTable::print()
 {
     std::map<int, Task>::iterator it;

@@ -20,7 +20,8 @@ class TaskTable
     void add_termination_to_task(std::vector<std::string> parsed_line);
 
     bool is_all_task_terminated();
-    
+    int size();
+
     void print();
 };
 } // namespace task

@@ -17,6 +17,21 @@ bool Resource::can_satisfy_request(Request request)
     return (remaining_unit_count > num_of_units_needed);
 }
 
+void Resource::handle_new_request(Request request)
+{
+    if (!can_satisfy_request(request))
+    {
+        std::cout
+            << "Cannot satisfy this request with resource currently available."
+            << std::endl;
+    }
+    else
+    {
+        int num_of_units_needed = request.get_request_count();
+        remaining_unit_count -= num_of_units_needed;
+    }
+}
+
 void Resource::print()
 {
     std::cout << "Resource ID:\t" << id

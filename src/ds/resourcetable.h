@@ -17,6 +17,7 @@ class ResourceTable
 
   public:
     bool can_satisfy_request(Request request);
+    void handle_new_request(Request request);
     void add(Resource resource);
     void print();
 };

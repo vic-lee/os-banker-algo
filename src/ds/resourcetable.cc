@@ -14,6 +14,11 @@ bool ResourceTable::can_satisfy_request(Request request)
     return resource_table[resource_type].can_satisfy_request(request);
 }
 
+void ResourceTable::handle_new_request(Request request)
+{
+    int resource_type = request.get_resource_type();
+    resource_table[resource_type].handle_new_request(request);
+}
 
 void ResourceTable::add(Resource resource)
 {

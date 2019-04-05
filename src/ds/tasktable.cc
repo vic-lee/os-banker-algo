@@ -61,6 +61,19 @@ void TaskTable::add_termination_to_task(std::vector<std::string> parsed_line)
     this->add_new_activity_to_task(new_termination);
 }
 
+bool TaskTable::is_all_task_terminated()
+{
+    std::map<int, Task>::iterator it;
+
+    for (it = task_table.begin(); it != task_table.end(); it++)
+    {
+        if (!it->second.is_terminated())
+            return false;
+    }
+
+    return true;
+}
+
 void TaskTable::print()
 {
     std::map<int, Task>::iterator it;

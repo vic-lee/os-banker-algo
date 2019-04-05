@@ -19,6 +19,8 @@ class TaskTable
     void add_new_release_to_task(std::vector<std::string> parsed_line);
     void add_termination_to_task(std::vector<std::string> parsed_line);
 
+    bool is_all_task_terminated();
+    
     void print();
 };
 } // namespace task

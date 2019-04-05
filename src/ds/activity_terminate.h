@@ -12,7 +12,7 @@ class Termination : public Activity
   public:
     Termination(int target_id, int delay) 
     : Activity("terminate", target_id, delay) {}
-    void do_activity();
+    void do_optimistic();
 };
 
 } // namespace task

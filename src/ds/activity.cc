@@ -14,7 +14,7 @@ int Activity::get_target_id()
     return target_id;
 }
 
-void Activity::do_activity() {}
+void Activity::do_optimistic() {}
 
 bool Activity::is_active()
 {

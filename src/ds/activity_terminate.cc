@@ -3,6 +3,6 @@
 namespace task
 {
 
-void Termination::do_activity() {}
+void Termination::do_optimistic() {}
 
 } // namespace task

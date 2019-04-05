@@ -34,7 +34,7 @@ class Activity
     }
     virtual ~Activity() {}
     int get_target_id();
-    virtual void do_activity();
+    virtual void do_optimistic();
     bool is_active();
     void print();
 };

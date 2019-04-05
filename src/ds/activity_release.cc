@@ -4,7 +4,7 @@
 namespace task
 {
 
-void Release::do_activity() {}
+void Release::do_optimistic() {}
 
 void Release::print()
 {

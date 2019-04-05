@@ -28,7 +28,7 @@ void Task::do_latest_activity()
     if (latest_activity == -1)
         return;
     
-    activities_table[latest_activity].do_activity();
+    activities_table[latest_activity].do_optimistic();
 }
 
 int Task::get_id()

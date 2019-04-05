@@ -3,6 +3,9 @@
 namespace task
 {
 
-void Request::do_activity() {}
+void Request::do_optimistic() 
+{
+    
+}
 
 }

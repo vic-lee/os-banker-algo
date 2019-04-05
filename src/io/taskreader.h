@@ -2,6 +2,7 @@
 #define HEADER_TASK_READER
 
 #include <string>
+#include <tuple>
 #include "../ds/tasktable.h"
 #include "../ds/resourcetable.h"
 
@@ -18,13 +19,13 @@ class TaskReader
     int is_fist_line(std::string line);
     void read_in_new_activities(task::TaskTable& task_table, std::vector<std::string> parsed_line);
     task::ResourceTable read_in_resource_table(std::string line);
-    task::TaskTable import_to_tasktable();
+    std::tuple<task::TaskTable, task::ResourceTable> import();
 
   public:
     TaskReader(std::string fp)
     {
         fpath = fp;
-        task_table = import_to_tasktable();
+        std::tie(task_table, resource_table) = import();
     }
     task::TaskTable to_tasktable();
     task::ResourceTable to_resourcetable();

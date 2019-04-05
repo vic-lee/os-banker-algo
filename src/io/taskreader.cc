@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <regex>
+#include <tuple>
 #include <vector>
 #include <algorithm>
 
@@ -80,7 +81,7 @@ task::ResourceTable TaskReader::read_in_resource_table(std::string line)
     return resource_table;
 }
 
-task::TaskTable TaskReader::import_to_tasktable()
+std::tuple<task::TaskTable, task::ResourceTable> TaskReader::import()
 {
     task::TaskTable task_table;
     task::ResourceTable resource_table;
@@ -106,7 +107,7 @@ task::TaskTable TaskReader::import_to_tasktable()
         std::cout << "Cannot open file." << std::endl;
     }
     task_table.print();
-    return task_table;
+    return std::make_tuple(task_table, resource_table);
 }
 
 task::TaskTable TaskReader::to_tasktable()

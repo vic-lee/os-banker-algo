@@ -13,9 +13,26 @@ int Request::get_request_count()
     return request_count;
 }
 
-void Request::do_optimistic() 
+void Request::execute()
 {
-    
+    if (completed)
+    {
+        return;
+    }
+    else if (executed && time_remaining == 0)
+    {
+        completed = true;
+        return;
+    }
+    else if (executed && time_remaining > 0)
+    {
+        time_remaining--;
+        return;
+    }
+    else
+    {
+        executed = true;
+    }
 }
 
-}
+} // namespace task

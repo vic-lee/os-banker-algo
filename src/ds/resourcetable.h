@@ -12,11 +12,11 @@ namespace task
 class ResourceTable
 {
     std::vector<Resource> resource_table;
-    
+
     int get_resource_count(int resource_id);
 
   public:
-    bool can_request_be_satisfied(Request request);
+    bool can_satisfy_request(Request request);
     void add(Resource resource);
     void print();
 };

@@ -4,6 +4,7 @@
 
 #include "io/taskreader.h"
 #include "ds/tasktable.h"
+#include "manager/optimisticmanager.h"
 
 namespace banker
 {
@@ -31,6 +32,10 @@ int main(int argc, char **argv)
     std::string input_fpath = banker::read_cmd_arg(argc, argv);
     io::TaskReader task_reader(input_fpath);
     task::TaskTable task_table = task_reader.to_tasktable();
+
+    manager::OptimisticManager optimistic_manager(task_table);
+    optimistic_manager.do_tasks();
+    optimistic_manager.print();
 
     return 0;
 }

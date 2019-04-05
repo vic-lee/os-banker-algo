@@ -63,7 +63,7 @@ void TaskTable::add_termination_to_task(std::vector<std::string> parsed_line)
 
 task::Task& TaskTable::access_task_by_id(int id)
 {
-    task::Task& t = task_table[id];
+    task::Task& t = task_table.at(id);
     return t;
 }
 

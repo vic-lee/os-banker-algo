@@ -18,6 +18,8 @@ class Request : public Activity
         this->request_resource_type = request_resource_type;
         this->request_count = request_count;
     }
+    int get_resource_type();
+    int get_request_count();
     void do_optimistic();
 };
 

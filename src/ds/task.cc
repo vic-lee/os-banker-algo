@@ -5,6 +5,17 @@
 namespace task
 {
 
+
+int Task::set_latest_activity()
+{
+    for (int i = 0; i < activities_table.size(); i++)
+    {
+        if (activities_table[i].is_active())
+            return i;
+    }
+    return -1;
+}
+
 void Task::add_new_activity(Activity activity)
 {
     activities_table.push_back(activity);

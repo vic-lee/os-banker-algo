@@ -19,7 +19,7 @@ class TaskTable
     void add_new_release_to_task(std::vector<std::string> parsed_line);
     void add_termination_to_task(std::vector<std::string> parsed_line);
 
-    task::Task& access_task_by_id(int id);
+    task::Task* access_task_by_id(int id);
     bool is_all_task_terminated();
     int size();
 

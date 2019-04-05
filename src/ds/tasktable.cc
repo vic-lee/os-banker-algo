@@ -61,9 +61,9 @@ void TaskTable::add_termination_to_task(std::vector<std::string> parsed_line)
     this->add_new_activity_to_task(new_termination);
 }
 
-task::Task& TaskTable::access_task_by_id(int id)
+task::Task* TaskTable::access_task_by_id(int id)
 {
-    task::Task& t = task_table.at(id);
+    task::Task* t = &task_table.at(id);
     return t;
 }
 

@@ -4,6 +4,8 @@
 namespace task
 {
 
+void Release::do_activity() {}
+
 void Release::print()
 {
     std::cout << type << ":\t"

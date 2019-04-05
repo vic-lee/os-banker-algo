@@ -19,6 +19,7 @@ class Release : public Activity
         this->release_count = release_count;
     }
     void print();
+    void do_activity();
 };
 
 } // namespace task

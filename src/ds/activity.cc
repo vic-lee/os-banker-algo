@@ -14,6 +14,8 @@ int Activity::get_target_id()
     return target_id;
 }
 
+void Activity::do_activity() {}
+
 void Activity::print()
 {
     std::cout << type << ":\t"

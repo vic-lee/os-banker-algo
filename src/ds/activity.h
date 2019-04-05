@@ -32,7 +32,9 @@ class Activity
         this->delay = delay;
         this->completed = false;
     }
+    virtual ~Activity() {}
     int get_target_id();
+    virtual void do_activity();
     void print();
 };
 } // namespace task

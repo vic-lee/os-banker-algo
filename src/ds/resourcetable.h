@@ -16,8 +16,8 @@ class ResourceTable
     int get_resource_count(int resource_id);
 
   public:
-    bool can_satisfy_request(Request request);
-    void handle_new_request(Request request);
+    bool can_satisfy_request(Request *request);
+    void handle_new_request(Request *request);
     void add(Resource resource);
     void print();
 };

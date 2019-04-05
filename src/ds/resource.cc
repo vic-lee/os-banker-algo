@@ -10,14 +10,14 @@ int Resource::get_unit_count()
     return total_unit_count;
 }
 
-bool Resource::can_satisfy_request(Request request)
+bool Resource::can_satisfy_request(Request *request)
 {
-    int resource_type = request.get_resource_type();
-    int num_of_units_needed = request.get_request_count();
+    int resource_type = request->get_resource_type();
+    int num_of_units_needed = request->get_request_count();
     return (remaining_unit_count > num_of_units_needed);
 }
 
-void Resource::handle_new_request(Request request)
+void Resource::handle_new_request(Request *request)
 {
     if (!can_satisfy_request(request))
     {
@@ -27,7 +27,7 @@ void Resource::handle_new_request(Request request)
     }
     else
     {
-        int num_of_units_needed = request.get_request_count();
+        int num_of_units_needed = request->get_request_count();
         remaining_unit_count -= num_of_units_needed;
     }
 }

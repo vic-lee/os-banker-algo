@@ -14,8 +14,8 @@ class Resource
 
   public:
     int get_unit_count();
-    bool can_satisfy_request(Request request);
-    void handle_new_request(Request request);
+    bool can_satisfy_request(Request *request);
+    void handle_new_request(Request *request);
     void print();
     Resource(int id, int unit_count)
     {

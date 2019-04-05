@@ -32,8 +32,9 @@ int main(int argc, char **argv)
     std::string input_fpath = banker::read_cmd_arg(argc, argv);
     io::TaskReader task_reader(input_fpath);
     task::TaskTable task_table = task_reader.to_tasktable();
+    task::ResourceTable resource_table = task_reader.to_resourcetable();
 
-    manager::OptimisticManager optimistic_manager(task_table);
+    manager::OptimisticManager optimistic_manager(task_table, resource_table);
     optimistic_manager.do_tasks();
     optimistic_manager.print();
 

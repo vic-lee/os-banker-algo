@@ -15,6 +15,11 @@ int Task::get_id()
     return id;
 }
 
+bool Task::is_terminated()
+{
+    return terminated;
+}
+
 void Task::print()
 {
     std::cout << std::endl;

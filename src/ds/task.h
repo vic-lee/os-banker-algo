@@ -19,17 +19,20 @@ class Task
     int id;
     std::map<int, Claim> claims_table;
     std::vector<Activity> activities_table;
+    bool terminated;
 
   public:
     Task(int id, Claim claim)
     {
         this->id = id;
+        terminated = false;
         claims_table.insert(
             std::pair<int, Claim>(claim.claimed_resource_id, claim));
     }
     void add_new_activity(Activity activity);
     int get_id();
     std::string to_string();
+    bool is_terminated();
     void print();
 };
 } // namespace task

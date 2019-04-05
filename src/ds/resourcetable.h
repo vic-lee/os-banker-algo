@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "resource.h"
+#include "activity_request.h"
 
 namespace task
 {
@@ -11,9 +12,11 @@ namespace task
 class ResourceTable
 {
     std::vector<Resource> resource_table;
+    
+    int get_resource_count(int resource_id);
 
   public:
-    int get_resource_count(int resource_id);
+    bool can_request_be_satisfied(Request request);
     void add(Resource resource);
     void print();
 };

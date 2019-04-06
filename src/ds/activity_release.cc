@@ -4,7 +4,15 @@
 namespace task
 {
 
-void Release::do_optimistic() {}
+void Release::execute() 
+{
+    Activity::execute();
+}
+
+int Release::get_resource_type()
+{
+    return release_resource_type;
+}
 
 void Release::print()
 {

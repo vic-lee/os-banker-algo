@@ -15,7 +15,6 @@ Request::Request(int target_id, int delay, int request_resource_type, int reques
 
 int Request::get_resource_type()
 {
-    std::cout << request_resource_type_ << std::endl;
     return request_resource_type_;
 }
 

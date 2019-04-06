@@ -56,8 +56,8 @@ task::ResourceTable TaskReader::read_in_resources(std::vector<std::string> parse
     for (int id = 1; id < (resource_type_count + 1); id++)
     {
         int unit_count = str_to_int(parsed_line[1 + id]);
-        task::Resource new_resource(id, unit_count);
-        resource_table.add(new_resource);
+        task::Resource* resource = new task::Resource(id, unit_count);
+        resource_table.add(resource);
     }
 
     resource_table.print();

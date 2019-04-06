@@ -17,9 +17,11 @@ class Activity
      */
 
   protected:
-    std::string type;
+    std::string type_;
     int target_id;
     int delay;
+    int time_remaining;
+    bool executed;
     bool completed;
 
     void set_to_complete();
@@ -27,16 +29,18 @@ class Activity
   public:
     Activity(std::string type, int target_id, int delay)
     {
-        this->type = type;
+        this->type_ = type;
         this->target_id = target_id;
         this->delay = delay;
+        this->time_remaining = delay;
         this->completed = false;
     }
     virtual ~Activity() {}
     int get_target_id();
-    virtual void do_optimistic();
+    virtual void execute();
     bool is_active();
     void print();
+    std::string type();
 };
 } // namespace task
 

@@ -14,11 +14,36 @@ int Activity::get_target_id()
     return target_id;
 }
 
-void Activity::do() {}
+void Activity::execute()
+{
+    if (completed)
+    {
+        return;
+    }
+    else if (executed && time_remaining == 0)
+    {
+        completed = true;
+        return;
+    }
+    else if (executed && time_remaining > 0)
+    {
+        time_remaining--;
+        return;
+    }
+    else
+    {
+        executed = true;
+    }
+}
 
 bool Activity::is_active()
 {
     return !completed;
+}
+
+std::string Activity::type()
+{
+    return type_;
 }
 
 void Activity::print()

@@ -13,8 +13,17 @@ Task::Task(int id, Claim claim)
     terminated_ = false;
     initiation_cycle_ = 0;
     cycles_waiting_ = 0;
+
     claims_table_.insert(
         std::pair<int, Claim>(claim.claimed_resource_id, claim));
+}
+
+Task::Task(int id)
+{
+    this->id_ = id;
+    terminated_ = false;
+    initiation_cycle_ = 0;
+    cycles_waiting_ = 0;
 }
 
 void Task::set_latest_activity()

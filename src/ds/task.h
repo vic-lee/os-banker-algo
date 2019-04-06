@@ -18,6 +18,7 @@ typedef int resource_id, claim_count;
 class Task
 {
   public:
+    Task(int id);
     Task(int id, Claim claim);
     void add_new_activity(Activity *activity);
     void do_latest_activity(ResourceTable *resource_table, int cycle);

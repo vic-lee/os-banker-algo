@@ -21,6 +21,7 @@ class Release : public Activity
     void print();
     void execute();
     int get_resource_type();
+    int get_release_count();
 };
 
 } // namespace task

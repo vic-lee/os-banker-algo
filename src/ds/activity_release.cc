@@ -14,6 +14,11 @@ int Release::get_resource_type()
     return release_resource_type;
 }
 
+int Release::get_release_count()
+{
+    return release_count;
+}
+
 void Release::print()
 {
     std::cout << type << ":\t"

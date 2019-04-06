@@ -32,6 +32,13 @@ void Resource::handle_new_request(Request *request)
     }
 }
 
+void Resource::handle_new_release(Release *release)
+{
+    int num_of_units_restored = release->get_release_count();
+    remaining_unit_count += num_of_units_restored;
+}
+
+
 void Resource::print()
 {
     std::cout << "Resource ID:\t" << id

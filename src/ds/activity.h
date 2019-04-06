@@ -16,6 +16,21 @@ class Activity
      * there's no need for a subclass for relevant info and actions. 
      */
 
+  public:
+    Activity(std::string type, int target_id, int delay);
+    virtual ~Activity() {}
+    int get_target_id();
+    void update_time_remaining_before_execute();
+    void update_completion_state_after_execute();
+    bool is_active();
+    bool is_time_to_execute();
+    virtual void print();
+
+    std::string type();
+    bool is_request();
+    bool is_release();
+    bool is_termination();
+
   protected:
     std::string type_;
     int target_id;
@@ -25,28 +40,6 @@ class Activity
     bool completed;
 
     void set_to_complete();
-
-  public:
-    Activity(std::string type, int target_id, int delay)
-    {
-        this->type_ = type;
-        this->target_id = target_id;
-        this->delay = delay;
-        this->time_remaining_ = delay;
-        this->completed = false;
-    }
-    // virtual ~Activity() {}
-    int get_target_id();
-    void update_time_remaining_before_execute();
-    void update_completion_state_after_execute();
-    bool is_active();
-    bool is_time_to_execute();
-    void print();
-
-    std::string type();
-    bool is_request();
-    bool is_release();
-    bool is_termination();
 };
 } // namespace task
 

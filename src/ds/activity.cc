@@ -4,6 +4,15 @@
 namespace task
 {
 
+Activity::Activity(std::string type, int target_id, int delay)
+{
+    this->type_ = type;
+    this->target_id = target_id;
+    this->delay = delay;
+    this->time_remaining_ = delay;
+    this->completed = false;
+}
+
 void Activity::set_to_complete()
 {
     completed = true;
@@ -45,8 +54,8 @@ void Activity::update_completion_state_after_execute()
      * An activity may satisfy `has_begun_` and `time_remaining_==0`
      * immeidately after `time_remaining_` has been updated, but has
      * yet been executed. 
-     */ 
-    
+     */
+
     if (has_begun_ && time_remaining_ == 0)
         completed = true;
 }

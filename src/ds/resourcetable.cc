@@ -6,7 +6,7 @@ namespace task
 
 Resource* ResourceTable::access_by_id(int id)
 {
-    resource_table_[id];
+    return resource_table_[id];
 }
 
 int ResourceTable::get_resource_count(int resource_id)

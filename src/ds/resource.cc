@@ -5,15 +5,22 @@
 namespace task
 {
 
+Resource::Resource(int id, int unit_count)
+{
+    this->id_ = id;
+    this->total_unit_count_ = unit_count;
+    this->remaining_unit_count_ = unit_count;
+}
+
 int Resource::get_unit_count()
 {
-    return total_unit_count;
+    return total_unit_count_;
 }
 
 bool Resource::can_satisfy_request(Request *request)
 {
     int num_of_units_needed = request->get_request_count();
-    return (remaining_unit_count > num_of_units_needed);
+    return (remaining_unit_count_ > num_of_units_needed);
 }
 
 void Resource::handle_new_request(Request *request)
@@ -27,20 +34,19 @@ void Resource::handle_new_request(Request *request)
     else
     {
         int num_of_units_needed = request->get_request_count();
-        remaining_unit_count -= num_of_units_needed;
+        remaining_unit_count_ -= num_of_units_needed;
     }
 }
 
 void Resource::handle_new_release(Release *release)
 {
     int num_of_units_restored = release->get_release_count();
-    remaining_unit_count += num_of_units_restored;
+    remaining_unit_count_ += num_of_units_restored;
 }
-
 
 void Resource::print()
 {
-    std::cout << "Resource ID:\t" << id
-              << "\tUnit count:\t" << total_unit_count << std::endl;
+    std::cout << "Resource ID:\t" << id_
+              << "\tUnit count:\t" << total_unit_count_ << std::endl;
 }
 } // namespace task

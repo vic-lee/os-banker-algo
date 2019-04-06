@@ -75,6 +75,11 @@ std::string Activity::type()
     return type_;
 }
 
+bool Activity::is_initiate()
+{
+    return type_ == "initiate";
+}
+
 bool Activity::is_request()
 {
     return type_ == "request";

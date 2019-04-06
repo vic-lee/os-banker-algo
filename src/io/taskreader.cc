@@ -67,7 +67,7 @@ task::ResourceTable TaskReader::read_in_resources(std::vector<std::string> parse
 void TaskReader::read_in_new_activities(task::TaskTable &task_table, std::vector<std::string> parsed_line)
 {
     if (parsed_line[0] == "initiate")
-        task_table.create_task_from_input(parsed_line);
+        task_table.handle_new_initiate(parsed_line);
 
     else if (parsed_line[0] == "request")
         task_table.add_new_request_to_task(parsed_line);

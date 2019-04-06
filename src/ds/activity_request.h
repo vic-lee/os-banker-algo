@@ -20,7 +20,7 @@ class Request : public Activity
     }
     int get_resource_type();
     int get_request_count();
-    void do_optimistic();
+    void execute();
 };
 
 } // namespace task

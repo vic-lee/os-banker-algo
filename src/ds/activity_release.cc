@@ -6,7 +6,7 @@ namespace task
 
 void Release::execute() 
 {
-    Activity::execute();
+    // Activity::execute();
 }
 
 int Release::get_resource_type()

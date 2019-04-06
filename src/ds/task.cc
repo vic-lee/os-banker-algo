@@ -16,10 +16,6 @@ void Task::set_latest_activity()
     latest_activity_index_ = -1;
 }
 
-void Task::do_request(Request &request, ResourceTable &resource_table)
-{
-}
-
 void Task::add_new_activity(Activity activity)
 {
     activities_table_.push_back(activity);

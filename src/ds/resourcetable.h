@@ -13,11 +13,10 @@ namespace task
 class ResourceTable
 {
     std::vector<Resource *> resource_table_;
-
+    Resource* find_resource_by_id(int id);
     int get_resource_count(int resource_id);
 
   public:
-    Resource* access_by_id(int id);
     bool can_satisfy_request(Request *request);
     void handle_new_request(Request *request);
     void handle_new_release(Release *release);

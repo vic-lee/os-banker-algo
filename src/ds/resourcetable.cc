@@ -4,9 +4,9 @@
 namespace task
 {
 
-Resource* ResourceTable::access_by_id(int id)
+Resource* ResourceTable::find_resource_by_id(int id)
 {
-    return resource_table_[id];
+    return resource_table_[id - 1];
 }
 
 int ResourceTable::get_resource_count(int resource_id)
@@ -23,9 +23,8 @@ bool ResourceTable::can_satisfy_request(Request *request)
 void ResourceTable::handle_new_request(Request *request)
 {
     int resource_type = request->get_resource_type();
-    std::cout << "Resource type is " << resource_type << std::endl;
-    resource_table_[resource_type]->print();
-    resource_table_[resource_type]->handle_new_request(request);
+    Resource* target_resource = find_resource_by_id(resource_type);
+    target_resource->handle_new_request(request);
 }
 
 void ResourceTable::handle_new_release(Release *release)
@@ -41,9 +40,9 @@ void ResourceTable::add(Resource *resource)
 
 void ResourceTable::print()
 {
-    for (int i = 0; i < resource_table.size(); i++)
+    for (int i = 0; i < resource_table_.size(); i++)
     {
-        resource_table[i]->print();
+        resource_table_[i]->print();
     }
 }
 

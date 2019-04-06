@@ -63,7 +63,7 @@ bool Activity::is_termination()
 
 void Activity::print()
 {
-    std::cout << type << ":\t"
+    std::cout << type_ << ":\t"
               << " Target ID: " << target_id
               << " Delay: " << delay << std::endl;
 }

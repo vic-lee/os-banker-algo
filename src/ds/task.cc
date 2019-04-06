@@ -9,9 +9,9 @@ namespace task
 
 void Task::set_latest_activity()
 {
-    for (int i = 0; i < activities_table.size(); i++)
+    for (int i = 0; i < activities_table_.size(); i++)
     {
-        if (activities_table[i].is_active())
+        if (activities_table_[i].is_active())
             latest_activity_ = i;
     }
     latest_activity_ = -1;
@@ -24,7 +24,7 @@ void Task::do_request(Request& request, ResourceTable& resource_table)
 
 void Task::add_new_activity(Activity activity)
 {
-    activities_table.push_back(activity);
+    activities_table_.push_back(activity);
 }
 
 void Task::do_latest_activity(ResourceTable& resource_table)
@@ -35,7 +35,7 @@ void Task::do_latest_activity(ResourceTable& resource_table)
         return;
 
     
-    activities_table[latest_activity_].execute();
+    activities_table_[latest_activity_].execute();
 }
 
 int Task::get_id()
@@ -56,15 +56,15 @@ void Task::print()
 
     std::cout << "---------------- Claims ---------------" << std::endl;
     std::map<int, Claim>::iterator it;
-    for (it = claims_table.begin(); it != claims_table.end(); it++)
+    for (it = claims_table_.begin(); it != claims_table_.end(); it++)
     {
         it->second.print();
     }
 
     std::cout << "------------- Activities --------------" << std::endl;
-    for (int i = 0; i < activities_table.size(); i++)
+    for (int i = 0; i < activities_table_.size(); i++)
     {
-        activities_table[i].print();
+        activities_table_[i].print();
     }
 }
 

@@ -20,8 +20,8 @@ class Task
     int id;
     int latest_activity_;
     bool terminated;
-    std::map<int, Claim> claims_table;
-    std::vector<Activity> activities_table;
+    std::map<int, Claim> claims_table_;
+    std::vector<Activity> activities_table_;
 
     void set_latest_activity();
     void do_request(Request& request, ResourceTable& resource_table);
@@ -31,7 +31,7 @@ class Task
     {
         this->id = id;
         terminated = false;
-        claims_table.insert(
+        claims_table_.insert(
             std::pair<int, Claim>(claim.claimed_resource_id, claim));
     }
     void add_new_activity(Activity activity);

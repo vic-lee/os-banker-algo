@@ -12,7 +12,6 @@ int Resource::get_unit_count()
 
 bool Resource::can_satisfy_request(Request *request)
 {
-    int resource_type = request->get_resource_type();
     int num_of_units_needed = request->get_request_count();
     return (remaining_unit_count > num_of_units_needed);
 }

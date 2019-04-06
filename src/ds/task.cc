@@ -6,7 +6,6 @@
 namespace task
 {
 
-
 void Task::set_latest_activity()
 {
     for (int i = 0; i < activities_table_.size(); i++)
@@ -17,9 +16,8 @@ void Task::set_latest_activity()
     latest_activity_index_ = -1;
 }
 
-void Task::do_request(Request& request, ResourceTable& resource_table)
-{    
-
+void Task::do_request(Request &request, ResourceTable &resource_table)
+{
 }
 
 void Task::add_new_activity(Activity activity)
@@ -27,21 +25,31 @@ void Task::add_new_activity(Activity activity)
     activities_table_.push_back(activity);
 }
 
-Activity& Task::get_latest_activity()
+Activity &Task::get_latest_activity()
 {
     set_latest_activity();
     return activities_table_[latest_activity_index_];
 }
 
-void Task::do_latest_activity(ResourceTable& resource_table)
+void Task::do_latest_activity(ResourceTable &resource_table)
 {
     set_latest_activity();
-    
+
     if (latest_activity_index_ == -1)
         return;
 
-    
-    activities_table_[latest_activity_index_].execute();
+    Activity latest_activity = get_latest_activity();
+
+    latest_activity.execute();
+
+    if (latest_activity.is_time_to_execute())
+    {
+        if (latest_activity.is_request())
+            resource_table.handle_new_request(static_cast<Request *>(&latest_activity));
+            
+        else if (latest_activity.is_release())
+            resource_table.handle_new_release(static_cast<Release *>(&latest_activity));
+    }
 }
 
 int Task::get_id()

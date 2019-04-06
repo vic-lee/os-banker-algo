@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
     manager::OptimisticManager optimistic_manager(task_table, resource_table);
     optimistic_manager.do_tasks();
-    // optimistic_manager.print();
+    optimistic_manager.print();
 
     return 0;
 }

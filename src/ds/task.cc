@@ -12,6 +12,7 @@ Task::Task(int id, Claim claim)
     this->id_ = id;
     terminated_ = false;
     initiation_cycle_ = 0;
+    cycles_waiting_ = 0;
     claims_table_.insert(
         std::pair<int, Claim>(claim.claimed_resource_id, claim));
 }
@@ -114,6 +115,15 @@ void Task::print()
     {
         activities_table_[i]->print();
     }
+}
+
+void Task::print_finished_status()
+{
+    int total_time_spent = termination_cycle_ - initiation_cycle_;
+    std::cout << "Task " << id_ << "\t    "
+              << total_time_spent << "   "
+              << cycles_waiting_ << "   "
+              << (((double)cycles_waiting_) / total_time_spent) << "%" << std::endl;
 }
 
 } // namespace task

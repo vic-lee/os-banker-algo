@@ -25,6 +25,7 @@ class Task
     bool is_terminated();
     void terminate(int cycle);
     void print();
+    void print_finished_status();
     int id();
 
   private:
@@ -37,6 +38,7 @@ class Task
     bool terminated_;
     int initiation_cycle_;
     int termination_cycle_;
+    int cycles_waiting_;
     std::map<int, Claim> claims_table_;
     std::vector<Activity *> activities_table_;
 };

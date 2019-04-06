@@ -134,6 +134,12 @@ void Task::print()
     }
 }
 
+std::tuple<int, int> Task::get_print_statistic()
+{
+    int total_time_spent = termination_cycle_ - initiation_cycle_;
+    return std::make_tuple(total_time_spent, cycles_waiting_);    
+}
+
 void Task::print_finished_status()
 {
     int total_time_spent = termination_cycle_ - initiation_cycle_;

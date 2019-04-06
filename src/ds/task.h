@@ -27,6 +27,7 @@ class Task
     bool is_terminated();
     void terminate(int cycle);
     void print();
+    std::tuple<int, int> get_print_statistic();
     void print_finished_status();
     int id();
 

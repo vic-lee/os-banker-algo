@@ -21,7 +21,7 @@ class Activity
     virtual ~Activity() {}
     int get_target_id();
     void update_time_remaining_before_execute();
-    void update_completion_state_after_execute();
+    void update_completion_state_after_execute(bool is_successful);
     bool is_active();
     bool is_time_to_execute();
     virtual void print();

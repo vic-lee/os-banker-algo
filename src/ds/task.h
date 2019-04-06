@@ -34,7 +34,7 @@ class Task
   private:
     void set_latest_activity();
     Activity *get_latest_activity();
-    void execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle);
+    bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle);
 
     int id_;
     int latest_activity_index_;

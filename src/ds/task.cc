@@ -67,8 +67,8 @@ void Task::do_latest_activity(ResourceTable *resource_table, int cycle)
 
     if (latest_activity->is_time_to_execute())
     {
-        execute_activity(latest_activity, resource_table, cycle);
-        latest_activity->update_completion_state_after_execute();
+        bool is_successful = execute_activity(latest_activity, resource_table, cycle);
+        latest_activity->update_completion_state_after_execute(is_successful);
     }
     else
     {
@@ -76,25 +76,29 @@ void Task::do_latest_activity(ResourceTable *resource_table, int cycle)
     }
 }
 
-void Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle)
+bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle)
 {
     if (latest_activity->is_initiate())
     {
         std::cout << "Initiating Task " << id_ << std::endl;
-        return;
+        return true;
     }
     if (latest_activity->is_request())
     {
-        resource_table->handle_new_request(static_cast<Request *>(latest_activity));
+        bool is_successful = resource_table->handle_new_request(static_cast<Request *>(latest_activity));
+        return is_successful;
     }
     else if (latest_activity->is_release())
     {
         resource_table->handle_new_release(static_cast<Release *>(latest_activity));
+        return true;
     }
     else if (latest_activity->is_termination())
     {
         terminate(cycle);
+        return true;
     }
+    return false;
 }
 
 int Task::id()

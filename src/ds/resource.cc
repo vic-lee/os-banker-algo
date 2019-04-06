@@ -23,13 +23,16 @@ bool Resource::can_satisfy_request(Request *request)
     return (remaining_unit_count_ > num_of_units_needed);
 }
 
-void Resource::handle_new_request(Request *request)
+bool Resource::handle_new_request(Request *request)
 {
     if (!can_satisfy_request(request))
     {
+        int num_of_units_needed = request->get_request_count();
         std::cout
-            << "Cannot satisfy this request with resource currently available."
+            << "Cannot satisfy request; requests " << num_of_units_needed << "; "
+            << "Only has " << remaining_unit_count_ <<" "
             << std::endl;
+        return false;
     }
     else
     {
@@ -39,6 +42,7 @@ void Resource::handle_new_request(Request *request)
                   << " granted to Task " << request->get_target_id() << "; "
                   << "Total: " << total_unit_count_ << "; "
                   << "Remaining: " << remaining_unit_count_ << std::endl;
+        return true;
     }
 }
 

@@ -20,11 +20,12 @@ bool ResourceTable::can_satisfy_request(Request *request)
     return find_resource_by_id(resource_type)->can_satisfy_request(request);
 }
 
-void ResourceTable::handle_new_request(Request *request)
+bool ResourceTable::handle_new_request(Request *request)
 {
     int resource_type = request->get_resource_type();
     Resource* target_resource = find_resource_by_id(resource_type);
-    target_resource->handle_new_request(request);
+    bool is_successful = target_resource->handle_new_request(request);
+    return is_successful;
 }
 
 void ResourceTable::handle_new_release(Release *release)

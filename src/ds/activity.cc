@@ -45,7 +45,7 @@ void Activity::update_time_remaining_before_execute()
     }
 }
 
-void Activity::update_completion_state_after_execute()
+void Activity::update_completion_state_after_execute(bool is_successful)
 {
     /**
      * Only call this function after Activity is executed (as the 
@@ -56,7 +56,7 @@ void Activity::update_completion_state_after_execute()
      * yet been executed. 
      */
 
-    if (has_begun_ && time_remaining_ == 0)
+    if (is_successful && has_begun_ && time_remaining_ == 0)
         completed = true;
 }
 

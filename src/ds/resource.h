@@ -13,7 +13,7 @@ class Resource
     Resource(int id, int unit_count);
     int get_unit_count();
     bool can_satisfy_request(Request *request);
-    void handle_new_request(Request *request);
+    bool handle_new_request(Request *request);
     void handle_new_release(Release *release);
     void print();
 

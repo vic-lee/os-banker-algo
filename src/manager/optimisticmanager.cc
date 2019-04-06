@@ -9,7 +9,7 @@ void OptimisticManager::do_tasks()
 {
     int cycle = 0;
 
-    while (!task_table.is_all_task_terminated() && cycle < 5)
+    while (!task_table.is_all_task_terminated())
         iterate_cycle(cycle);
 }
 

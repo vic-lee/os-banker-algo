@@ -24,8 +24,8 @@ void Release::print()
     std::cout << type_ << ":\t"
               << " Target ID: " << target_id
               << " Delay: " << delay 
-              << " RT: " << release_resource_type
-              << " RC: " << release_count
+              << " Release RT: " << release_resource_type
+              << " Release Count: " << release_count
               << std::endl;
 }
 } // namespace task

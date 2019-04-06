@@ -31,7 +31,6 @@ void Activity::update_time_remaining_before_execute()
     }
     else if (has_begun_ && time_remaining_ == 0)
     {
-        completed = true;
         return;
     }
     else if (has_begun_ && time_remaining_ > 0)

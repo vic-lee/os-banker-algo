@@ -1,19 +1,25 @@
 #include <iostream>
 #include "task.h"
 #include "activity.h"
+#include "activity_request.h"
 
 namespace task
 {
 
 
-int Task::set_latest_activity()
+void Task::set_latest_activity()
 {
     for (int i = 0; i < activities_table.size(); i++)
     {
         if (activities_table[i].is_active())
-            return i;
+            latest_activity_ = i;
     }
-    return -1;
+    latest_activity_ = -1;
+}
+
+void Task::do_request(Request& request, ResourceTable& resource_table)
+{    
+
 }
 
 void Task::add_new_activity(Activity activity)
@@ -21,14 +27,15 @@ void Task::add_new_activity(Activity activity)
     activities_table.push_back(activity);
 }
 
-void Task::do_latest_activity()
+void Task::do_latest_activity(ResourceTable& resource_table)
 {
     set_latest_activity();
     
-    if (latest_activity == -1)
+    if (latest_activity_ == -1)
         return;
+
     
-    activities_table[latest_activity].do_optimistic();
+    activities_table[latest_activity_].execute();
 }
 
 int Task::get_id()

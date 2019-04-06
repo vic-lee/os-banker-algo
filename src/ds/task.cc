@@ -21,7 +21,10 @@ void Task::set_latest_activity()
     for (int i = 0; i < activities_table_.size(); i++)
     {
         if (activities_table_[i].is_active())
+        {
             latest_activity_index_ = i;
+            return;
+        }
     }
     latest_activity_index_ = -1;
 }
@@ -41,10 +44,15 @@ void Task::do_latest_activity(ResourceTable &resource_table, int cycle)
 {
     set_latest_activity();
 
+    std::cout << "Latest activity index is: " << latest_activity_index_ << std::endl;
+
     if (latest_activity_index_ == -1)
         return;
 
     Activity latest_activity = get_latest_activity();
+    
+    std::cout << "This is the latest activity:" << std::endl;
+    latest_activity.print();
 
     latest_activity.update_time_remaining_before_execute();
 
@@ -53,18 +61,30 @@ void Task::do_latest_activity(ResourceTable &resource_table, int cycle)
         execute_activity(latest_activity, resource_table, cycle);
         latest_activity.update_completion_state_after_execute();
     }
+    else
+    {
+        std::cout << "Not time to execute yet." << std::endl;
+    }
+    
 }
 
 void Task::execute_activity(Activity &latest_activity, ResourceTable &resource_table, int cycle)
 {
     if (latest_activity.is_request())
+    {
+        std::cout << "Do request" << std::endl;
         resource_table.handle_new_request(static_cast<Request *>(&latest_activity));
-
+    }
     else if (latest_activity.is_release())
+    {
+        std::cout << "Do release" << std::endl;
         resource_table.handle_new_release(static_cast<Release *>(&latest_activity));
-
+    }
     else if (latest_activity.is_termination())
+    {
+        std::cout << "Do termination" << std::endl;
         terminate(cycle);
+    }
 }
 
 int Task::id()

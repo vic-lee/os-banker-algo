@@ -20,14 +20,14 @@ void Activity::execute()
     {
         return;
     }
-    else if (executed && time_remaining == 0)
+    else if (executed && time_remaining_ == 0)
     {
         completed = true;
         return;
     }
-    else if (executed && time_remaining > 0)
+    else if (executed && time_remaining_ > 0)
     {
-        time_remaining--;
+        time_remaining_--;
         return;
     }
     else
@@ -39,6 +39,11 @@ void Activity::execute()
 bool Activity::is_active()
 {
     return !completed;
+}
+
+bool Activity::is_time_to_execute()
+{
+    return time_remaining_ == 0;
 }
 
 std::string Activity::type()

@@ -20,7 +20,7 @@ class Activity
     std::string type_;
     int target_id;
     int delay;
-    int time_remaining;
+    int time_remaining_;
     bool executed;
     bool completed;
 
@@ -32,13 +32,14 @@ class Activity
         this->type_ = type;
         this->target_id = target_id;
         this->delay = delay;
-        this->time_remaining = delay;
+        this->time_remaining_ = delay;
         this->completed = false;
     }
     virtual ~Activity() {}
     int get_target_id();
     virtual void execute();
     bool is_active();
+    bool is_time_to_execute();
     void print();
 
     std::string type();

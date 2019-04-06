@@ -18,6 +18,11 @@
 namespace io
 {
 
+int str_to_int(std::string s)
+{
+    return atoi(s.c_str());
+}
+
 std::string TaskReader::remove_spaces(std::string str)
 {
     str.erase(remove(str.begin(), str.end(), ' '), str.end());
@@ -43,14 +48,14 @@ int TaskReader::is_fist_line(std::string line)
     return isdigit(line[0]);
 }
 
-task::ResourceTable generate_resource_table_from_input(std::string buffer)
+task::ResourceTable TaskReader::read_in_resources(std::vector<std::string> parsed_line)
 {
     task::ResourceTable resource_table;
-    int resource_type_count = buffer[1] - 48;
+    int resource_type_count = str_to_int(parsed_line[1]);
 
     for (int id = 1; id < (resource_type_count + 1); id++)
     {
-        int unit_count = buffer[1 + id];
+        int unit_count = str_to_int(parsed_line[1 + id]);
         task::Resource new_resource(id, unit_count);
         resource_table.add(new_resource);
     }
@@ -74,13 +79,6 @@ void TaskReader::read_in_new_activities(task::TaskTable &task_table, std::vector
         task_table.add_termination_to_task(parsed_line);
 }
 
-task::ResourceTable TaskReader::read_in_resource_table(std::string line)
-{
-    std::string buffer = remove_spaces(line);
-    task::ResourceTable resource_table = generate_resource_table_from_input(buffer);
-    return resource_table;
-}
-
 std::tuple<task::TaskTable, task::ResourceTable> TaskReader::import()
 {
     task::TaskTable task_table;
@@ -95,11 +93,11 @@ std::tuple<task::TaskTable, task::ResourceTable> TaskReader::import()
         {
             std::vector<std::string> parsed_line = parse_line(line);
             if (is_fist_line(line))
-                resource_table = read_in_resource_table(line);
+                resource_table = read_in_resources(parsed_line);
             else
                 read_in_new_activities(task_table, parsed_line);
         }
-        
+
         input_file.close();
     }
     else

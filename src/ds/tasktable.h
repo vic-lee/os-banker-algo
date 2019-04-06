@@ -10,7 +10,7 @@ class TaskTable
 {
     std::map<int, Task> task_table;
     void add(Task task);
-    void add_new_activity_to_task(Activity activity);
+    void add_new_activity_to_task(Activity* activity);
 
   public:
     void create_task_from_input(std::vector<std::string> parsed_line);

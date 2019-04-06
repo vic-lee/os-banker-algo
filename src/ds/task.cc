@@ -11,6 +11,7 @@ Task::Task(int id, Claim claim)
 {
     this->id_ = id;
     terminated_ = false;
+    initiation_cycle_ = 0;
     claims_table_.insert(
         std::pair<int, Claim>(claim.claimed_resource_id, claim));
 }
@@ -36,7 +37,7 @@ Activity &Task::get_latest_activity()
     return activities_table_[latest_activity_index_];
 }
 
-void Task::do_latest_activity(ResourceTable &resource_table)
+void Task::do_latest_activity(ResourceTable &resource_table, int cycle)
 {
     set_latest_activity();
 
@@ -49,12 +50,12 @@ void Task::do_latest_activity(ResourceTable &resource_table)
 
     if (latest_activity.is_time_to_execute())
     {
-        execute_activity(latest_activity, resource_table);
+        execute_activity(latest_activity, resource_table, cycle);
         latest_activity.update_completion_state_after_execute();
     }
 }
 
-void Task::execute_activity(Activity &latest_activity, ResourceTable &resource_table)
+void Task::execute_activity(Activity &latest_activity, ResourceTable &resource_table, int cycle)
 {
     if (latest_activity.is_request())
         resource_table.handle_new_request(static_cast<Request *>(&latest_activity));
@@ -63,7 +64,7 @@ void Task::execute_activity(Activity &latest_activity, ResourceTable &resource_t
         resource_table.handle_new_release(static_cast<Release *>(&latest_activity));
 
     else if (latest_activity.is_termination())
-        terminate();
+        terminate(cycle);
 }
 
 int Task::id()
@@ -76,9 +77,10 @@ bool Task::is_terminated()
     return terminated_;
 }
 
-void Task::terminate()
+void Task::terminate(int cycle)
 {
     terminated_ = true;
+    termination_cycle_ = cycle;
 }
 
 void Task::print()

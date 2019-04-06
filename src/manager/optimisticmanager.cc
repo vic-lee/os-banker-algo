@@ -21,7 +21,7 @@ void OptimisticManager::iterate_cycle(int& cycle)
     for (int i = 1; i < (task_table.size() + 1); i++)
     {
         task::Task* task = task_table.access_task_by_id(i);
-        task->do_latest_activity(resource_table);
+        task->do_latest_activity(resource_table, cycle);
     }
 
     cycle++;

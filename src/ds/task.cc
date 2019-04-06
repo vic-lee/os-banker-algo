@@ -40,7 +40,7 @@ Activity *Task::get_latest_activity()
     return activities_table_[latest_activity_index_];
 }
 
-void Task::do_latest_activity(ResourceTable &resource_table, int cycle)
+void Task::do_latest_activity(ResourceTable *resource_table, int cycle)
 {
     set_latest_activity();
 
@@ -66,18 +66,18 @@ void Task::do_latest_activity(ResourceTable &resource_table, int cycle)
     }
 }
 
-void Task::execute_activity(Activity *latest_activity, ResourceTable &resource_table, int cycle)
+void Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle)
 {
     if (latest_activity->is_request())
     {
         std::cout << "Do request" << std::endl;
         latest_activity->print();
-        resource_table.handle_new_request(static_cast<Request *>(latest_activity));
+        resource_table->handle_new_request(static_cast<Request *>(latest_activity));
     }
     else if (latest_activity->is_release())
     {
         std::cout << "Do release" << std::endl;
-        resource_table.handle_new_release(static_cast<Release *>(latest_activity));
+        resource_table->handle_new_release(static_cast<Release *>(latest_activity));
     }
     else if (latest_activity->is_termination())
     {

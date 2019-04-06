@@ -20,7 +20,7 @@ class Task
   public:
     Task(int id, Claim claim);
     void add_new_activity(Activity *activity);
-    void do_latest_activity(ResourceTable &resource_table, int cycle);
+    void do_latest_activity(ResourceTable *resource_table, int cycle);
     std::string to_string();
     bool is_terminated();
     void terminate(int cycle);
@@ -30,7 +30,7 @@ class Task
   private:
     void set_latest_activity();
     Activity *get_latest_activity();
-    void execute_activity(Activity *latest_activity, ResourceTable &resource_table, int cycle);
+    void execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle);
 
     int id_;
     int latest_activity_index_;

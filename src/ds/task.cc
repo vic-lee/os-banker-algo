@@ -3,6 +3,8 @@
 #include "claim.h"
 #include "activity.h"
 #include "activity_request.h"
+#include "activity_release.h"
+#include "activity_initiate.h"
 
 namespace task
 {
@@ -10,6 +12,7 @@ namespace task
 Task::Task(int id, Claim claim)
 {
     this->id_ = id;
+    aborted_ = false;
     terminated_ = false;
     initiation_cycle_ = 0;
     cycles_waiting_ = 0;
@@ -21,6 +24,7 @@ Task::Task(int id, Claim claim)
 Task::Task(int id)
 {
     this->id_ = id;
+    aborted_ = false;
     terminated_ = false;
     initiation_cycle_ = 0;
     cycles_waiting_ = 0;
@@ -74,6 +78,11 @@ void Task::do_latest_activity(ResourceTable *resource_table, int cycle)
 
 void Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle)
 {
+    if (latest_activity->is_initiate())
+    {
+        std::cout << "Initiating Task " << id_ << std::endl;
+        return;
+    }
     if (latest_activity->is_request())
     {
         resource_table->handle_new_request(static_cast<Request *>(latest_activity));
@@ -102,8 +111,7 @@ void Task::terminate(int cycle)
 {
     terminated_ = true;
     termination_cycle_ = cycle;
-    std::cout << "Terminating Task " << id_
-              << " in cycle " << termination_cycle_ << std::endl;
+    std::cout << "Terminating Task " << id_ << std::endl;
 }
 
 void Task::print()

@@ -9,6 +9,7 @@
 #include "activity.h"
 #include "claim.h"
 #include "resourcetable.h"
+#include "activity_initiate.h"
 
 namespace task
 {
@@ -36,6 +37,7 @@ class Task
 
     int id_;
     int latest_activity_index_;
+    bool aborted_;
     bool terminated_;
     int initiation_cycle_;
     int termination_cycle_;

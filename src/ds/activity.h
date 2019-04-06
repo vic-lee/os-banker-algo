@@ -27,6 +27,7 @@ class Activity
     virtual void print();
 
     std::string type();
+    bool is_initiate();
     bool is_request();
     bool is_release();
     bool is_termination();

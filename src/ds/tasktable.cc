@@ -18,7 +18,7 @@ int str_to_int(std::string s)
 
 void TaskTable::add(Task task)
 {
-    task_table.insert(std::pair<int, Task>(task.get_id(), task));
+    task_table.insert(std::pair<int, Task>(task.id(), task));
 }
 
 void TaskTable::create_task_from_input(std::vector<std::string> parsed_line)

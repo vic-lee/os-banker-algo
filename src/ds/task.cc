@@ -1,10 +1,19 @@
 #include <iostream>
 #include "task.h"
+#include "claim.h"
 #include "activity.h"
 #include "activity_request.h"
 
 namespace task
 {
+
+Task::Task(int id, Claim claim)
+{
+    this->id_ = id;
+    terminated_ = false;
+    claims_table_.insert(
+        std::pair<int, Claim>(claim.claimed_resource_id, claim));
+}
 
 void Task::set_latest_activity()
 {
@@ -57,9 +66,9 @@ void Task::execute_activity(Activity &latest_activity, ResourceTable &resource_t
         terminate();
 }
 
-int Task::get_id()
+int Task::id()
 {
-    return id;
+    return id_;
 }
 
 bool Task::is_terminated()
@@ -76,7 +85,7 @@ void Task::print()
 {
     std::cout << std::endl;
 
-    std::cout << "Task ID: " << id << std::endl;
+    std::cout << "Task ID: " << id_ << std::endl;
 
     std::cout << "---------------- Claims ---------------" << std::endl;
     std::map<int, Claim>::iterator it;

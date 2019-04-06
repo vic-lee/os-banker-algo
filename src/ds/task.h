@@ -17,31 +17,26 @@ typedef int resource_id, claim_count;
 
 class Task
 {
-    int id;
-    int latest_activity_index_;
-    bool terminated_;
-    std::map<int, Claim> claims_table_;
-    std::vector<Activity> activities_table_;
-
-    void set_latest_activity();
-    Activity& get_latest_activity();
-    void execute_activity(Activity& latest_activity, ResourceTable& resource_table);
-
   public:
-    Task(int id, Claim claim)
-    {
-        this->id = id;
-        terminated_ = false;
-        claims_table_.insert(
-            std::pair<int, Claim>(claim.claimed_resource_id, claim));
-    }
+    Task(int id, Claim claim);
     void add_new_activity(Activity activity);
-    void do_latest_activity(ResourceTable& resource_table);
-    int get_id();
+    void do_latest_activity(ResourceTable &resource_table);
     std::string to_string();
     bool is_terminated();
     void terminate();
     void print();
+    int id();
+
+  private:
+    void set_latest_activity();
+    Activity &get_latest_activity();
+    void execute_activity(Activity &latest_activity, ResourceTable &resource_table);
+
+    int id_;
+    int latest_activity_index_;
+    bool terminated_;
+    std::map<int, Claim> claims_table_;
+    std::vector<Activity> activities_table_;
 };
 } // namespace task
 

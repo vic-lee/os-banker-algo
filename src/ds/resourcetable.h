@@ -5,6 +5,7 @@
 #include <string>
 #include "resource.h"
 #include "activity_request.h"
+#include "activity_release.h"
 
 namespace task
 {
@@ -18,6 +19,7 @@ class ResourceTable
   public:
     bool can_satisfy_request(Request *request);
     void handle_new_request(Request *request);
+    void handle_new_release(Release *release);
     void add(Resource resource);
     void print();
 };

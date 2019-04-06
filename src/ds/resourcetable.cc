@@ -20,6 +20,12 @@ void ResourceTable::handle_new_request(Request *request)
     resource_table[resource_type].handle_new_request(request);
 }
 
+void ResourceTable::handle_new_release(Release *release)
+{
+    int resource_type = release->get_resource_type();
+    resource_table[resource_type].handle_new_release(release);
+}
+
 void ResourceTable::add(Resource resource)
 {
     resource_table.push_back(resource);

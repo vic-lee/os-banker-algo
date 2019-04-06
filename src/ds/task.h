@@ -25,6 +25,7 @@ class Task
 
     void set_latest_activity();
     Activity& get_latest_activity();
+    void execute_activity(Activity& latest_activity, ResourceTable& resource_table);
 
   public:
     Task(int id, Claim claim)

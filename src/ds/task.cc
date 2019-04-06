@@ -40,16 +40,22 @@ void Task::do_latest_activity(ResourceTable &resource_table)
 
     Activity latest_activity = get_latest_activity();
 
-    latest_activity.execute();
+    latest_activity.update_time_remaining_before_execute();
 
     if (latest_activity.is_time_to_execute())
     {
         if (latest_activity.is_request())
             resource_table.handle_new_request(static_cast<Request *>(&latest_activity));
-            
+
         else if (latest_activity.is_release())
             resource_table.handle_new_release(static_cast<Release *>(&latest_activity));
+
+        else if (latest_activity.is_termination())
+            terminate();
+
+        latest_activity.update_completion_state_after_execute();        
     }
+
 }
 
 int Task::get_id()
@@ -59,7 +65,12 @@ int Task::get_id()
 
 bool Task::is_terminated()
 {
-    return terminated;
+    return terminated_;
+}
+
+void Task::terminate()
+{
+    terminated_ = true;
 }
 
 void Task::print()

@@ -19,7 +19,7 @@ class Task
 {
     int id;
     int latest_activity_index_;
-    bool terminated;
+    bool terminated_;
     std::map<int, Claim> claims_table_;
     std::vector<Activity> activities_table_;
 
@@ -31,7 +31,7 @@ class Task
     Task(int id, Claim claim)
     {
         this->id = id;
-        terminated = false;
+        terminated_ = false;
         claims_table_.insert(
             std::pair<int, Claim>(claim.claimed_resource_id, claim));
     }
@@ -40,6 +40,7 @@ class Task
     int get_id();
     std::string to_string();
     bool is_terminated();
+    void terminate();
     void print();
 };
 } // namespace task

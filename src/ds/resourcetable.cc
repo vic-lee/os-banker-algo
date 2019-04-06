@@ -17,7 +17,7 @@ int ResourceTable::get_resource_count(int resource_id)
 bool ResourceTable::can_satisfy_request(Request *request)
 {
     int resource_type = request->get_resource_type();
-    return resource_table_[resource_type]->can_satisfy_request(request);
+    return find_resource_by_id(resource_type)->can_satisfy_request(request);
 }
 
 void ResourceTable::handle_new_request(Request *request)
@@ -30,7 +30,8 @@ void ResourceTable::handle_new_request(Request *request)
 void ResourceTable::handle_new_release(Release *release)
 {
     int resource_type = release->get_resource_type();
-    resource_table_[resource_type]->handle_new_release(release);
+    Resource* target_resource = find_resource_by_id(resource_type);
+    target_resource->handle_new_release(release);
 }
 
 void ResourceTable::add(Resource *resource)

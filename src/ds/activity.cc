@@ -46,6 +46,21 @@ std::string Activity::type()
     return type_;
 }
 
+bool Activity::is_request()
+{
+    return type_ == "request";
+}
+
+bool Activity::is_release()
+{
+    return type_ == "release";
+}
+
+bool Activity::is_termination()
+{
+    return type_ == "terminate";
+}
+
 void Activity::print()
 {
     std::cout << type << ":\t"

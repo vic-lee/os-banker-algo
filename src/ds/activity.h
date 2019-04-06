@@ -40,7 +40,11 @@ class Activity
     virtual void execute();
     bool is_active();
     void print();
+
     std::string type();
+    bool is_request();
+    bool is_release();
+    bool is_termination();
 };
 } // namespace task
 

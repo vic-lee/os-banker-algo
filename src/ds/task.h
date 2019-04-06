@@ -18,12 +18,13 @@ typedef int resource_id, claim_count;
 class Task
 {
     int id;
-    int latest_activity_;
+    int latest_activity_index_;
     bool terminated;
     std::map<int, Claim> claims_table_;
     std::vector<Activity> activities_table_;
 
     void set_latest_activity();
+    Activity& get_latest_activity();
     void do_request(Request& request, ResourceTable& resource_table);
 
   public:

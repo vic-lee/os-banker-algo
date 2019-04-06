@@ -21,7 +21,7 @@ int Release::get_release_count()
 
 void Release::print()
 {
-    std::cout << type << ":\t"
+    std::cout << type_ << ":\t"
               << " Target ID: " << target_id
               << " Delay: " << delay 
               << " RT: " << release_resource_type

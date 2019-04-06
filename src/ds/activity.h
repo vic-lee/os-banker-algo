@@ -21,7 +21,7 @@ class Activity
     int target_id;
     int delay;
     int time_remaining_;
-    bool executed;
+    bool has_begun_;
     bool completed;
 
     void set_to_complete();
@@ -35,9 +35,10 @@ class Activity
         this->time_remaining_ = delay;
         this->completed = false;
     }
-    virtual ~Activity() {}
+    // virtual ~Activity() {}
     int get_target_id();
-    virtual void execute();
+    void update_time_remaining_before_execute();
+    void update_completion_state_after_execute();
     bool is_active();
     bool is_time_to_execute();
     void print();

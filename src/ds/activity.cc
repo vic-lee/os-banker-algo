@@ -14,26 +14,41 @@ int Activity::get_target_id()
     return target_id;
 }
 
-void Activity::execute()
+void Activity::update_time_remaining_before_execute()
 {
     if (completed)
     {
         return;
     }
-    else if (executed && time_remaining_ == 0)
+    else if (has_begun_ && time_remaining_ == 0)
     {
         completed = true;
         return;
     }
-    else if (executed && time_remaining_ > 0)
+    else if (has_begun_ && time_remaining_ > 0)
     {
         time_remaining_--;
         return;
     }
     else
     {
-        executed = true;
+        has_begun_ = true;
     }
+}
+
+void Activity::update_completion_state_after_execute()
+{
+    /**
+     * Only call this function after Activity is executed (as the 
+     * function name indicates).
+     * 
+     * An activity may satisfy `has_begun_` and `time_remaining_==0`
+     * immeidately after `time_remaining_` has been updated, but has
+     * yet been executed. 
+     */ 
+    
+    if (has_begun_ && time_remaining_ == 0)
+        completed = true;
 }
 
 bool Activity::is_active()

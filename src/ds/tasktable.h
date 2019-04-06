@@ -3,7 +3,6 @@
 
 #include <map>
 #include "task.h"
-#include "activity_request.h"
 
 namespace task
 {

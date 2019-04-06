@@ -14,6 +14,7 @@ class Request : public Activity
     int get_resource_type();
     int get_request_count();
     void execute();
+    void print() override;
 
   private:
     int request_resource_type_;

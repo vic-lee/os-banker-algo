@@ -29,4 +29,13 @@ void Request::execute()
     // Activity::execute();
 }
 
+void Request::print()
+{
+    std::cout << type_ << ":\t"
+              << " Target ID: " << target_id
+              << " Delay: " << delay 
+              << " Request RT: " << this->request_resource_type_
+              << " Request count: " << this->request_count_ << std::endl;
+}
+
 } // namespace task

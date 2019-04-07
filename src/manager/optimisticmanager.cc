@@ -23,7 +23,7 @@ void OptimisticManager::iterate_cycle()
 
     task_table.do_all_latest_releases(visit_status, &resource_table_, cycle_);
 
-    while (does_deadlock_exist())
+    while (does_deadlock_exist(visit_status))
     {
         std::cout << "DEADLOCKED!!!" << std::endl;
         been_deadlocked = true;
@@ -36,19 +36,12 @@ void OptimisticManager::iterate_cycle()
     if (!been_deadlocked)
         task_table.do_all_latest_requests(visit_status, &resource_table_, cycle_);
 
-
-    // task_table.iterate_task_activities(been_deadlocked, &resource_table_, cycle_);
-
-    // for (int i = 1; i < (task_table.size() + 1); i++)
-    // {
-    //     task::Task *task = task_table.access_task_by_id(i);
-    //     task->do_latest_activity(&resource_table_, cycle_);
-    // }
+    resource_table_.release_pending_resources();
 
     cycle_++;
 }
 
-bool OptimisticManager::does_deadlock_exist()
+bool OptimisticManager::does_deadlock_exist(std::map<int, bool> visit_status)
 {
     bool does_deadlock_exist = true;
 
@@ -57,6 +50,12 @@ bool OptimisticManager::does_deadlock_exist()
     for (int i = 1; i < (task_table.size() + 1); i++)
     {
         task::Task *task = task_table.access_task_by_id(i);
+
+        if (visit_status.at(i) == true)
+        {
+            does_deadlock_exist = false;
+            continue;
+        }
 
         if (!task->is_terminated() && task->is_latest_activity_request())
         {
@@ -69,10 +68,6 @@ bool OptimisticManager::does_deadlock_exist()
             if (can_satisfy)
             {
                 does_deadlock_exist = false;
-            }
-            else
-            {
-                task->increment_cycles_waiting(cycle_);
             }
         }
     }

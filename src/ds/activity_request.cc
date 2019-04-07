@@ -9,8 +9,6 @@ Request::Request(int target_id, int delay, int request_resource_type, int reques
 {
     this->request_resource_type_ = request_resource_type;
     this->request_count_ = request_count;
-    std::cout << "Request RT: " << this->request_resource_type_
-              << "\tRequest count: " << this->request_count_ << std::endl;
 }
 
 int Request::get_resource_type()

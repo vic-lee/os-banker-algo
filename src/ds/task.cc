@@ -140,6 +140,10 @@ bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_t
     if (latest_activity->is_request())
     {
         bool is_successful = resource_table->handle_new_request(static_cast<Request *>(latest_activity));
+        
+        if (!is_successful)
+            increment_cycles_waiting(cycle);
+            
         return is_successful;
     }
     else if (latest_activity->is_release())
@@ -200,13 +204,16 @@ void Task::release_resources(ResourceTable *resource_table)
 
 void Task::increment_cycles_waiting(int current_cycle)
 {
+    std::cout << "Incrementing cycle for Task " << id_;
     if (latest_cycle_waited_ == -1 || latest_cycle_waited_ < current_cycle)
     {
         latest_cycle_waited_ = current_cycle;
         cycles_waiting_++;
+        std::cout << " to " << cycles_waiting_ << std::endl;
     }
     else if (latest_cycle_waited_ == current_cycle)
     {
+        std::cout << " to " << cycles_waiting_ << std::endl;
         return;
     }
 }

@@ -17,17 +17,17 @@ void OptimisticManager::do_tasks()
 
 void OptimisticManager::iterate_cycle(int &cycle)
 {
-    std::cout << "Cycle: " << cycle << std::endl;
+    std::cout << "\nCycle: " << cycle << std::endl;
+    bool been_deadlocked = false;
 
-    if (does_deadlock_exist())
+    while (does_deadlock_exist())
     {
-        while (does_deadlock_exist())
-        {
-            std::cout << "DEADLOCKED!!!" << std::endl;
-            handle_deadlock();
-        }
+        std::cout << "DEADLOCKED!!!" << std::endl;
+        been_deadlocked = true;
+        handle_deadlock();
     }
-    else
+    
+    if (!been_deadlocked)
     {
         for (int i = 1; i < (task_table.size() + 1); i++)
         {
@@ -52,6 +52,10 @@ bool OptimisticManager::does_deadlock_exist()
         {
             has_request_pending_next_cycle = true;
 
+            std::cout << "Testing Task " << task->id()
+                      << "; Terminated? " << task->is_terminated()
+                      << "; Aborted? " << task->is_aborted() << std::endl;
+
             task::Activity *latest_request = task->get_latest_activity();
 
             bool can_satisfy = resource_table_.can_satisfy_request(
@@ -59,7 +63,6 @@ bool OptimisticManager::does_deadlock_exist()
             if (can_satisfy)
             {
                 does_deadlock_exist = false;
-                std::cout << does_deadlock_exist << std::endl;
             }
         }
     }

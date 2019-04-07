@@ -16,3 +16,8 @@ The project includes the following modules:
 Create a data structure that stores statistics regarding each task for inter-module communications. 
 
 ## Algorithm for detecting safe state
+
+
+## TODO
+1. Make `cycle` a private data member of OptimisticManager, not a var in function.
+2. Migrate final printing functions to `TaskPrinter.cc`.

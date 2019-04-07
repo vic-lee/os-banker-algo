@@ -112,6 +112,8 @@ task::Task *OptimisticManager::find_lowest_task_with_request()
 
 void OptimisticManager::print()
 {
+    std::cout << "\n/******** FIFO ********/" <<std::endl;
+
     int cumulative_time_spent = 0;
     int cumulative_time_waiting = 0;
 
@@ -128,7 +130,7 @@ void OptimisticManager::print()
     std::cout << "Total\t    "
               << cumulative_time_spent << "   "
               << cumulative_time_waiting << "   "
-              << (cumulative_time_waiting / (double)cumulative_time_spent) << "%"
+              << (100 * cumulative_time_waiting / (double)cumulative_time_spent) << "%"
               << std::endl;
 }
 

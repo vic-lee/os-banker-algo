@@ -183,6 +183,9 @@ void Task::print()
 
 std::tuple<int, int> Task::get_print_statistic()
 {
+    if (is_aborted())
+        return std::make_tuple(0, 0);
+
     int total_time_spent = termination_cycle_ - initiation_cycle_;
     return std::make_tuple(total_time_spent, cycles_waiting_);
 }
@@ -196,7 +199,7 @@ void Task::print_finished_status()
         int total_time_spent = termination_cycle_ - initiation_cycle_;
         std::cout << total_time_spent << "   "
                   << cycles_waiting_ << "   "
-                  << (100 * ((double)cycles_waiting_) / total_time_spent) << "%"
+                  << (100 * cycles_waiting_ / ((double) total_time_spent)) << "%"
                   << std::endl;
     }
     else

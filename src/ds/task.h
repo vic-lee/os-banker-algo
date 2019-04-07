@@ -23,9 +23,13 @@ class Task
     Task(int id, Claim claim);
     void add_new_activity(Activity *activity);
     void do_latest_activity(ResourceTable *resource_table, int cycle);
+    bool is_latest_activity_request();
+    Activity *get_latest_activity();
     std::string to_string();
     bool is_terminated();
     void terminate(int cycle);
+    bool is_aborted();
+    void abort();
     void print();
     std::tuple<int, int> get_print_statistic();
     void print_finished_status();
@@ -33,7 +37,6 @@ class Task
 
   private:
     void set_latest_activity();
-    Activity *get_latest_activity();
     bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle);
 
     int id_;

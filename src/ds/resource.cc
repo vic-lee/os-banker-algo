@@ -28,8 +28,11 @@ bool Resource::handle_new_request(Request *request)
     if (!can_satisfy_request(request))
     {
         int num_of_units_needed = request->get_request_count();
+        int target_id = request->get_target_id();
         std::cout
-            << "Cannot satisfy request; requests " << num_of_units_needed << "; "
+            << "Cannot satisfy request; " 
+            << "Task " << target_id << " requests " 
+            << num_of_units_needed << " of RT " << id_ << "; "
             << "Only has " << remaining_unit_count_ <<" "
             << std::endl;
         return false;

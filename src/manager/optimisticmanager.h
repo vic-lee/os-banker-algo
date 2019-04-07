@@ -12,7 +12,8 @@ class OptimisticManager
     bool does_deadlock_exist();
     void handle_deadlock();
     void iterate_cycle(int &cycle);
-
+    task::Task* find_lowest_task_with_request();
+    
   public:
     OptimisticManager(task::TaskTable task_table, task::ResourceTable resource_table)
     {

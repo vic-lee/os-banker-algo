@@ -54,6 +54,12 @@ Activity *Task::get_latest_activity()
     return activities_table_[latest_activity_index_];
 }
 
+bool Task::is_latest_activity_request()
+{
+    Activity *latest_actvity = get_latest_activity();
+    return latest_actvity->is_request();
+}
+
 void Task::do_latest_activity(ResourceTable *resource_table, int cycle)
 {
     set_latest_activity();
@@ -118,6 +124,17 @@ void Task::terminate(int cycle)
     std::cout << "Terminating Task " << id_ << std::endl;
 }
 
+bool Task::is_aborted()
+{
+    return aborted_;
+}
+
+void Task::abort()
+{
+    aborted_ = true;
+    terminated_ = true;
+}
+
 void Task::print()
 {
     std::cout << std::endl;
@@ -141,16 +158,24 @@ void Task::print()
 std::tuple<int, int> Task::get_print_statistic()
 {
     int total_time_spent = termination_cycle_ - initiation_cycle_;
-    return std::make_tuple(total_time_spent, cycles_waiting_);    
+    return std::make_tuple(total_time_spent, cycles_waiting_);
 }
 
 void Task::print_finished_status()
 {
-    int total_time_spent = termination_cycle_ - initiation_cycle_;
-    std::cout << "Task " << id_ << "\t    "
-              << total_time_spent << "   "
-              << cycles_waiting_ << "   "
-              << (((double)cycles_waiting_) / total_time_spent) << "%" << std::endl;
+    std::cout << "Task " << id_ << "\t    ";
+
+    if (!is_aborted())
+    {
+        int total_time_spent = termination_cycle_ - initiation_cycle_;
+        std::cout << total_time_spent << "   "
+                  << cycles_waiting_ << "   "
+                  << (((double)cycles_waiting_) / total_time_spent) << "%" << std::endl;
+    }
+    else
+    {
+        std::cout << "Aborted" << std::endl;
+    }
 }
 
 } // namespace task

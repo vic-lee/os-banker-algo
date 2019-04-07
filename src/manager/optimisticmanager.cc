@@ -19,7 +19,7 @@ void OptimisticManager::iterate_cycle(int &cycle)
 {
     std::cout << "Cycle: " << cycle << std::endl;
 
-    if (does_deadlock_exist())
+    while (does_deadlock_exist())
     {
         std::cout << "DEADLOCKED!!!" << std::endl;
         handle_deadlock();
@@ -44,7 +44,7 @@ bool OptimisticManager::does_deadlock_exist()
     {
         task::Task *task = task_table.access_task_by_id(i);
 
-        if (task->is_latest_activity_request())
+        if (!task->is_terminated() && task->is_latest_activity_request())
         {
             has_request_pending_next_cycle = true;
 
@@ -60,7 +60,7 @@ bool OptimisticManager::does_deadlock_exist()
         }
     }
 
-    if (!has_request_pending_next_cycle && does_deadlock_exist==true)
+    if (!has_request_pending_next_cycle && does_deadlock_exist == true)
         does_deadlock_exist = false;
 
     return does_deadlock_exist;
@@ -68,6 +68,23 @@ bool OptimisticManager::does_deadlock_exist()
 
 void OptimisticManager::handle_deadlock()
 {
+    task::Task *task_to_abort = find_lowest_task_with_request();
+
+    if (task_to_abort != NULL)
+    {
+        task_to_abort->abort();
+    }
+}
+
+task::Task *OptimisticManager::find_lowest_task_with_request()
+{
+    for (int i = 1; i < (task_table.size() + 1); i++)
+    {
+        task::Task *task = task_table.access_task_by_id(i);
+        if (task->is_latest_activity_request())
+            return task;
+    }
+    return nullptr;
 }
 
 void OptimisticManager::print()

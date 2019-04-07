@@ -17,6 +17,21 @@ int str_to_int(std::string s)
     return atoi(s.c_str());
 }
 
+std::tuple<Task *, int> TaskTable::get_next_active_task(int prior_id)
+{
+    int id = prior_id++;
+    std::cout << "Doing ID " << id << std::endl;
+    while (id <= task_table.size())
+    {
+        Task *task = access_task_by_id(id);
+        if (!task->is_terminated())
+            return std::make_tuple(task, id);
+        id++;
+    }
+
+    return std::make_tuple(nullptr, -1);
+}
+
 void TaskTable::add(Task task)
 {
     task_table.insert(std::pair<int, Task>(task.id(), task));

@@ -7,15 +7,17 @@ namespace manager
 class OptimisticManager
 {
     task::TaskTable task_table;
-    task::ResourceTable resource_table;
+    task::ResourceTable resource_table_;
 
-    void iterate_cycle(int& cycle);
+    bool does_deadlock_exist();
+    void handle_deadlock();
+    void iterate_cycle(int &cycle);
 
   public:
     OptimisticManager(task::TaskTable task_table, task::ResourceTable resource_table)
     {
         this->task_table = task_table;
-        this->resource_table = resource_table;
+        this->resource_table_ = resource_table;
     }
     void do_tasks();
     void print();

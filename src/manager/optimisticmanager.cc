@@ -9,7 +9,7 @@ namespace manager
 
 void OptimisticManager::do_tasks()
 {
-    while (!task_table.is_all_task_terminated())
+    while (!task_table_.is_all_task_terminated())
         iterate_cycle();
 }
 
@@ -19,9 +19,9 @@ void OptimisticManager::iterate_cycle()
 
     bool been_deadlocked = false;
 
-    std::map<int, bool> visit_status = task_table.create_visit_status_table_for_all_tasks();
+    std::map<int, bool> visit_status = create_visit_status_table_for_all_tasks();
 
-    task_table.do_all_latest_releases(visit_status, &resource_table_, cycle_);
+    do_all_latest_releases(visit_status);
 
     while (does_deadlock_exist(visit_status))
     {
@@ -30,11 +30,11 @@ void OptimisticManager::iterate_cycle()
         handle_deadlock();
     }
 
-    task_table.do_all_latest_initiates(visit_status, &resource_table_, cycle_);
-    task_table.do_all_latest_terminates(visit_status, &resource_table_, cycle_);
+    do_all_latest_initiates(visit_status);
+    do_all_latest_terminates(visit_status);
 
     if (!been_deadlocked)
-        task_table.do_all_latest_requests(visit_status, &resource_table_, cycle_);
+        do_all_latest_requests(visit_status);
 
     resource_table_.release_pending_resources();
 
@@ -47,9 +47,9 @@ bool OptimisticManager::does_deadlock_exist(std::map<int, bool> visit_status)
 
     bool has_request_pending_next_cycle = false;
 
-    for (int i = 1; i < (task_table.size() + 1); i++)
+    for (int i = 1; i < (task_table_.size() + 1); i++)
     {
-        task::Task *task = task_table.access_task_by_id(i);
+        task::Task *task = task_table_.access_task_by_id(i);
 
         if (visit_status.at(i) == true)
         {
@@ -91,14 +91,64 @@ void OptimisticManager::handle_deadlock()
 
 task::Task *OptimisticManager::find_lowest_task_with_request()
 {
-    for (int i = 1; i < (task_table.size() + 1); i++)
+    for (int i = 1; i < (task_table_.size() + 1); i++)
     {
-        task::Task *task = task_table.access_task_by_id(i);
+        task::Task *task = task_table_.access_task_by_id(i);
         if (task->is_latest_activity_request())
             return task;
     }
     return nullptr;
 }
+
+std::map<int, bool> OptimisticManager::create_visit_status_table_for_all_tasks()
+{
+    std::map<int, bool> visit_table;
+
+    for (int i = 1; i < (task_table_.size() + 1); i++)
+        visit_table.insert(std::pair<int, bool>(i, false));
+
+    return visit_table;
+}
+
+void OptimisticManager::do_all_latest_initiates(std::map<int, bool> &visit_status)
+{
+    do_all_latest_activity_of_type("initiate", visit_status);
+}
+
+void OptimisticManager::do_all_latest_terminates(std::map<int, bool> &visit_status)
+{
+    do_all_latest_activity_of_type("terminate", visit_status);
+}
+
+void OptimisticManager::do_all_latest_requests(std::map<int, bool> &visit_status)
+{
+    do_all_latest_activity_of_type("request", visit_status);
+}
+
+void OptimisticManager::do_all_latest_releases(std::map<int, bool> &visit_status)
+{
+    do_all_latest_activity_of_type("release", visit_status);
+}
+
+void OptimisticManager::do_all_latest_activity_of_type(std::string type, std::map<int, bool> &visit_status)
+{
+    for (int i = 1; i < (task_table_.size() + 1); i++)
+    {
+        task::Task *task = task_table_.access_task_by_id(i);
+
+        if (!task->is_terminated() && visit_status.at(i) == false)
+        {
+            task::Activity *activity = task->get_latest_activity();
+
+            if (activity->type() == type)
+            {
+                task->do_latest_activity(&resource_table_, cycle_);
+                visit_status.at(i) = true;
+            }
+        }
+    }
+}
+
 
 void OptimisticManager::print()
 {
@@ -107,9 +157,9 @@ void OptimisticManager::print()
     int cumulative_time_spent = 0;
     int cumulative_time_waiting = 0;
 
-    for (int i = 1; i < (task_table.size() + 1); i++)
+    for (int i = 1; i < (task_table_.size() + 1); i++)
     {
-        task::Task *current_task = task_table.access_task_by_id(i);
+        task::Task *current_task = task_table_.access_task_by_id(i);
         current_task->print_finished_status();
 
         int time_spent, time_waiting;

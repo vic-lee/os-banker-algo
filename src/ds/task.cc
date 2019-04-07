@@ -196,7 +196,8 @@ void Task::print_finished_status()
         int total_time_spent = termination_cycle_ - initiation_cycle_;
         std::cout << total_time_spent << "   "
                   << cycles_waiting_ << "   "
-                  << (((double)cycles_waiting_) / total_time_spent) << "%" << std::endl;
+                  << (100 * ((double)cycles_waiting_) / total_time_spent) << "%"
+                  << std::endl;
     }
     else
     {

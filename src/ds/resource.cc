@@ -20,7 +20,7 @@ int Resource::get_unit_count()
 bool Resource::can_satisfy_request(Request *request)
 {
     int num_of_units_needed = request->get_request_count();
-    
+
     if (!(remaining_unit_count_ >= num_of_units_needed))
     {
         std::cout << "Request of " << num_of_units_needed << " RT"
@@ -71,6 +71,12 @@ void Resource::handle_new_release(Release *release)
 {
     int num_of_units_restored = release->get_release_count();
     remaining_unit_count_ += num_of_units_restored;
+
+    /** DEBUG **/
+    if (remaining_unit_count_ > total_unit_count_)
+        std::cout << "BUG: units remaining > total units; "
+                  << "Remaining " << remaining_unit_count_
+                  << "; Total " << total_unit_count_ << std::endl;
 
     std::cout << "Release of " << num_of_units_restored << " of RT " << id_
               << " granted to Task " << release->get_target_id() << "; "

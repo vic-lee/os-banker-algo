@@ -23,7 +23,7 @@ class Task
     Task(int id, Claim claim);
 
     int id();
-    void increment_cycles_waiting();
+    void increment_cycles_waiting(int current_cycle);
 
     void add_new_activity(Activity *activity);
     Activity *get_latest_activity();
@@ -52,6 +52,7 @@ class Task
     int initiation_cycle_;
     int termination_cycle_;
     int cycles_waiting_;
+    int latest_cycle_waited_;
     std::map<int, Claim> claims_table_;
     std::vector<Activity *> activities_table_;
 };

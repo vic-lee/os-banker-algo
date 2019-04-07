@@ -16,6 +16,7 @@ Task::Task(int id, Claim claim)
     terminated_ = false;
     initiation_cycle_ = 0;
     cycles_waiting_ = 0;
+    latest_cycle_waited_ = -1;
 
     claims_table_.insert(
         std::pair<int, Claim>(claim.claimed_resource_id, claim));
@@ -28,6 +29,7 @@ Task::Task(int id)
     terminated_ = false;
     initiation_cycle_ = 0;
     cycles_waiting_ = 0;
+    latest_cycle_waited_ = -1;
 }
 
 void Task::set_latest_activity()
@@ -57,11 +59,18 @@ void Task::add_new_activity(Activity *activity)
 Activity *Task::get_latest_activity()
 {
     set_latest_activity();
+
+    if (latest_activity_index_ == -1)
+        return nullptr;
+
     return activities_table_[latest_activity_index_];
 }
 
 bool Task::is_latest_activity_request()
 {
+    if (terminated_)
+        return false;
+
     Activity *latest_actvity = get_latest_activity();
     return latest_actvity->is_request();
 }
@@ -156,9 +165,17 @@ void Task::release_resources(ResourceTable *resource_table)
     }
 }
 
-void Task::increment_cycles_waiting()
+void Task::increment_cycles_waiting(int current_cycle)
 {
-    cycles_waiting_++;
+    if (latest_cycle_waited_ == -1 || latest_cycle_waited_ < current_cycle)
+    {
+        latest_cycle_waited_ = current_cycle;
+        cycles_waiting_++;
+    }
+    else if (latest_cycle_waited_ == current_cycle)
+    {
+        return;
+    }
 }
 
 void Task::print()
@@ -199,7 +216,7 @@ void Task::print_finished_status()
         int total_time_spent = termination_cycle_ - initiation_cycle_;
         std::cout << total_time_spent << "   "
                   << cycles_waiting_ << "   "
-                  << (100 * cycles_waiting_ / ((double) total_time_spent)) << "%"
+                  << (100 * cycles_waiting_ / ((double)total_time_spent)) << "%"
                   << std::endl;
     }
     else

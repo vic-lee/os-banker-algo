@@ -21,7 +21,7 @@ void OptimisticManager::iterate_cycle(int &cycle)
 
     bool been_deadlocked = false;
 
-    while (does_deadlock_exist())
+    while (does_deadlock_exist(cycle))
     {
         std::cout << "DEADLOCKED!!!" << std::endl;
         been_deadlocked = true;
@@ -50,7 +50,7 @@ void OptimisticManager::iterate_cycle(int &cycle)
     cycle++;
 }
 
-bool OptimisticManager::does_deadlock_exist()
+bool OptimisticManager::does_deadlock_exist(int cycle)
 {
     bool does_deadlock_exist = true;
 
@@ -74,7 +74,7 @@ bool OptimisticManager::does_deadlock_exist()
             }
             else
             {
-                task->increment_cycles_waiting();
+                task->increment_cycles_waiting(cycle);
             }
         }
     }
@@ -87,6 +87,7 @@ bool OptimisticManager::does_deadlock_exist()
 
 void OptimisticManager::handle_deadlock()
 {
+
     task::Task *task_to_abort = find_lowest_task_with_request();
 
     if (task_to_abort != NULL)

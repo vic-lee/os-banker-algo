@@ -19,18 +19,22 @@ void OptimisticManager::iterate_cycle(int &cycle)
 {
     std::cout << "Cycle: " << cycle << std::endl;
 
-    while (does_deadlock_exist())
+    if (does_deadlock_exist())
     {
-        std::cout << "DEADLOCKED!!!" << std::endl;
-        handle_deadlock();
+        while (does_deadlock_exist())
+        {
+            std::cout << "DEADLOCKED!!!" << std::endl;
+            handle_deadlock();
+        }
     }
-
-    for (int i = 1; i < (task_table.size() + 1); i++)
+    else
     {
-        task::Task *task = task_table.access_task_by_id(i);
-        task->do_latest_activity(&resource_table_, cycle);
+        for (int i = 1; i < (task_table.size() + 1); i++)
+        {
+            task::Task *task = task_table.access_task_by_id(i);
+            task->do_latest_activity(&resource_table_, cycle);
+        }
     }
-
     cycle++;
 }
 
@@ -72,7 +76,8 @@ void OptimisticManager::handle_deadlock()
 
     if (task_to_abort != NULL)
     {
-        task_to_abort->abort();
+        std::cout << "Aborting" << std::endl;
+        task_to_abort->abort(&resource_table_);
     }
 }
 

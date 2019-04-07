@@ -20,7 +20,15 @@ int Resource::get_unit_count()
 bool Resource::can_satisfy_request(Request *request)
 {
     int num_of_units_needed = request->get_request_count();
-    return (remaining_unit_count_ > num_of_units_needed);
+    
+    if (!(remaining_unit_count_ >= num_of_units_needed))
+    {
+        std::cout << "Request of " << num_of_units_needed << " RT"
+                  << request->get_resource_type() << " Cannot be granted; "
+                  << remaining_unit_count_ << " units remaining" << std::endl;
+    }
+
+    return (remaining_unit_count_ >= num_of_units_needed);
 }
 
 bool Resource::handle_new_request(Request *request)
@@ -53,7 +61,8 @@ void Resource::reverse_request(Request *request)
 {
     int num_of_units_to_restore = request->get_request_count();
     remaining_unit_count_ += num_of_units_to_restore;
-    std::cout << "Restored " << num_of_units_to_restore << " of RT " << id_ << ";"
+    std::cout << "Restored " << num_of_units_to_restore << " of RT " << id_
+              << " originally given to Task " << request->get_target_id() << "; "
               << "Total: " << total_unit_count_ << "; "
               << "Remaining: " << remaining_unit_count_ << std::endl;
 }

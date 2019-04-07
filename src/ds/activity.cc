@@ -10,12 +10,12 @@ Activity::Activity(std::string type, int target_id, int delay)
     this->target_id = target_id;
     this->delay = delay;
     this->time_remaining_ = delay;
-    this->completed = false;
+    this->completed_ = false;
 }
 
 void Activity::set_to_complete()
 {
-    completed = true;
+    completed_ = true;
 }
 
 int Activity::get_target_id()
@@ -25,7 +25,7 @@ int Activity::get_target_id()
 
 void Activity::update_time_remaining_before_execute()
 {
-    if (completed)
+    if (completed_)
     {
         return;
     }
@@ -56,12 +56,12 @@ void Activity::update_completion_state_after_execute(bool is_successful)
      */
 
     if (is_successful && has_begun_ && time_remaining_ == 0)
-        completed = true;
+        completed_ = true;
 }
 
 bool Activity::is_active()
 {
-    return !completed;
+    return !completed_;
 }
 
 bool Activity::is_time_to_execute()

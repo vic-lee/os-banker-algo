@@ -24,6 +24,7 @@ class Activity
     void update_completion_state_after_execute(bool is_successful);
     bool is_active();
     bool is_time_to_execute();
+    void set_to_complete();
     virtual void print();
 
     std::string type();
@@ -38,9 +39,8 @@ class Activity
     int delay;
     int time_remaining_;
     bool has_begun_;
-    bool completed;
+    bool completed_;
 
-    void set_to_complete();
 };
 } // namespace task
 

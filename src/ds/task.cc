@@ -32,6 +32,12 @@ Task::Task(int id)
 
 void Task::set_latest_activity()
 {
+    if (aborted_ || terminated_)
+    {
+        latest_activity_index_ = -1;
+        return;
+    }
+
     for (int i = 0; i < activities_table_.size(); i++)
     {
         if (activities_table_[i]->is_active())
@@ -140,10 +146,11 @@ void Task::release_resources(ResourceTable *resource_table)
 {
     for (int i = 0; i < latest_activity_index_; i++)
     {
-        Activity *activity = activities_table_[latest_activity_index_];
+        Activity *activity = activities_table_[i];
         if (activity->is_request())
         {
             resource_table->reverse_request(static_cast<Request *>(activity));
+            activity->set_to_complete();
         }
     }
 }

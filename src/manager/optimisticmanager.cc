@@ -9,19 +9,17 @@ namespace manager
 
 void OptimisticManager::do_tasks()
 {
-    int cycle = 0;
-
     while (!task_table.is_all_task_terminated())
-        iterate_cycle(cycle);
+        iterate_cycle();
 }
 
-void OptimisticManager::iterate_cycle(int &cycle)
+void OptimisticManager::iterate_cycle()
 {
-    std::cout << "\n----- Cycle " << cycle << "-" << cycle + 1 << " -----" << std::endl;
+    std::cout << "\n----- Cycle " << cycle_ << "-" << cycle_ + 1 << " -----" << std::endl;
 
     bool been_deadlocked = false;
 
-    while (does_deadlock_exist(cycle))
+    while (does_deadlock_exist())
     {
         std::cout << "DEADLOCKED!!!" << std::endl;
         been_deadlocked = true;
@@ -33,7 +31,7 @@ void OptimisticManager::iterate_cycle(int &cycle)
         for (int i = 1; i < (task_table.size() + 1); i++)
         {
             task::Task *task = task_table.access_task_by_id(i);
-            task->do_latest_activity(&resource_table_, cycle);
+            task->do_latest_activity(&resource_table_, cycle_);
         }
 
         // task::Task *task;
@@ -47,10 +45,10 @@ void OptimisticManager::iterate_cycle(int &cycle)
         //     std::tie(task, id) = task_table.get_next_active_task(id);
         // }
     }
-    cycle++;
+    cycle_++;
 }
 
-bool OptimisticManager::does_deadlock_exist(int cycle)
+bool OptimisticManager::does_deadlock_exist()
 {
     bool does_deadlock_exist = true;
 
@@ -74,7 +72,7 @@ bool OptimisticManager::does_deadlock_exist(int cycle)
             }
             else
             {
-                task->increment_cycles_waiting(cycle);
+                task->increment_cycles_waiting(cycle_);
             }
         }
     }

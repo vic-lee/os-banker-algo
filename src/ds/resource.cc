@@ -57,10 +57,6 @@ bool Resource::handle_new_request(Request *request)
                   << "Total: " << total_unit_count_ << "; "
                   << "Remaining: " << remaining_unit_count_ << std::endl;
 
-        // std::cout << "Request of " << num_of_units_needed << " of RT " << id_
-        //           << " granted to Task " << request->get_target_id() << "; "
-        //           << "Total: " << total_unit_count_ << "; "
-        //           << "Remaining: " << remaining_unit_count_ << std::endl;
         return true;
     }
 }

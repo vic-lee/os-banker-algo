@@ -129,10 +129,23 @@ bool Task::is_aborted()
     return aborted_;
 }
 
-void Task::abort()
+void Task::abort(ResourceTable *resource_table)
 {
     aborted_ = true;
     terminated_ = true;
+    release_resources(resource_table);
+}
+
+void Task::release_resources(ResourceTable *resource_table)
+{
+    for (int i = 0; i < latest_activity_index_; i++)
+    {
+        Activity *activity = activities_table_[latest_activity_index_];
+        if (activity->is_request())
+        {
+            resource_table->reverse_request(static_cast<Request *>(activity));
+        }
+    }
 }
 
 void Task::print()

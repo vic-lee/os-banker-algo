@@ -30,10 +30,10 @@ bool Resource::handle_new_request(Request *request)
         int num_of_units_needed = request->get_request_count();
         int target_id = request->get_target_id();
         std::cout
-            << "Cannot satisfy request; " 
-            << "Task " << target_id << " requests " 
+            << "Cannot satisfy request; "
+            << "Task " << target_id << " requests "
             << num_of_units_needed << " of RT " << id_ << "; "
-            << "Only has " << remaining_unit_count_ <<" "
+            << "Only has " << remaining_unit_count_ << " "
             << std::endl;
         return false;
     }
@@ -47,6 +47,15 @@ bool Resource::handle_new_request(Request *request)
                   << "Remaining: " << remaining_unit_count_ << std::endl;
         return true;
     }
+}
+
+void Resource::reverse_request(Request *request)
+{
+    int num_of_units_to_restore = request->get_request_count();
+    remaining_unit_count_ += num_of_units_to_restore;
+    std::cout << "Restored " << num_of_units_to_restore << " of RT " << id_ << ";"
+              << "Total: " << total_unit_count_ << "; "
+              << "Remaining: " << remaining_unit_count_ << std::endl;
 }
 
 void Resource::handle_new_release(Release *release)

@@ -19,6 +19,7 @@ class ResourceTable
   public:
     bool can_satisfy_request(Request *request);
     bool handle_new_request(Request *request);
+    void reverse_request(Request *request);
     void handle_new_release(Release *release);
     void add(Resource *resource);
     void print();

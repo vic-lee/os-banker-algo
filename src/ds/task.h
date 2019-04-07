@@ -29,7 +29,7 @@ class Task
     bool is_terminated();
     void terminate(int cycle);
     bool is_aborted();
-    void abort();
+    void abort(ResourceTable *resource_table);
     void print();
     std::tuple<int, int> get_print_statistic();
     void print_finished_status();
@@ -38,6 +38,7 @@ class Task
   private:
     void set_latest_activity();
     bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle);
+    void release_resources(ResourceTable *resource_table);
 
     int id_;
     int latest_activity_index_;

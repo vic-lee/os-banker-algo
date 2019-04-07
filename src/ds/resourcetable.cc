@@ -4,7 +4,7 @@
 namespace task
 {
 
-Resource* ResourceTable::find_resource_by_id(int id)
+Resource *ResourceTable::find_resource_by_id(int id)
 {
     return resource_table_[id - 1];
 }
@@ -23,15 +23,22 @@ bool ResourceTable::can_satisfy_request(Request *request)
 bool ResourceTable::handle_new_request(Request *request)
 {
     int resource_type = request->get_resource_type();
-    Resource* target_resource = find_resource_by_id(resource_type);
+    Resource *target_resource = find_resource_by_id(resource_type);
     bool is_successful = target_resource->handle_new_request(request);
     return is_successful;
+}
+
+void ResourceTable::reverse_request(Request *request)
+{
+    int resource_type = request->get_resource_type();
+    Resource *target_resource = find_resource_by_id(resource_type);
+    target_resource->reverse_request(request);
 }
 
 void ResourceTable::handle_new_release(Release *release)
 {
     int resource_type = release->get_resource_type();
-    Resource* target_resource = find_resource_by_id(resource_type);
+    Resource *target_resource = find_resource_by_id(resource_type);
     target_resource->handle_new_release(release);
 }
 

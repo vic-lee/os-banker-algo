@@ -68,11 +68,44 @@ Activity *Task::get_latest_activity()
 
 bool Task::is_latest_activity_request()
 {
+    return determine_latest_activity_type("request");
+}
+
+bool Task::is_latest_activity_release()
+{
+    return determine_latest_activity_type("release");
+}
+
+bool Task::is_latest_activity_initiate()
+{
+    return determine_latest_activity_type("initiate");
+}
+
+bool Task::is_latest_activity_terminate()
+{
+    return determine_latest_activity_type("terminate");
+}
+
+bool Task::determine_latest_activity_type(std::string target_type)
+{
     if (terminated_)
         return false;
 
     Activity *latest_actvity = get_latest_activity();
-    return latest_actvity->is_request();
+
+    if (target_type == "initate")
+        return latest_actvity->is_initiate();
+
+    else if (target_type == "request")
+        return latest_actvity->is_request();
+
+    else if (target_type == "release")
+        return latest_actvity->is_release();
+
+    else if (target_type == "terminate")
+        return latest_actvity->is_termination();
+
+    return false;
 }
 
 void Task::do_latest_activity(ResourceTable *resource_table, int cycle)

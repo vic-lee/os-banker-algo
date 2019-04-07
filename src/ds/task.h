@@ -28,7 +28,10 @@ class Task
     void add_new_activity(Activity *activity);
     Activity *get_latest_activity();
     void do_latest_activity(ResourceTable *resource_table, int cycle);
+    bool is_latest_activity_initiate();
     bool is_latest_activity_request();
+    bool is_latest_activity_release();
+    bool is_latest_activity_terminate();
 
     bool is_terminated();
     void terminate(int cycle);
@@ -44,6 +47,7 @@ class Task
     void set_latest_activity();
     bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle);
     void release_resources(ResourceTable *resource_table);
+    bool determine_latest_activity_type(std::string target_type);
 
     int id_;
     int latest_activity_index_;

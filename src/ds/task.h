@@ -21,19 +21,24 @@ class Task
   public:
     Task(int id);
     Task(int id, Claim claim);
+
+    int id();
+    void increment_cycles_waiting();
+
     void add_new_activity(Activity *activity);
+    Activity *get_latest_activity();
     void do_latest_activity(ResourceTable *resource_table, int cycle);
     bool is_latest_activity_request();
-    Activity *get_latest_activity();
-    std::string to_string();
+
     bool is_terminated();
     void terminate(int cycle);
     bool is_aborted();
     void abort(ResourceTable *resource_table);
+
     void print();
-    std::tuple<int, int> get_print_statistic();
+    std::string to_string();
     void print_finished_status();
-    int id();
+    std::tuple<int, int> get_print_statistic();
 
   private:
     void set_latest_activity();

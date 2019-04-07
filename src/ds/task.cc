@@ -137,6 +137,7 @@ bool Task::is_aborted()
 
 void Task::abort(ResourceTable *resource_table)
 {
+    std::cout << "Aborting Task " << id_ << std::endl;
     aborted_ = true;
     terminated_ = true;
     release_resources(resource_table);
@@ -153,6 +154,11 @@ void Task::release_resources(ResourceTable *resource_table)
             activity->set_to_complete();
         }
     }
+}
+
+void Task::increment_cycles_waiting()
+{
+    cycles_waiting_++;
 }
 
 void Task::print()

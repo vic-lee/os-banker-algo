@@ -21,7 +21,7 @@ std::tuple<Task *, int> TaskTable::get_next_active_task(int prior_id)
 {
     int id = prior_id++;
     std::cout << "Doing ID " << id << std::endl;
-    while (id <= task_table.size())
+    while (id <= task_table_.size())
     {
         Task *task = access_task_by_id(id);
         if (!task->is_terminated())
@@ -34,7 +34,7 @@ std::tuple<Task *, int> TaskTable::get_next_active_task(int prior_id)
 
 void TaskTable::add(Task task)
 {
-    task_table.insert(std::pair<int, Task>(task.id(), task));
+    task_table_.insert(std::pair<int, Task>(task.id(), task));
 }
 
 void TaskTable::handle_new_initiate(std::vector<std::string> parsed_line)
@@ -84,20 +84,20 @@ void TaskTable::add_termination_to_task(std::vector<std::string> parsed_line)
 
 task::Task *TaskTable::access_task_by_id(int id)
 {
-    task::Task *t = &task_table.at(id);
+    task::Task *t = &task_table_.at(id);
     return t;
 }
 
 bool TaskTable::has_task_been_created(int id)
 {
-    return task_table.count(id) > 0;
+    return task_table_.count(id) > 0;
 }
 
 bool TaskTable::is_all_task_terminated()
 {
     std::map<int, Task>::iterator it;
 
-    for (it = task_table.begin(); it != task_table.end(); it++)
+    for (it = task_table_.begin(); it != task_table_.end(); it++)
     {
         if (!it->second.is_terminated())
             return false;
@@ -108,14 +108,14 @@ bool TaskTable::is_all_task_terminated()
 
 int TaskTable::size()
 {
-    return task_table.size();
+    return task_table_.size();
 }
 
 void TaskTable::print()
 {
     std::map<int, Task>::iterator it;
 
-    for (it = task_table.begin(); it != task_table.end(); it++)
+    for (it = task_table_.begin(); it != task_table_.end(); it++)
     {
         it->second.print();
     }
@@ -124,7 +124,21 @@ void TaskTable::print()
 void TaskTable::add_new_activity_to_task(Activity *activity)
 {
     int target_id = activity->get_target_id();
-    task_table.find(target_id)->second.add_new_activity(activity);
+    task_table_.find(target_id)->second.add_new_activity(activity);
+}
+
+std::vector<std::vector<int>> TaskTable::generate_unmet_demand_matrix() 
+{
+    std::vector<std::vector<int>> unmet_demand;
+
+    for (int i = 1; i < (task_table_.size() + 1); i++)
+    {
+        task::Task *task = access_task_by_id(i);
+        std::vector<int> unmet_demand_for_task = task->generate_unmet_demand_vector();
+        unmet_demand.push_back(unmet_demand_for_task);
+    }
+
+    return unmet_demand;
 }
 
 } // namespace task

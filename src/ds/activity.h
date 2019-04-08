@@ -9,11 +9,7 @@ class Activity
 {
 
     /**
-     * This is a base class for Request, Release, and Termination. 
-     * 
-     * Initiate, the other possible Activity, does not have a derived
-     * subclass. Initiation is done when we read in a file; therefore
-     * there's no need for a subclass for relevant info and actions. 
+     * This is a base class for Initiate, Request, Release, and Termination. 
      */
 
   public:

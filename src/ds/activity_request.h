@@ -2,10 +2,12 @@
 #define HEADER_ACTIVITY_REQUEST
 
 #include <string>
-#include "activity.h"
 
 namespace task
 {
+
+class Activity;
+class ResourceTable;
 
 class Request : public Activity
 {
@@ -16,7 +18,10 @@ class Request : public Activity
     void execute();
     void print() override;
 
+    bool dispatch(ResourceTable *resource_table, bool check_legal);
+
   private:
+    bool is_request_legal();
     int request_resource_type_;
     int request_count_;
 };

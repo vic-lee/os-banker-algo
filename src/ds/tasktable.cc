@@ -49,8 +49,10 @@ void TaskTable::handle_new_initiate(std::vector<std::string> parsed_line)
     int claimed_resource_type = str_to_int(parsed_line[3]);
     int claimed_resource_count = str_to_int(parsed_line[4]);
 
+    Task *task = access_task_by_id(task_id);
+
     task::Claim claim(claimed_resource_type, claimed_resource_count);
-    Initiate *initiate = new Initiate(task_id, claim);
+    Initiate *initiate = new Initiate(task_id, claim, task);
     this->add_new_activity_to_task(initiate);
 }
 
@@ -60,7 +62,9 @@ void TaskTable::add_new_request_to_task(std::vector<std::string> parsed_line)
     int delay = str_to_int(parsed_line[2]);
     int request_type = str_to_int(parsed_line[3]);
     int request_count = str_to_int(parsed_line[4]);
-    task::Request *request = new Request(task_id, delay, request_type, request_count);
+    Task *task = access_task_by_id(task_id);
+
+    task::Request *request = new Request(task_id, delay, request_type, request_count, task);
     this->add_new_activity_to_task(request);
 }
 
@@ -70,7 +74,9 @@ void TaskTable::add_new_release_to_task(std::vector<std::string> parsed_line)
     int delay = str_to_int(parsed_line[2]);
     int release_type = str_to_int(parsed_line[3]);
     int release_count = str_to_int(parsed_line[4]);
-    task::Release *release = new Release(task_id, delay, release_type, release_count);
+    Task *task = access_task_by_id(task_id);
+
+    task::Release *release = new Release(task_id, delay, release_type, release_count, task);
     this->add_new_activity_to_task(release);
 }
 
@@ -78,7 +84,9 @@ void TaskTable::add_termination_to_task(std::vector<std::string> parsed_line)
 {
     int task_id = str_to_int(parsed_line[1]);
     int delay = str_to_int(parsed_line[2]);
-    task::Termination *termination = new Termination(task_id, delay);
+    Task *task = access_task_by_id(task_id);
+
+    task::Termination *termination = new Termination(task_id, delay, task);
     this->add_new_activity_to_task(termination);
 }
 

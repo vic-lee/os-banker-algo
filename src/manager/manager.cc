@@ -47,11 +47,11 @@ std::map<int, bool> Manager::create_visit_status_table_for_all_tasks()
 
 void Manager::do_all_latest_requests(std::map<int, bool> &visit_status)
 {
-    do_all_blocked_tasks_with_requests(visit_status);
-    do_all_non_blocked_tasks_with_requests(visit_status);
+    do_latest_requests_from_blocked_tasks(visit_status);
+    do_latest_requests_from_non_blocked_tasks(visit_status);
 }
 
-void Manager::do_all_blocked_tasks_with_requests(std::map<int, bool> &visit_status)
+void Manager::do_latest_requests_from_blocked_tasks(std::map<int, bool> &visit_status)
 {
     int i = 0;
     while (i < blocked_tasks_table_.size())
@@ -64,7 +64,7 @@ void Manager::do_all_blocked_tasks_with_requests(std::map<int, bool> &visit_stat
     }
 }
 
-void Manager::do_all_non_blocked_tasks_with_requests(std::map<int, bool> &visit_status)
+void Manager::do_latest_requests_from_non_blocked_tasks(std::map<int, bool> &visit_status)
 {
     for (int i = 1; i < (task_table_.size() + 1); i++)
     {

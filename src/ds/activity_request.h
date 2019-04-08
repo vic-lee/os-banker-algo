@@ -10,7 +10,7 @@ namespace task
 class Request : public Activity
 {
   public:
-    Request(int target_id, int delay, int request_resource_type, int request_count);
+    Request(int target_id, int delay, int request_resource_type, int request_count, Task *task);
     int get_resource_type();
     int get_request_count();
     void execute();

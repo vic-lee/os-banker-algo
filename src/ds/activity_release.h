@@ -9,7 +9,7 @@ namespace task
 class Release : public Activity
 {
   public:
-    Release(int target_id, int delay, int release_resource_type, int release_count);
+    Release(int target_id, int delay, int release_resource_type, int release_count, Task *task);
     void print();
     void execute();
     int get_resource_type();

@@ -4,12 +4,14 @@
 namespace task
 {
 
-Activity::Activity(std::string type, int target_id, int delay)
+Activity::Activity(std::string type, int target_id, int delay, Task *task)
 {
     this->type_ = type;
     this->target_id = target_id;
     this->delay = delay;
     this->time_remaining_ = delay;
+
+    this->target_task_ = task;
     this->completed_ = false;
 }
 

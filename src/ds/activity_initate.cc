@@ -2,8 +2,8 @@
 
 namespace task
 {
-Initiate::Initiate(int target_id, Claim claim)
-    : Activity("initiate", target_id, 0)
+Initiate::Initiate(int target_id, Claim claim, Task *task)
+    : Activity("initiate", target_id, 0, task)
 {
     this->claim = claim;
 }

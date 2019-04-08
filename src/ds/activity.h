@@ -5,6 +5,8 @@
 
 namespace task
 {
+class Task;
+
 class Activity
 {
 
@@ -13,7 +15,7 @@ class Activity
      */
 
   public:
-    Activity(std::string type, int target_id, int delay);
+    Activity(std::string type, int target_id, int delay, Task *task);
     virtual ~Activity() {}
     int get_target_id();
     void update_time_remaining_before_execute();
@@ -33,6 +35,7 @@ class Activity
   protected:
     std::string type_;
     int target_id;
+    task::Task *target_task_;
     int delay;
     int time_remaining_;
     bool has_begun_;

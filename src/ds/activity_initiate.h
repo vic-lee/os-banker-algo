@@ -11,7 +11,7 @@ namespace task
 class Initiate : public Activity
 {
   public:
-    Initiate(int target_id, Claim claim);
+    Initiate(int target_id, Claim claim, Task *task);
 
   private:
     Claim claim;

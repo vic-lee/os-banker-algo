@@ -11,11 +11,7 @@ namespace task
 class Initiate : public Activity
 {
   public:
-    Initiate(int target_id, Claim claim)
-        : Activity("initiate", target_id, 0)
-    {
-        this->claim = claim;
-    }
+    Initiate(int target_id, Claim claim);
 
   private:
     Claim claim;

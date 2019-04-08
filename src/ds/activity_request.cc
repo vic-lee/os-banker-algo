@@ -3,7 +3,6 @@
 
 namespace task
 {
-
 Request::Request(int target_id, int delay, int request_resource_type, int request_count)
     : Activity("request", target_id, delay)
 {

@@ -3,8 +3,14 @@
 
 namespace task
 {
+Release::Release(int target_id, int delay, int release_resource_type, int release_count)
+    : Activity("release", target_id, delay)
+{
+    this->release_resource_type = release_resource_type;
+    this->release_count = release_count;
+}
 
-void Release::execute() 
+void Release::execute()
 {
     // Activity::execute();
 }
@@ -23,7 +29,7 @@ void Release::print()
 {
     std::cout << type_ << ":\t"
               << " Target ID: " << target_id
-              << " Delay: " << delay 
+              << " Delay: " << delay
               << " Release RT: " << release_resource_type
               << " Release Count: " << release_count
               << std::endl;

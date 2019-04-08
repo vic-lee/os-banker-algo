@@ -6,6 +6,12 @@ namespace manager
 
 class OptimisticManager
 {
+  public:
+    OptimisticManager(task::TaskTable task_table, task::ResourceTable resource_table);
+    void do_tasks();
+    void print();
+
+  private:
     int cycle_;
     task::TaskTable task_table_;
     std::vector<task::Task *> blocked_tasks_table_;
@@ -27,15 +33,5 @@ class OptimisticManager
     void do_all_latest_releases(std::map<int, bool> &visit_status);
     void do_all_latest_activity_of_type(std::string type, std::map<int, bool> &visit_status);
     bool do_one_latest_activity_of_type(std::string type, std::map<int, bool> &visit_status, task::Task *task, bool from_blocked);
-
-  public:
-    OptimisticManager(task::TaskTable task_table, task::ResourceTable resource_table)
-    {
-        cycle_ = 0;
-        this->task_table_ = task_table;
-        this->resource_table_ = resource_table;
-    }
-    void do_tasks();
-    void print();
 };
 } // namespace manager

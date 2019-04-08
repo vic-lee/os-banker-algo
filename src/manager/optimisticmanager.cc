@@ -7,6 +7,13 @@
 namespace manager
 {
 
+OptimisticManager::OptimisticManager(task::TaskTable task_table, task::ResourceTable resource_table)
+{
+    cycle_ = 0;
+    this->task_table_ = task_table;
+    this->resource_table_ = resource_table;
+}
+
 void OptimisticManager::do_tasks()
 {
     while (!task_table_.is_all_task_terminated())
@@ -148,7 +155,7 @@ void OptimisticManager::do_all_latest_activity_of_type(std::string type, std::ma
     for (int i = 1; i < (task_table_.size() + 1); i++)
     {
         task::Task *task = task_table_.access_task_by_id(i);
-        do_one_latest_activity_of_type(type, visit_status, task, false);                
+        do_one_latest_activity_of_type(type, visit_status, task, false);
     }
 }
 

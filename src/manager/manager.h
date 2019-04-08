@@ -30,7 +30,11 @@ class Manager
 
     void do_all_latest_initiates(std::map<int, bool> &visit_status);
     void do_all_latest_terminates(std::map<int, bool> &visit_status);
+
     void do_all_latest_requests(std::map<int, bool> &visit_status);
+    void do_all_blocked_tasks_with_requests(std::map<int, bool> &visit_status);
+    void do_all_non_blocked_tasks_with_requests(std::map<int, bool> &visit_status);
+
     void do_all_latest_releases(std::map<int, bool> &visit_status);
     void do_all_latest_activity_of_type(std::string type, std::map<int, bool> &visit_status);
     bool do_one_latest_activity_of_type(std::string type, std::map<int, bool> &visit_status, task::Task *task, bool from_blocked);

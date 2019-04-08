@@ -4,4 +4,4 @@ namespace manager
 {
 Banker::Banker(task::TaskTable task_table, task::ResourceTable resource_table)
     : Manager(task_table, resource_table) {}
-} // namespace manager
+} // namespace managero

@@ -7,7 +7,6 @@
 
 namespace manager
 {
-
 OptimisticManager::OptimisticManager(
     task::TaskTable task_table,
     task::ResourceTable resource_table) : Manager(task_table, resource_table) {}
@@ -22,8 +21,6 @@ void OptimisticManager::iterate_cycle()
 {
     std::cout << "\n----- Cycle " << cycle_ << "-" << cycle_ + 1 << " -----" << std::endl;
 
-    bool been_deadlocked = false;
-
     std::map<int, bool> visit_status = create_visit_status_table_for_all_tasks();
 
     do_all_latest_releases(visit_status);
@@ -31,7 +28,6 @@ void OptimisticManager::iterate_cycle()
     while (does_deadlock_exist(visit_status))
     {
         std::cout << "DEADLOCKED!!!" << std::endl;
-        been_deadlocked = true;
         handle_deadlock();
     }
 
@@ -82,7 +78,6 @@ bool OptimisticManager::does_deadlock_exist(std::map<int, bool> visit_status)
 
 void OptimisticManager::handle_deadlock()
 {
-
     task::Task *task_to_abort = find_lowest_task_with_request();
 
     if (task_to_abort != NULL)
@@ -124,8 +119,6 @@ void OptimisticManager::do_all_latest_terminates(std::map<int, bool> &visit_stat
 
 void OptimisticManager::do_all_latest_requests(std::map<int, bool> &visit_status)
 {
-    // do_all_latest_activity_of_type("request", visit_status);
-    // for (int i = 0; i < (blocked_tasks_table_.size()); i++)
     int i = 0;
     while (i < blocked_tasks_table_.size())
     {

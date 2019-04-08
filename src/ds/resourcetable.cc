@@ -43,13 +43,7 @@ void ResourceTable::reverse_request(Request *request)
 
 void ResourceTable::handle_new_release(Release *release)
 {
-    // int resource_type = release->get_resource_type();
-    // int num_of_units_restored = release->get_release_count();
-    // Resource *target_resource = find_resource_by_id(resource_type);
-
     pending_release_table_.push_back(release);
-
-    // target_resource->handle_new_release(release);
 }
 
 void ResourceTable::release_pending_resources()

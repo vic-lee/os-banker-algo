@@ -199,7 +199,7 @@ bool Task::is_terminated()
 bool Task::is_computing()
 {
     Activity *activity = get_latest_activity();
-    
+
     if (activity != NULL)
         return activity->is_computing();
 
@@ -238,19 +238,9 @@ void Task::release_resources(ResourceTable *resource_table)
         target->add_release_next_cycle(units_owned);
 
         std::cout << "Task " << id_ << " will release "
-                  << units_owned << " of RT" << resource_type 
+                  << units_owned << " of RT" << resource_type
                   << " next cycle" << std::endl;
     }
-
-    // for (int i = 0; i < latest_activity_index_; i++)
-    // {
-    //     Activity *activity = activities_table_[i];
-    //     if (activity->is_request())
-    //     {
-    //         resource_table->reverse_request(static_cast<Request *>(activity));
-    //         activity->set_to_complete();
-    //     }
-    // }
 }
 
 void Task::increment_cycles_waiting(int current_cycle)

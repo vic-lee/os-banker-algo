@@ -171,7 +171,7 @@ bool OptimisticManager::do_one_latest_activity_of_type(
             bool is_successful = task->do_latest_activity(&resource_table_, cycle_);
             visit_status.at(id) = true;
 
-            if (!is_successful && !from_blocked)
+            if (!is_successful && !task->is_computing() && !from_blocked)
             {
                 std::cout << "Adding Task " << task->id() << " to blocked table." << std::endl;
                 blocked_tasks_table_.push_back(task);

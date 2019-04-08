@@ -32,9 +32,7 @@ void OptimisticManager::iterate_cycle()
 
     do_all_latest_initiates(visit_status);
     do_all_latest_terminates(visit_status);
-
-    if (!been_deadlocked)
-        do_all_latest_requests(visit_status);
+    do_all_latest_requests(visit_status);
 
     resource_table_.release_pending_resources();
 
@@ -63,12 +61,11 @@ bool OptimisticManager::does_deadlock_exist(std::map<int, bool> visit_status)
 
             task::Activity *latest_request = task->get_latest_activity();
 
-            bool can_satisfy = resource_table_.can_satisfy_request(
+            bool can_satisfy = resource_table_.can_satisfy_request_next_cycle(
                 static_cast<task::Request *>(latest_request));
+
             if (can_satisfy)
-            {
                 does_deadlock_exist = false;
-            }
         }
     }
 

@@ -64,6 +64,11 @@ bool Activity::is_active()
     return !completed_;
 }
 
+bool Activity::is_computing()
+{
+    return (has_begun_ && time_remaining_ > 0);
+}
+
 bool Activity::is_time_to_execute()
 {
     return time_remaining_ == 0;

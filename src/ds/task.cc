@@ -128,7 +128,7 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle)
     }
     else
     {
-        std::cout << "Not time to execute yet." << std::endl;
+        std::cout << "Not time to execute Task " << id_ << " yet." << std::endl;
     }
 
     return is_successful;
@@ -194,6 +194,16 @@ int Task::id()
 bool Task::is_terminated()
 {
     return terminated_;
+}
+
+bool Task::is_computing()
+{
+    Activity *activity = get_latest_activity();
+    
+    if (activity != NULL)
+        return activity->is_computing();
+
+    return false;
 }
 
 void Task::terminate(int cycle)

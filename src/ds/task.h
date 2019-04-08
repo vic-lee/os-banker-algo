@@ -34,6 +34,7 @@ class Task
     bool is_latest_activity_terminate();
 
     bool is_terminated();
+    bool is_computing();
     void terminate(int cycle);
     bool is_aborted();
     void abort(ResourceTable *resource_table);

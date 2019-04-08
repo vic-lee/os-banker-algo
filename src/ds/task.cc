@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+#include <math.h>
 #include "task.h"
 #include "claim.h"
 #include "activity.h"
@@ -295,9 +297,9 @@ void Task::print_finished_status()
     if (!is_aborted())
     {
         int total_time_spent = termination_cycle_ - initiation_cycle_;
-        std::cout << total_time_spent << "   "
-                  << cycles_waiting_ << "   "
-                  << (100 * cycles_waiting_ / ((double)total_time_spent)) << "%"
+        std::cout << std::setw(4) << total_time_spent 
+                  << std::setw(4) << cycles_waiting_
+                  << std::setw(4) << (int) nearbyint(100 * cycles_waiting_ / ((double)total_time_spent)) << "%"
                   << std::endl;
     }
     else

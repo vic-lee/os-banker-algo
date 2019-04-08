@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+#include <math.h>
 #include "manager.h"
 #include "../ds/task.h"
 #include "../ds/activity.h"
@@ -223,9 +225,9 @@ void OptimisticManager::print()
         cumulative_time_waiting += time_waiting;
     }
     std::cout << "Total\t    "
-              << cumulative_time_spent << "   "
-              << cumulative_time_waiting << "   "
-              << (100 * cumulative_time_waiting / (double)cumulative_time_spent) << "%"
+              << std::setw(4) << cumulative_time_spent
+              << std::setw(4) << cumulative_time_waiting
+              << std::setw(4) << (int)nearbyint(100 * cumulative_time_waiting / ((double)cumulative_time_spent)) << "%"
               << std::endl;
 }
 

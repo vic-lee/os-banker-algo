@@ -58,6 +58,7 @@ class Task
     int cycles_waiting_;
     int latest_cycle_waited_;
     std::map<int, Claim> claims_table_;
+    std::map<int, int> resources_owned_;
     std::vector<Activity *> activities_table_;
 };
 } // namespace task

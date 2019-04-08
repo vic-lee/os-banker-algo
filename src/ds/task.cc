@@ -144,15 +144,38 @@ bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_t
     if (latest_activity->is_request())
     {
         bool is_successful = resource_table->handle_new_request(static_cast<Request *>(latest_activity));
-        
-        if (!is_successful)
+
+        if (is_successful)
+        {
+            int resource_type = static_cast<Request *>(latest_activity)->get_resource_type();
+            int request_count = static_cast<Request *>(latest_activity)->get_request_count();
+
+            if (resources_owned_.find(resource_type) == resources_owned_.end())
+                resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
+            else
+                resources_owned_.at(resource_type) += request_count;
+        }
+        else
+        {
             increment_cycles_waiting(cycle);
-            
+        }
+
         return is_successful;
     }
     else if (latest_activity->is_release())
     {
         resource_table->handle_new_release(static_cast<Release *>(latest_activity));
+
+        int resource_type = static_cast<Release *>(latest_activity)->get_resource_type();
+        int release_count = static_cast<Release *>(latest_activity)->get_release_count();
+
+        resources_owned_.at(resource_type) -= release_count;
+
+        if (resources_owned_.at(resource_type) < 0)
+            std::cout << "Debug: [negative resource ownership]; "
+                      << "Own " << resources_owned_.at(resource_type)
+                      << " of RT" << resource_type << std::endl;
+
         return true;
     }
     else if (latest_activity->is_termination())
@@ -195,15 +218,29 @@ void Task::abort(ResourceTable *resource_table)
 
 void Task::release_resources(ResourceTable *resource_table)
 {
-    for (int i = 0; i < latest_activity_index_; i++)
+    std::map<int, int>::iterator it;
+
+    for (it = resources_owned_.begin(); it != resources_owned_.end(); it++)
     {
-        Activity *activity = activities_table_[i];
-        if (activity->is_request())
-        {
-            resource_table->reverse_request(static_cast<Request *>(activity));
-            activity->set_to_complete();
-        }
+        int resource_type = it->first;
+        int units_owned = it->second;
+        Resource *target = resource_table->find_resource_by_id(resource_type);
+        target->add_release_next_cycle(units_owned);
+
+        std::cout << "Task " << id_ << " will release "
+                  << units_owned << " of RT" << resource_type 
+                  << " next cycle" << std::endl;
     }
+
+    // for (int i = 0; i < latest_activity_index_; i++)
+    // {
+    //     Activity *activity = activities_table_[i];
+    //     if (activity->is_request())
+    //     {
+    //         resource_table->reverse_request(static_cast<Request *>(activity));
+    //         activity->set_to_complete();
+    //     }
+    // }
 }
 
 void Task::increment_cycles_waiting(int current_cycle)

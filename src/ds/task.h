@@ -27,7 +27,7 @@ class Task
 
     void add_new_activity(Activity *activity);
     Activity *get_latest_activity();
-    void do_latest_activity(ResourceTable *resource_table, int cycle);
+    bool do_latest_activity(ResourceTable *resource_table, int cycle);
     bool is_latest_activity_initiate();
     bool is_latest_activity_request();
     bool is_latest_activity_release();

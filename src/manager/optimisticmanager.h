@@ -1,10 +1,11 @@
+#include "manager.h"
 #include "../ds/tasktable.h"
 #include "../ds/resourcetable.h"
 
 namespace manager
 {
 
-class OptimisticManager
+class OptimisticManager : public Manager
 {
   public:
     OptimisticManager(task::TaskTable task_table, task::ResourceTable resource_table);
@@ -12,11 +13,6 @@ class OptimisticManager
     void print();
 
   private:
-    int cycle_;
-    task::TaskTable task_table_;
-    std::vector<task::Task *> blocked_tasks_table_;
-    task::ResourceTable resource_table_;
-
     bool does_deadlock_exist(std::map<int, bool> visit_status);
     void handle_deadlock();
     void iterate_cycle();

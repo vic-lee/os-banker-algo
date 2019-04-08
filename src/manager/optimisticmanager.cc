@@ -1,4 +1,5 @@
 #include <iostream>
+#include "manager.h"
 #include "../ds/task.h"
 #include "../ds/activity.h"
 #include "../ds/activity_request.h"
@@ -7,12 +8,9 @@
 namespace manager
 {
 
-OptimisticManager::OptimisticManager(task::TaskTable task_table, task::ResourceTable resource_table)
-{
-    cycle_ = 0;
-    this->task_table_ = task_table;
-    this->resource_table_ = resource_table;
-}
+OptimisticManager::OptimisticManager(
+    task::TaskTable task_table,
+    task::ResourceTable resource_table) : Manager(task_table, resource_table) {}
 
 void OptimisticManager::do_tasks()
 {

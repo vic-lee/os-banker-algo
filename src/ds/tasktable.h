@@ -21,7 +21,7 @@ class TaskTable
     void add_termination_to_task(std::vector<std::string> parsed_line);
     std::tuple<Task *, int> get_next_active_task(int prior_id);
 
-    std::vector<std::vector<int>> TaskTable::generate_unmet_demand_matrix();
+    std::vector<std::vector<int>> generate_unmet_demand_matrix();
 
     task::Task *access_task_by_id(int id);
     bool is_all_task_terminated();

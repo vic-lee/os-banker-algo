@@ -17,9 +17,15 @@ std::string read_cmd_arg(int argc, char **argv)
     {
         std::string input = argv[1];
         if (input.find("test") != std::string::npos)
+        {
             input_fpath = input;
+        }
         else
-            input_fpath = "test/input-0" + input;
+        {
+            if (input.length() == 1)
+                input = "0" + input;
+            input_fpath = "test/input-" + input;
+        }
     }
 
     return input_fpath;

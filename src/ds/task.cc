@@ -108,12 +108,14 @@ bool Task::determine_latest_activity_type(std::string target_type)
     return false;
 }
 
-void Task::do_latest_activity(ResourceTable *resource_table, int cycle)
+bool Task::do_latest_activity(ResourceTable *resource_table, int cycle)
 {
+    bool is_successful = false;
+
     set_latest_activity();
 
     if (latest_activity_index_ == -1)
-        return;
+        return is_successful;
 
     Activity *latest_activity = get_latest_activity();
 
@@ -121,13 +123,15 @@ void Task::do_latest_activity(ResourceTable *resource_table, int cycle)
 
     if (latest_activity->is_time_to_execute())
     {
-        bool is_successful = execute_activity(latest_activity, resource_table, cycle);
+        is_successful = execute_activity(latest_activity, resource_table, cycle);
         latest_activity->update_completion_state_after_execute(is_successful);
     }
     else
     {
         std::cout << "Not time to execute yet." << std::endl;
     }
+
+    return is_successful;
 }
 
 bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle)

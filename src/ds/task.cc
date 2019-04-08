@@ -18,7 +18,7 @@ Task::Task(int id, Claim claim)
     cycles_waiting_ = 0;
     latest_cycle_waited_ = -1;
 
-    claims_table_.insert(
+    resources_claimed_.insert(
         std::pair<int, Claim>(claim.claimed_resource_id, claim));
 }
 
@@ -267,7 +267,7 @@ void Task::print()
 
     std::cout << "---------------- Claims ---------------" << std::endl;
     std::map<int, Claim>::iterator it;
-    for (it = claims_table_.begin(); it != claims_table_.end(); it++)
+    for (it = resources_claimed_.begin(); it != resources_claimed_.end(); it++)
     {
         it->second.print();
     }
@@ -304,6 +304,19 @@ void Task::print_finished_status()
     {
         std::cout << "Aborted" << std::endl;
     }
+}
+
+std::vector<int> Task::generate_unmet_demand_vector()
+{
+    std::vector<int> unmet_demand; 
+
+    for (int i = 0; i < resources_claimed_.size(); i++)
+    {
+        int max_addl_claim = resources_claimed_.at(i).claim_count - resources_owned_.at(i);
+        unmet_demand.push_back(max_addl_claim);
+    }
+
+    return unmet_demand;
 }
 
 } // namespace task

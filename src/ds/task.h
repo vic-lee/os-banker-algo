@@ -39,6 +39,8 @@ class Task
     bool is_aborted();
     void abort(ResourceTable *resource_table);
 
+    std::vector<int> generate_unmet_demand_vector();
+
     void print();
     std::string to_string();
     void print_finished_status();
@@ -58,7 +60,7 @@ class Task
     int termination_cycle_;
     int cycles_waiting_;
     int latest_cycle_waited_;
-    std::map<int, Claim> claims_table_;
+    std::map<int, Claim> resources_claimed_;
     std::map<int, int> resources_owned_;
     std::vector<Activity *> activities_table_;
 };

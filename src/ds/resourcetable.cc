@@ -63,6 +63,19 @@ void ResourceTable::release_pending_resources()
     }
 }
 
+std::vector<int> ResourceTable::generate_resource_available_vector()
+{
+    std::vector<int> resource_available;
+    
+    for (int i = 0; resource_table_.size(); i++)
+    {
+        int availability = resource_table_[i]->remaining_unit_count();
+        resource_available.push_back(availability);
+    }
+    
+    return resource_available;
+}
+
 void ResourceTable::add(Resource *resource)
 {
     resource_table_.push_back(resource);

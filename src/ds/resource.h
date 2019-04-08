@@ -12,6 +12,7 @@ class Resource
   public:
     Resource(int id, int unit_count);
     int get_unit_count();
+    int remaining_unit_count();
     bool can_satisfy_request(Request *request);
     bool can_satisfy_request_next_cycle(Request *request);
     bool handle_new_request(Request *request);

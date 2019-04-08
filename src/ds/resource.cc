@@ -18,6 +18,11 @@ int Resource::get_unit_count()
     return total_unit_count_;
 }
 
+int Resource::remaining_unit_count()
+{
+    return remaining_unit_count_;
+}
+
 bool Resource::can_satisfy_request(Request *request)
 {
     int num_of_units_needed = request->get_request_count();
@@ -42,7 +47,7 @@ bool Resource::can_satisfy_request_next_cycle(Request *request)
     {
         std::cout << "Task " << request->get_target_id()
                   << "'s request of " << num_of_units_needed << " RT"
-                  << request->get_resource_type() 
+                  << request->get_resource_type()
                   << " cannot be granted (next cycle); "
                   << remaining_unit_count_ << " units remaining" << std::endl;
     }

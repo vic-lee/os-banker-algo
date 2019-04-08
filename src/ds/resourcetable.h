@@ -24,7 +24,10 @@ class ResourceTable
     void reverse_request(Request *request);
     void handle_new_release(Release *release);
     void release_pending_resources();
-    Resource* find_resource_by_id(int id);
+
+    std::vector<int> generate_resource_available_vector();
+
+    Resource *find_resource_by_id(int id);
     void add(Resource *resource);
     void print();
 };

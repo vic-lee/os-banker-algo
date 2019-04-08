@@ -14,7 +14,6 @@ namespace task
 class ResourceTable
 {
     std::vector<Resource *> resource_table_;
-    std::vector<Release *> pending_release_table_;
     int get_resource_count(int resource_id);
 
   public:

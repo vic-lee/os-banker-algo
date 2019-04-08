@@ -3,7 +3,6 @@
 
 namespace task
 {
-
 Resource *ResourceTable::find_resource_by_id(int id)
 {
     return resource_table_[id - 1];
@@ -43,20 +42,14 @@ void ResourceTable::reverse_request(Request *request)
 
 void ResourceTable::handle_new_release(Release *release)
 {
-    pending_release_table_.push_back(release);
+    int resource_type = release->get_resource_type();
+    int release_count = release->get_release_count();
+    Resource *target_resource = find_resource_by_id(resource_type);
+    target_resource->add_release_next_cycle(release_count);
 }
 
 void ResourceTable::release_pending_resources()
 {
-    for (int i = 0; i < pending_release_table_.size(); i++)
-    {
-        Release *release = pending_release_table_[i];
-        int resource_type = release->get_resource_type();
-        Resource *target_resource = find_resource_by_id(resource_type);
-        target_resource->handle_new_release(release);
-    }
-    pending_release_table_.clear();
-
     for (int i = 0; i < resource_table_.size(); i++)
     {
         resource_table_[i]->clear_to_be_added_units();
@@ -66,13 +59,13 @@ void ResourceTable::release_pending_resources()
 std::vector<int> ResourceTable::generate_resource_available_vector()
 {
     std::vector<int> resource_available;
-    
+
     for (int i = 0; resource_table_.size(); i++)
     {
         int availability = resource_table_[i]->remaining_unit_count();
         resource_available.push_back(availability);
     }
-    
+
     return resource_available;
 }
 
@@ -88,5 +81,4 @@ void ResourceTable::print()
         resource_table_[i]->print();
     }
 }
-
 } // namespace task

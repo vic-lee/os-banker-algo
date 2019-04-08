@@ -20,6 +20,12 @@ bool ResourceTable::can_satisfy_request(Request *request)
     return find_resource_by_id(resource_type)->can_satisfy_request(request);
 }
 
+bool ResourceTable::can_satisfy_request_next_cycle(Request *request)
+{
+    int resource_type = request->get_resource_type();
+    return find_resource_by_id(resource_type)->can_satisfy_request_next_cycle(request);
+}
+
 bool ResourceTable::handle_new_request(Request *request)
 {
     int resource_type = request->get_resource_type();
@@ -56,6 +62,11 @@ void ResourceTable::release_pending_resources()
         target_resource->handle_new_release(release);
     }
     pending_release_table_.clear();
+
+    for (int i = 0; i < resource_table_.size(); i++)
+    {
+        resource_table_[i]->clear_to_be_added_units();
+    }
 }
 
 void ResourceTable::add(Resource *resource)

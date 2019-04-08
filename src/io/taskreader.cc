@@ -92,6 +92,10 @@ std::tuple<task::TaskTable, task::ResourceTable> TaskReader::import()
         while (std::getline(input_file, line))
         {
             std::vector<std::string> parsed_line = parse_line(line);
+
+            if (parsed_line.size() == 0)
+                continue;
+
             if (is_fist_line(line))
                 resource_table = read_in_resources(parsed_line);
             else

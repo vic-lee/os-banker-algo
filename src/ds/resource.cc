@@ -25,7 +25,7 @@ bool Resource::can_satisfy_request(Request *request)
     {
         std::cout << "Task " << request->get_target_id()
                   << "'s request of " << num_of_units_needed << " RT"
-                  << request->get_resource_type() << " Cannot be granted; "
+                  << request->get_resource_type() << " cannot be granted; "
                   << remaining_unit_count_ << " units remaining" << std::endl;
     }
 

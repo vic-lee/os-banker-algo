@@ -40,6 +40,7 @@ class Task
     void abort(ResourceTable *resource_table);
 
     std::vector<int> generate_unmet_demand_vector();
+    int check_unmet_demand_for_resource(int resource_id);
 
     void print();
     std::string to_string();

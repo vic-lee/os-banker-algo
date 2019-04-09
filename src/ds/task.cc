@@ -297,9 +297,9 @@ void Task::print_finished_status()
     if (!is_aborted())
     {
         int total_time_spent = termination_cycle_ - initiation_cycle_;
-        std::cout << std::setw(4) << total_time_spent 
+        std::cout << std::setw(4) << total_time_spent
                   << std::setw(4) << cycles_waiting_
-                  << std::setw(4) << (int) nearbyint(100 * cycles_waiting_ / ((double)total_time_spent)) << "%"
+                  << std::setw(4) << (int)nearbyint(100 * cycles_waiting_ / ((double)total_time_spent)) << "%"
                   << std::endl;
     }
     else
@@ -310,7 +310,7 @@ void Task::print_finished_status()
 
 std::vector<int> Task::generate_unmet_demand_vector()
 {
-    std::vector<int> unmet_demand; 
+    std::vector<int> unmet_demand;
 
     for (int i = 0; i < resources_claimed_.size(); i++)
     {
@@ -319,6 +319,12 @@ std::vector<int> Task::generate_unmet_demand_vector()
     }
 
     return unmet_demand;
+}
+
+int Task::check_unmet_demand_for_resource(int resource_id)
+{
+    std::vector<int> unmet_demand = generate_unmet_demand_vector();
+    return unmet_demand[resource_id];
 }
 
 } // namespace task

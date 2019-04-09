@@ -1,4 +1,5 @@
 #include <iostream>
+#include "resourcetable.h"
 #include "activity_release.h"
 
 namespace task
@@ -13,6 +14,11 @@ Release::Release(int target_id, int delay, int release_resource_type, int releas
 void Release::execute()
 {
     // Activity::execute();
+}
+
+bool Release::dispatch(ResourceTable *resource_table)
+{
+    resource_table->handle_new_release(this);
 }
 
 int Release::get_resource_type()

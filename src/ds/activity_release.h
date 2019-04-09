@@ -6,6 +6,8 @@
 
 namespace task
 {
+class ResourceTable;
+
 class Release : public Activity
 {
   public:
@@ -14,6 +16,8 @@ class Release : public Activity
     void execute();
     int get_resource_type();
     int get_release_count();
+
+    bool dispatch(ResourceTable *resource_table);
 
   private:
     int release_resource_type;

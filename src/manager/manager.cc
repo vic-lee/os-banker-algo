@@ -45,6 +45,30 @@ std::map<int, bool> Manager::create_visit_status_table_for_all_tasks()
     return visit_table;
 }
 
+bool Manager::is_request_safe(task::Task *task)
+{
+    bool is_request_safe = true;
+    std::vector<int> max_addl_demand = task->generate_unmet_demand_vector();
+    std::vector<int> current_resource_availability = resource_table_.generate_resource_available_vector();
+
+    /* DEBUG */
+    if (max_addl_demand.size() != current_resource_availability.size())
+        std::cout << "Max demand and Availability vector has different sizes." << std::endl;
+
+    for (int i = 0; i < max_addl_demand.size(); i++)
+    {
+        if (max_addl_demand[i] > current_resource_availability[i])
+        {
+            is_request_safe = false;
+            std::cout << "Request from Task " << task->id() << " is not safe;"
+                      << "MaxAddlDemand for RT" << i << " is " << max_addl_demand[i] << "; "
+                      << "Availability: " << current_resource_availability[i] << std::endl;
+        }
+    }
+
+    return is_request_safe;
+}
+
 void Manager::do_all_latest_requests(std::map<int, bool> &visit_status)
 {
     do_latest_requests_from_blocked_tasks(visit_status);
@@ -57,7 +81,20 @@ void Manager::do_latest_requests_from_blocked_tasks(std::map<int, bool> &visit_s
     while (i < blocked_tasks_table_.size())
     {
         task::Task *task = blocked_tasks_table_[i];
-        bool is_task_unblocked = do_one_latest_activity_of_type("request", visit_status, task, true);
+        bool is_task_unblocked = false;
+
+        if (should_check_safety_) /*  BANKER  */
+        {
+            if (is_request_safe(task))
+            {
+                is_task_unblocked = do_one_latest_activity_of_type("request", visit_status, task, true);
+            }
+        }
+        else /*  FIFO  */
+        {
+            is_task_unblocked = do_one_latest_activity_of_type("request", visit_status, task, true);
+        }
+
         if (is_task_unblocked)
             i--;
         i++;
@@ -116,7 +153,7 @@ bool Manager::do_one_latest_activity_of_type(
             bool is_successful = task->do_latest_activity(&resource_table_, cycle_);
             visit_status.at(id) = true;
 
-            if (!is_successful && !task->is_computing() && !from_blocked)
+            if (!is_successful && !task->is_computing() && !task->is_aborted() && !from_blocked)
             {
                 std::cout << "Adding Task " << task->id() << " to blocked table." << std::endl;
                 blocked_tasks_table_.push_back(task);

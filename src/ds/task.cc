@@ -141,51 +141,21 @@ bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_t
 {
     if (latest_activity->is_initiate())
     {
-        std::cout << "Initiating Task " << id_ << std::endl;
-        return true;
+        return initiate();
     }
     if (latest_activity->is_request())
     {
-        bool is_successful = resource_table->handle_new_request(static_cast<Request *>(latest_activity));
-
-        if (is_successful)
-        {
-            int resource_type = static_cast<Request *>(latest_activity)->get_resource_type();
-            int request_count = static_cast<Request *>(latest_activity)->get_request_count();
-
-            if (resources_owned_.find(resource_type) == resources_owned_.end())
-                resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
-            else
-                resources_owned_.at(resource_type) += request_count;
-        }
-        else
-        {
-            increment_cycles_waiting(cycle);
-        }
-
-        return is_successful;
+        return request(latest_activity, resource_table, cycle);
     }
     else if (latest_activity->is_release())
     {
-        resource_table->handle_new_release(static_cast<Release *>(latest_activity));
-
-        int resource_type = static_cast<Release *>(latest_activity)->get_resource_type();
-        int release_count = static_cast<Release *>(latest_activity)->get_release_count();
-
-        resources_owned_.at(resource_type) -= release_count;
-
-        if (resources_owned_.at(resource_type) < 0)
-            std::cout << "Debug: [negative resource ownership]; "
-                      << "Own " << resources_owned_.at(resource_type)
-                      << " of RT" << resource_type << std::endl;
-
-        return true;
+        return release(latest_activity, resource_table);
     }
     else if (latest_activity->is_termination())
     {
-        terminate(cycle);
-        return true;
+        return terminate(cycle);
     }
+    
     return false;
 }
 
@@ -226,15 +196,61 @@ void Task::unblock()
 {
     if (!blocked_)
         std::cout << "Debug warning: Process is already unblocked before disabling block." << std::endl;
-    
+
     blocked_ = false;
 }
 
-void Task::terminate(int cycle)
+bool Task::initiate()
+{
+    std::cout << "Initiating Task " << id_ << std::endl;
+    return true;
+}
+
+bool Task::request(Activity *latest_activity, ResourceTable *resource_table, int cycle)
+{
+    bool can_satisfy_request = resource_table->handle_new_request(static_cast<Request *>(latest_activity));
+
+    if (can_satisfy_request)
+    {
+        int resource_type = static_cast<Request *>(latest_activity)->get_resource_type();
+        int request_count = static_cast<Request *>(latest_activity)->get_request_count();
+
+        if (resources_owned_.find(resource_type) == resources_owned_.end())
+            resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
+        else
+            resources_owned_.at(resource_type) += request_count;
+    }
+    else
+    {
+        increment_cycles_waiting(cycle);
+    }
+
+    return can_satisfy_request;
+}
+
+bool Task::release(Activity *latest_activity, ResourceTable *resource_table)
+{
+    resource_table->handle_new_release(static_cast<Release *>(latest_activity));
+
+    int resource_type = static_cast<Release *>(latest_activity)->get_resource_type();
+    int release_count = static_cast<Release *>(latest_activity)->get_release_count();
+
+    resources_owned_.at(resource_type) -= release_count;
+
+    if (resources_owned_.at(resource_type) < 0)
+        std::cout << "Debug: [negative resource ownership]; "
+                  << "Own " << resources_owned_.at(resource_type)
+                  << " of RT" << resource_type << std::endl;
+
+    return true;
+}
+
+bool Task::terminate(int cycle)
 {
     terminated_ = true;
     termination_cycle_ = cycle;
     std::cout << "Terminating Task " << id_ << std::endl;
+    return true;
 }
 
 bool Task::is_aborted()

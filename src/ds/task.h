@@ -39,6 +39,10 @@ class Task
     bool is_aborted();
     void abort(ResourceTable *resource_table);
 
+    bool is_blocked();
+    void block();
+    void unblock();
+
     std::vector<int> generate_unmet_demand_vector();
     int check_unmet_demand_for_resource(int resource_id);
 
@@ -55,6 +59,7 @@ class Task
 
     int id_;
     int latest_activity_index_;
+    bool blocked_;
     bool aborted_;
     bool terminated_;
     int initiation_cycle_;

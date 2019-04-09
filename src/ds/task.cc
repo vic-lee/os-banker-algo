@@ -15,6 +15,7 @@ Task::Task(int id, Claim claim)
 {
     this->id_ = id;
     aborted_ = false;
+    blocked_ = false;
     terminated_ = false;
     initiation_cycle_ = 0;
     cycles_waiting_ = 0;
@@ -206,6 +207,27 @@ bool Task::is_computing()
         return activity->is_computing();
 
     return false;
+}
+
+bool Task::is_blocked()
+{
+    return blocked_;
+}
+
+void Task::block()
+{
+    if (blocked_)
+        std::cout << "Debug warning: Process is already blocked before setting to block." << std::endl;
+
+    blocked_ = true;
+}
+
+void Task::unblock()
+{
+    if (!blocked_)
+        std::cout << "Debug warning: Process is already unblocked before disabling block." << std::endl;
+    
+    blocked_ = false;
 }
 
 void Task::terminate(int cycle)

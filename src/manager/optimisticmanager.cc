@@ -37,7 +37,7 @@ void OptimisticManager::iterate_cycle()
         handle_deadlock();
     }
 
-    do_all_latest_requests();
+    do_latest_requests();
 
     after_cycle_teardown();
 
@@ -101,7 +101,7 @@ task::Task *OptimisticManager::find_lowest_task_with_request()
     return nullptr;
 }
 
-void OptimisticManager::do_all_latest_requests()
+void OptimisticManager::do_latest_requests()
 {
     do_latest_requests_from_blocked_tasks();
     do_latest_requests_from_non_blocked_tasks();

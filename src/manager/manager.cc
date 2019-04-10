@@ -90,7 +90,7 @@ bool Manager::is_request_safe(task::Task *task)
         {
             is_request_safe = false;
             std::cout << "Request from Task " << task->id() << " is not safe; "
-                      << "MaxAddlDemand for RT" << i << " is " << max_addl_demand[i] << "; "
+                      << "Max addl demand for RT" << i << " is " << max_addl_demand[i] << "; "
                       << "Availability: " << current_resource_availability[i] << std::endl;
         }
     }
@@ -139,6 +139,8 @@ void Manager::do_latest_terminates()
         }
     }
 }
+
+void Manager::do_latest_requests() {}
 
 bool Manager::do_task_latest_activity(task::Task *t)
 {

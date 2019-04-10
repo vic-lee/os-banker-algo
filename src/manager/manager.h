@@ -50,6 +50,7 @@ protected:
     void do_latest_initiates();
     void do_latest_terminates();
     void do_latest_releases();
+    virtual void do_latest_requests();
 
     bool do_one_latest_request(task::Task *task, bool from_blocked);
 };

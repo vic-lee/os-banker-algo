@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+#include <math.h>
 #include "manager.h"
 
 namespace manager
@@ -14,7 +16,33 @@ Manager::~Manager() {}
 
 void Manager::do_tasks() {}
 
-void Manager::print() {}
+void Manager::print() 
+{
+    if (should_check_safety_ == true)
+        std::cout << "\n/******** BANKER ********/" << std::endl;
+    else
+        std::cout << "\n/******** FIFO ********/" << std::endl;
+
+    int cumulative_time_spent = 0;
+    int cumulative_time_waiting = 0;
+
+    for (int i = 1; i < (task_table_.size() + 1); i++)
+    {
+        task::Task *current_task = task_table_.access_task_by_id(i);
+        current_task->print_finished_status();
+
+        int time_spent, time_waiting;
+        std::tie(time_spent, time_waiting) = current_task->get_print_statistic();
+        cumulative_time_spent += time_spent;
+        cumulative_time_waiting += time_waiting;
+    }
+    std::cout << "Total\t    "
+              << std::setw(4) << cumulative_time_spent
+              << std::setw(4) << cumulative_time_waiting
+              << std::setw(4) << (int)nearbyint(100 * cumulative_time_waiting / ((double)cumulative_time_spent)) << "%"
+              << std::endl;
+
+}
 
 void Manager::remove_from_blocked_table(task::Task *t)
 {
@@ -23,6 +51,12 @@ void Manager::remove_from_blocked_table(task::Task *t)
         if (blocked_tasks_table_[i]->id() == t->id())
             blocked_tasks_table_.erase(blocked_tasks_table_.begin() + i);
     }
+}
+
+void Manager::block(task::Task *t)
+{
+    std::cout << "Blocking Task " << t->id() << std::endl;
+    blocked_tasks_table_.push_back(t);
 }
 
 bool Manager::is_in_blocked_table(int id)
@@ -60,7 +94,7 @@ bool Manager::is_request_safe(task::Task *task)
         if (max_addl_demand[i] > current_resource_availability[i])
         {
             is_request_safe = false;
-            std::cout << "Request from Task " << task->id() << " is not safe;"
+            std::cout << "Request from Task " << task->id() << " is not safe; "
                       << "MaxAddlDemand for RT" << i << " is " << max_addl_demand[i] << "; "
                       << "Availability: " << current_resource_availability[i] << std::endl;
         }
@@ -150,7 +184,7 @@ bool Manager::do_one_latest_activity_of_type(
 
         if (activity->type() == type)
         {
-            bool is_successful = task->do_latest_activity(&resource_table_, cycle_);
+            bool is_successful = task->do_latest_activity(&resource_table_, cycle_, should_check_safety_);
             visit_status.at(id) = true;
 
             if (!is_successful && !task->is_computing() && !task->is_aborted() && !from_blocked)

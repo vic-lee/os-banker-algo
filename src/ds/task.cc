@@ -133,7 +133,8 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool sho
 
     Activity *latest_activity = get_latest_activity();
 
-    // latest_activity->update_time_remaining_before_execute();
+    if (!should_check_safety)
+        latest_activity->update_time_remaining_before_execute();
 
     if (latest_activity->is_time_to_execute())
     {

@@ -2,11 +2,11 @@
 #define HEADER_ACTIVITY_REQUEST
 
 #include <string>
+#include "activity.h"
 
 namespace task
 {
-
-class Activity;
+class Task;
 class ResourceTable;
 
 class Request : public Activity

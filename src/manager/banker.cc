@@ -148,10 +148,4 @@ void Banker::do_latest_terminates()
     }
 }
 
-void Banker::update_resources_available_vector(
-    std::vector<int> &resources_available,
-    std::vector<int> resources_released)
-{
-}
-
 } // namespace manager

@@ -13,7 +13,6 @@ public:
 private:
     void iterate_cycle();
     bool is_state_safe();
-    void update_resources_available_vector(std::vector<int> &resources_available, std::vector<int> resources_released);
 
     void do_latest_initiates();
     void do_latest_terminates();

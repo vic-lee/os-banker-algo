@@ -1,5 +1,7 @@
 #include <iostream>
+#include "task.h"
 #include "activity.h"
+#include "resourcetable.h"
 
 namespace task
 {
@@ -108,6 +110,11 @@ void Activity::print()
     std::cout << type_ << ":\t"
               << " Target ID: " << target_id
               << " Delay: " << delay << std::endl;
+}
+
+bool Activity::dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle) 
+{
+    return false;
 }
 
 } // namespace task

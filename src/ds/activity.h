@@ -6,6 +6,7 @@
 namespace task
 {
 class Task;
+class ResourceTable;
 
 class Activity
 {
@@ -14,7 +15,7 @@ class Activity
      * This is a base class for Initiate, Request, Release, and Termination. 
      */
 
-  public:
+public:
     Activity(std::string type, int target_id, int delay);
     virtual ~Activity() {}
     int get_target_id();
@@ -24,7 +25,9 @@ class Activity
     bool is_computing();
     bool is_time_to_execute();
     void set_to_complete();
-    virtual bool dispatch();
+
+    virtual bool dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle);
+
     virtual void print();
 
     std::string type();
@@ -33,14 +36,13 @@ class Activity
     bool is_release();
     bool is_termination();
 
-  protected:
+protected:
     std::string type_;
     int target_id;
     int delay;
     int time_remaining_;
     bool has_begun_;
     bool completed_;
-
 };
 } // namespace task
 

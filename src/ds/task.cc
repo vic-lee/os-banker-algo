@@ -48,9 +48,7 @@ void Task::set_latest_activity()
     {
         if (activities_table_[i]->is_active())
         {
-            std::cout << "Activity " << activities_table_[i]->type() << " is active? " << activities_table_[i]->is_active() << std::endl;
             latest_activity_index_ = i;
-            std::cout << "latest activity index is now " << latest_activity_index_ << std::endl;
             return;
         }
     }
@@ -116,12 +114,12 @@ bool Task::determine_latest_activity_type(std::string target_type)
     return false;
 }
 
-bool Task::do_latest_activity(ResourceTable *resource_table, int cycle)
+bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
     bool is_successful = false;
-    std::cout << "Before setting latest activity" << std::endl;
+
     set_latest_activity();
-    std::cout << "After setting latest activity" << std::endl;
+
     if (latest_activity_index_ == -1)
         return is_successful;
 
@@ -131,7 +129,7 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle)
 
     if (latest_activity->is_time_to_execute())
     {
-        is_successful = execute_activity(latest_activity, resource_table, cycle);
+        is_successful = execute_activity(latest_activity, resource_table, cycle, should_check_safety);
         latest_activity->update_completion_state_after_execute(is_successful);
     }
     else
@@ -142,13 +140,13 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle)
     return is_successful;
 }
 
-bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle)
+bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
     if (latest_activity->is_initiate())
     {
-        return initiate(latest_activity);
+        return initiate(latest_activity, resource_table, should_check_safety);
     }
-    if (latest_activity->is_request())
+    else if (latest_activity->is_request())
     {
         return request(latest_activity, resource_table, cycle);
     }
@@ -210,9 +208,17 @@ void Task::unblock()
     blocked_ = false;
 }
 
-bool Task::initiate(Activity *latest_activity)
+bool Task::initiate(Activity *latest_activity, ResourceTable *resource_table, bool should_check_safety)
 {   
     Claim *claim = static_cast<Initiate *>(latest_activity)->claim();
+
+    if (should_check_safety)
+    {
+        bool is_claim_legal = claim->is_claim_legal(resource_table);
+
+        if (!is_claim_legal)
+            abort(resource_table);
+    }
 
     add_new_claim(claim);
     std::cout << "Initiating Task " << id_ << std::endl;
@@ -273,7 +279,6 @@ void Task::add_new_claim(Claim *claim)
 
     std::cout << "Added new claim ";
     claim->print();
-    std::cout << std::endl;
 }
 
 bool Task::is_aborted()
@@ -381,7 +386,7 @@ std::vector<int> Task::generate_unmet_demand_vector()
 
         if (resources_owned_.find(resource_id) == resources_owned_.end())
         {
-            std::cout << "Task " << id_ << " has not owned Resource " << resource_id << " before." << std::endl;
+            std::cout << "Task " << id_ << " has not owned RT" << resource_id << " before." << std::endl;
             own_count = 0;
         }
         else
@@ -390,7 +395,6 @@ std::vector<int> Task::generate_unmet_demand_vector()
         }
         
         int max_addl_claim = claim_count - own_count;
-        std::cout << "Max addl demand " << max_addl_claim << std::endl;
         unmet_demand.push_back(max_addl_claim);
     }
 

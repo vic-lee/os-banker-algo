@@ -27,7 +27,7 @@ class Task
 
     void add_new_activity(Activity *activity);
     Activity *get_latest_activity();
-    bool do_latest_activity(ResourceTable *resource_table, int cycle);
+    bool do_latest_activity(ResourceTable *resource_table, int cycle, bool should_check_safety);
     bool is_latest_activity_initiate();
     bool is_latest_activity_request();
     bool is_latest_activity_release();
@@ -53,14 +53,14 @@ class Task
     std::tuple<int, int> get_print_statistic();
 
   private:
-    bool initiate(Activity *latest_activity);
+    bool initiate(Activity *latest_activity, ResourceTable *resource_table, bool should_check_safety);
     bool request(Activity *latest_activity, ResourceTable *resource_table, int cycle);
     bool release(Activity *latest_activity, ResourceTable *resource_table);
     
     void add_new_claim(Claim *claim);
 
     void set_latest_activity();
-    bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle);
+    bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety);
     void release_resources(ResourceTable *resource_table);
     bool determine_latest_activity_type(std::string target_type);
 

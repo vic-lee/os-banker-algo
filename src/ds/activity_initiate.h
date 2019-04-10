@@ -10,12 +10,12 @@ namespace task
 
 class Initiate : public Activity
 {
-  public:
+public:
     Initiate(int target_id, Claim claim);
     bool dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle) override;
-    Claim * claim();
+    Claim *claim();
 
-  private:
+private:
     Claim claim_;
 };
 

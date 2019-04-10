@@ -12,11 +12,6 @@ Release::Release(int target_id, int delay, int release_resource_type, int releas
     this->release_count = release_count;
 }
 
-void Release::execute()
-{
-    // Activity::execute();
-}
-
 bool Release::dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle)
 {
     resource_table->handle_new_release(this);

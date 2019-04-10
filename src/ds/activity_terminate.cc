@@ -5,12 +5,6 @@
 
 namespace task
 {
-
-void Termination::execute() 
-{
-    // Activity::execute();
-}
-
 bool Termination::dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle)
 {
     return target_task->terminate(cycle);

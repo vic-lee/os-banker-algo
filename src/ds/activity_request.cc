@@ -55,11 +55,6 @@ int Request::get_request_count()
     return request_count_;
 }
 
-void Request::execute()
-{
-    // Activity::execute();
-}
-
 void Request::print()
 {
     std::cout << type_ << ":\t"

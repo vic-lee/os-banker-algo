@@ -103,6 +103,72 @@ task::Task *OptimisticManager::find_lowest_task_with_request()
     return nullptr;
 }
 
+void OptimisticManager::do_all_latest_requests()
+{
+    do_latest_requests_from_blocked_tasks();
+    do_latest_requests_from_non_blocked_tasks();
+}
+
+void OptimisticManager::do_latest_requests_from_blocked_tasks()
+{
+    int i = 0;
+    while (i < blocked_tasks_table_.size())
+    {
+        task::Task *task = blocked_tasks_table_[i];
+        bool is_task_unblocked = false;
+
+        is_task_unblocked = do_one_latest_request(task, true);
+
+        if (is_task_unblocked)
+            i--;
+        i++;
+    }
+}
+
+void OptimisticManager::do_latest_requests_from_non_blocked_tasks()
+{
+    for (int i = 1; i < (task_table_.size() + 1); i++)
+    {
+        task::Task *task = task_table_.access_task_by_id(i);
+        do_one_latest_request(task, false);
+    }
+}
+
+bool OptimisticManager::do_one_latest_request(task::Task *task, bool from_blocked)
+{
+    int id = task->id();
+
+    bool should_do_task = !task->is_terminated() && visit_table_.at(id) == false;
+
+    if (!from_blocked)
+        should_do_task = !is_in_blocked_table(id) && should_do_task;
+
+    if (should_do_task)
+    {
+        task::Activity *activity = task->get_latest_activity();
+
+        if (activity->is_request())
+        {
+            bool is_successful = task->do_latest_activity(&resource_table_, cycle_, should_check_safety_);
+            visit_table_.at(id) = true;
+
+            if (!is_successful && !task->is_computing() && !task->is_aborted() && !from_blocked)
+            {
+                std::cout << "Adding Task " << task->id() << " to blocked table." << std::endl;
+                blocked_tasks_table_.push_back(task);
+            }
+
+            else if (is_successful && from_blocked)
+            {
+                std::cout << "Removing Task " << task->id() << " from blocked table." << std::endl;
+                remove_from_blocked_table(task);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 void OptimisticManager::print()
 {
     std::cout << "\n/******** FIFO ********/" << std::endl;

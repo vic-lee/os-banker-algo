@@ -45,17 +45,13 @@ protected:
 
     std::map<int, bool> create_visit_status_table_for_all_tasks();
 
-    void do_all_latest_requests();
-    void do_latest_requests_from_blocked_tasks();
-    void do_latest_requests_from_non_blocked_tasks();
-
     bool is_request_safe(task::Task *task);
 
     void do_latest_initiates();
     void do_latest_terminates();
     void do_latest_releases();
 
-    bool do_one_latest_activity_of_type(std::string type, task::Task *task, bool from_blocked);
+    bool do_one_latest_request(task::Task *task, bool from_blocked);
 };
 } // namespace manager
 

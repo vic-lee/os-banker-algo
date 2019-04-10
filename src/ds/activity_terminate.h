@@ -13,6 +13,7 @@ class Termination : public Activity
     Termination(int target_id, int delay) 
     : Activity("terminate", target_id, delay) {}
     void execute();
+    bool dispatch(Task *target_task, int cycle);
 };
 
 } // namespace task

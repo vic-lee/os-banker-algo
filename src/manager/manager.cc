@@ -55,7 +55,7 @@ void Manager::remove_from_blocked_table(task::Task *t)
 
 void Manager::block(task::Task *t)
 {
-    std::cout << "Blocking Task " << t->id() << std::endl;
+    // std::cout << "Blocking Task " << t->id() << std::endl;
     blocked_tasks_table_.push_back(t);
 }
 
@@ -87,17 +87,17 @@ bool Manager::is_request_safe(task::Task *task)
     std::vector<int> current_resource_availability = resource_table_.generate_resource_available_vector();
 
     /* DEBUG */
-    if (max_addl_demand.size() != current_resource_availability.size())
-        std::cout << "Max demand and Availability vector has different sizes." << std::endl;
+    // if (max_addl_demand.size() != current_resource_availability.size())
+        // std::cout << "Max demand and Availability vector has different sizes." << std::endl;
 
     for (unsigned int i = 0; i < max_addl_demand.size(); i++)
     {
         if (max_addl_demand[i] > current_resource_availability[i])
         {
             is_request_safe = false;
-            std::cout << "Request from Task " << task->id() << " is not safe; "
-                      << "MaxAddlDemand for RT" << i << " is " << max_addl_demand[i] << "; "
-                      << "Availability: " << current_resource_availability[i] << std::endl;
+            // std::cout << "Request from Task " << task->id() << " is not safe; "
+            //           << "MaxAddlDemand for RT" << i << " is " << max_addl_demand[i] << "; "
+            //           << "Availability: " << current_resource_availability[i] << std::endl;
         }
     }
 

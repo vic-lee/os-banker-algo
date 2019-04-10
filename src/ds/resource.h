@@ -11,7 +11,6 @@ class Resource
 {
   public:
     Resource(int id, int unit_count);
-    // TODO: Rename to total_unit_count();
     int get_unit_count();
     int remaining_unit_count();
 

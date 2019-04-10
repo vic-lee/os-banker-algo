@@ -74,10 +74,6 @@ bool Activity::is_computing()
 
 bool Activity::is_time_to_execute()
 {
-    // if (time_remaining_ == 0)
-    //     std::cout << "Time to execute Task " << target_id << std::endl;
-    // else
-    //     std::cout << "Computing Task " << target_id << std::endl;
     return time_remaining_ == 0;
 }
 

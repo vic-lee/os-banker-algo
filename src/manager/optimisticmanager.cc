@@ -25,8 +25,6 @@ void OptimisticManager::do_tasks()
 
 void OptimisticManager::iterate_cycle()
 {
-    // std::cout << "\n----- Cycle " << cycle_ << "-" << cycle_ + 1 << " -----" << std::endl;
-
     before_cycle_setup();
 
     do_latest_releases();
@@ -154,13 +152,11 @@ bool OptimisticManager::do_one_latest_request(task::Task *task, bool from_blocke
 
             if (!is_successful && !task->is_computing() && !task->is_aborted() && !from_blocked)
             {
-                // std::cout << "Adding Task " << task->id() << " to blocked table." << std::endl;
                 blocked_tasks_table_.push_back(task);
             }
 
             else if (is_successful && from_blocked)
             {
-                // std::cout << "Removing Task " << task->id() << " from blocked table." << std::endl;
                 remove_from_blocked_table(task);
                 return true;
             }

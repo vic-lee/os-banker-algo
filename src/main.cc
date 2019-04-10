@@ -50,7 +50,6 @@ void do_optimistic_manager(int argc, char **argv)
     task::TaskTable task_table = task_reader.to_tasktable();
     task::ResourceTable resource_table = task_reader.to_resourcetable();
 
-    // manager::OptimisticManager optimistic_manager(task_table, resource_table);
     manager::OptimisticManager *optimistic_manager = new manager::OptimisticManager(task_table, resource_table, debug);
     optimistic_manager->do_tasks();
     optimistic_manager->print();
@@ -67,7 +66,6 @@ void do_banker(int argc, char **argv)
     task::TaskTable task_table = task_reader.to_tasktable();
     task::ResourceTable resource_table = task_reader.to_resourcetable();
 
-    // manager::Banker banker(task_table, resource_table);
     manager::Banker *banker = new manager::Banker(task_table, resource_table, debug);
     banker->do_tasks();
     banker->print();

@@ -29,9 +29,9 @@ void OptimisticManager::iterate_cycle()
 
     before_cycle_setup();
 
-    do_all_latest_releases();
-    do_all_latest_initiates();
-    do_all_latest_terminates();
+    do_latest_releases();
+    do_latest_initiates();
+    do_latest_terminates();
 
     while (does_deadlock_exist())
     {

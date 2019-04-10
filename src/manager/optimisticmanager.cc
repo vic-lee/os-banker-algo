@@ -35,7 +35,7 @@ void OptimisticManager::iterate_cycle()
 
     while (does_deadlock_exist())
     {
-        std::cout << "DEADLOCKED!!!" << std::endl;
+        std::cout << "Deadlocked!" << std::endl;
         handle_deadlock();
     }
 

@@ -37,7 +37,7 @@ void Banker::do_tasks()
 
 void Banker::iterate_cycle()
 {
-    // std::cout << "\n------ Cycle " << cycle_ << "-" << (cycle_ + 1) << " ------" << std::endl;
+    std::cout << "\n------ Cycle " << cycle_ << "-" << (cycle_ + 1) << " ------" << std::endl;
 
     before_cycle_setup();
 

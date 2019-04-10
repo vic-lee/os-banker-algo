@@ -29,7 +29,7 @@ bool Initiate::dispatch(Task *target_task, ResourceTable *resource_table, bool c
         }
     }
     target_task->add_new_claim(&claim_);
-    // std::cout << "Initiating Task " << target_task->id() << std::endl;
+    std::cout << "Initiating Task " << target_task->id() << std::endl;
     return true;
 }
 } // namespace task

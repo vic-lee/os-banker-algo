@@ -33,6 +33,13 @@ protected:
     void before_cycle_setup();
     void after_cycle_teardown();
 
+    bool should_visit_task(task::Task *t);
+
+    bool do_task_latest_activity(task::Task *t);
+
+    bool has_visited(task::Task *t);
+    void mark_as_visited(task::Task *t);
+
     void incr_blocked_task_waiting_time();
     void decr_delay_countdowns();
 

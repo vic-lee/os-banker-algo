@@ -148,28 +148,6 @@ void Banker::do_latest_terminates()
     }
 }
 
-bool Banker::do_task_latest_activity(task::Task *t)
-{
-    bool was_successful = t->do_latest_activity(&resource_table_, cycle_, should_check_safety_);
-    mark_as_visited(t);
-    return was_successful;
-}
-
-bool Banker::should_visit_task(task::Task *t)
-{
-    return (!is_in_blocked_table(t->id()) && !has_visited(t) && t->is_active());
-}
-
-void Banker::mark_as_visited(task::Task *t)
-{
-    visit_table_.at(t->id()) = true;
-}
-
-bool Banker::has_visited(task::Task *t)
-{
-    return visit_table_.at(t->id());
-}
-
 void Banker::update_resources_available_vector(
     std::vector<int> &resources_available,
     std::vector<int> resources_released)

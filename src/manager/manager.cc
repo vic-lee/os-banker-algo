@@ -203,6 +203,28 @@ bool Manager::do_one_latest_activity_of_type(std::string type, task::Task *task,
     return false;
 }
 
+bool Manager::do_task_latest_activity(task::Task *t)
+{
+    bool was_successful = t->do_latest_activity(&resource_table_, cycle_, should_check_safety_);
+    mark_as_visited(t);
+    return was_successful;
+}
+
+bool Manager::should_visit_task(task::Task *t)
+{
+    return (!is_in_blocked_table(t->id()) && !has_visited(t) && t->is_active());
+}
+
+bool Manager::has_visited(task::Task *t)
+{
+    return visit_table_.at(t->id());
+}
+
+void Manager::mark_as_visited(task::Task *t)
+{
+    visit_table_.at(t->id()) = true;
+}
+
 void Manager::before_cycle_setup()
 {
     if (visit_table_.size() > 0)

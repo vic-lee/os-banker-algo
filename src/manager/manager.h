@@ -55,7 +55,6 @@ protected:
     void do_latest_terminates();
     void do_latest_releases();
 
-    void do_all_latest_activity_of_type(std::string type);
     bool do_one_latest_activity_of_type(std::string type, task::Task *task, bool from_blocked);
 };
 } // namespace manager

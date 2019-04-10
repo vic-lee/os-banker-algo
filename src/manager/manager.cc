@@ -117,17 +117,7 @@ void Manager::do_latest_requests_from_blocked_tasks()
         task::Task *task = blocked_tasks_table_[i];
         bool is_task_unblocked = false;
 
-        if (should_check_safety_) /*  BANKER  */
-        {
-            if (is_request_safe(task))
-            {
-                is_task_unblocked = do_one_latest_activity_of_type("request", task, true);
-            }
-        }
-        else /*  FIFO  */
-        {
-            is_task_unblocked = do_one_latest_activity_of_type("request", task, true);
-        }
+        is_task_unblocked = do_one_latest_activity_of_type("request", task, true);
 
         if (is_task_unblocked)
             i--;
@@ -141,15 +131,6 @@ void Manager::do_latest_requests_from_non_blocked_tasks()
     {
         task::Task *task = task_table_.access_task_by_id(i);
         do_one_latest_activity_of_type("request", task, false);
-    }
-}
-
-void Manager::do_all_latest_activity_of_type(std::string type)
-{
-    for (int i = 1; i < (task_table_.size() + 1); i++)
-    {
-        task::Task *task = task_table_.access_task_by_id(i);
-        do_one_latest_activity_of_type(type, task, false);
     }
 }
 

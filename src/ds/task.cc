@@ -57,7 +57,6 @@ void Task::set_latest_activity()
         {
             // std::cout << activities_table_[i]->type() << " activity is NOT active" << std::endl;
         }
-        
     }
     std::cout << "Activities table size is " << activities_table_.size() << std::endl;
     latest_activity_index_ = -1;
@@ -149,10 +148,6 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool sho
         is_successful = execute_activity(latest_activity, resource_table, cycle, should_check_safety);
         latest_activity->update_completion_state_after_execute(is_successful);
     }
-    // else
-    // {
-    //     std::cout << "Not time to execute Task " << id_ << " yet." << std::endl;
-    // }
 
     return is_successful;
 }
@@ -160,25 +155,6 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool sho
 bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
     return latest_activity->dispatch(this, resource_table, should_check_safety, cycle);
-
-    // if (latest_activity->is_initiate())
-    // {
-    //     return initiate(latest_activity, resource_table, should_check_safety);
-    // }
-    // else if (latest_activity->is_request())
-    // {
-    //     return request(latest_activity, resource_table, cycle, should_check_safety);
-    // }
-    // else if (latest_activity->is_release())
-    // {
-    //     return release(latest_activity, resource_table);
-    // }
-    // else if (latest_activity->is_termination())
-    // {
-    //     return terminate(cycle);
-    // }
-
-    // return false;
 }
 
 int Task::id()
@@ -213,78 +189,13 @@ bool Task::is_blocked()
 
 void Task::block()
 {
-    // if (blocked_)
-    //     std::cout << "Debug warning: Process is already blocked before setting to block." << std::endl;
-
     blocked_ = true;
 }
 
 void Task::unblock()
 {
-    // if (!blocked_)
-    //     std::cout << "Debug warning: Process is already unblocked before disabling block." << std::endl;
-
     blocked_ = false;
 }
-
-// bool Task::initiate(Activity *latest_activity, ResourceTable *resource_table, bool should_check_safety)
-// {
-//     Claim *claim = static_cast<Initiate *>(latest_activity)->claim();
-
-//     if (should_check_safety)
-//     {
-//         bool is_claim_legal = claim->is_claim_legal(resource_table);
-
-//         if (!is_claim_legal)
-//             abort(resource_table);
-//     }
-
-//     add_new_claim(claim);
-//     // std::cout << "Initiating Task " << id_ << std::endl;
-//     return true;
-// }
-
-// bool Task::request(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
-// {
-//     int resource_type = static_cast<Request *>(latest_activity)->get_resource_type();
-//     int request_count = static_cast<Request *>(latest_activity)->get_request_count();
-
-//     if (should_check_safety && !is_request_legal(resource_type, request_count))
-//     {
-//         abort(resource_table);
-//         return false;
-//     }
-
-//     bool can_satisfy_request = resource_table->handle_new_request(static_cast<Request *>(latest_activity));
-
-//     if (can_satisfy_request)
-//     {
-//         add_resource_owned(resource_type, request_count);
-//     }
-//     else
-//     {
-//         increment_cycles_waiting(cycle);
-//     }
-
-//     return can_satisfy_request;
-// }
-
-// bool Task::release(Activity *latest_activity, ResourceTable *resource_table)
-// {
-//     resource_table->handle_new_release(static_cast<Release *>(latest_activity));
-
-//     int resource_type = static_cast<Release *>(latest_activity)->get_resource_type();
-//     int release_count = static_cast<Release *>(latest_activity)->get_release_count();
-
-//     release_resource_owned(resource_type, release_count);
-
-//     // if (resources_owned_.at(resource_type) < 0)
-//     //     std::cout << "Debug: [negative resource ownership]; "
-//     //               << "Own " << resources_owned_.at(resource_type)
-//     //               << " of RT" << resource_type << std::endl;
-
-//     return true;
-// }
 
 bool Task::terminate(int cycle)
 {
@@ -395,7 +306,7 @@ void Task::print()
 
     std::cout << "------------- Activities --------------" << std::endl;
     // for (int i = 0; i < activities_table_.size(); i++)
-    for (auto& activity : activities_table_)
+    for (auto &activity : activities_table_)
     {
         activity->print();
     }

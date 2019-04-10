@@ -17,21 +17,6 @@ int str_to_int(std::string s)
     return atoi(s.c_str());
 }
 
-std::tuple<Task *, int> TaskTable::get_next_active_task(int prior_id)
-{
-    int id = prior_id++;
-    // std::cout << "Doing ID " << id << std::endl;
-    while (id <= task_table_.size())
-    {
-        Task *task = access_task_by_id(id);
-        if (!task->is_terminated())
-            return std::make_tuple(task, id);
-        id++;
-    }
-
-    return std::make_tuple(nullptr, -1);
-}
-
 void TaskTable::add(Task task)
 {
     task_table_.insert(std::pair<int, Task>(task.id(), task));
@@ -134,7 +119,7 @@ std::vector<std::vector<int>> TaskTable::generate_unmet_demand_matrix()
 {
     std::vector<std::vector<int>> unmet_demand;
 
-    for (int i = 1; i < (task_table_.size() + 1); i++)
+    for (unsigned int i = 1; i < (task_table_.size() + 1); i++)
     {
         task::Task *task = access_task_by_id(i);
         std::vector<int> unmet_demand_for_task = task->generate_unmet_demand_vector();

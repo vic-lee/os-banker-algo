@@ -19,7 +19,6 @@ class TaskTable
     void add_new_request_to_task(std::vector<std::string> parsed_line);
     void add_new_release_to_task(std::vector<std::string> parsed_line);
     void add_termination_to_task(std::vector<std::string> parsed_line);
-    std::tuple<Task *, int> get_next_active_task(int prior_id);
 
     std::vector<std::vector<int>> generate_unmet_demand_matrix();
 

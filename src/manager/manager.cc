@@ -17,7 +17,7 @@ Manager::~Manager() {}
 
 void Manager::do_tasks() {}
 
-void Manager::print() 
+void Manager::print()
 {
     if (should_check_safety_ == true)
         std::cout << "\n/******** BANKER ********/" << std::endl;
@@ -42,7 +42,6 @@ void Manager::print()
               << std::setw(4) << cumulative_time_waiting
               << std::setw(4) << (int)nearbyint(100 * cumulative_time_waiting / ((double)cumulative_time_spent)) << "%"
               << std::endl;
-
 }
 
 void Manager::remove_from_blocked_table(task::Task *t)
@@ -203,6 +202,42 @@ bool Manager::do_one_latest_activity_of_type(
         }
     }
     return false;
+}
+
+void Manager::before_cycle_setup()
+{
+    if (visit_table_.size() > 0)
+        visit_table_.clear();
+
+    visit_table_ = create_visit_status_table_for_all_tasks();
+
+    decr_delay_countdowns();
+}
+
+void Manager::after_cycle_teardown()
+{
+    resource_table_.release_pending_resources();
+
+    visit_table_.clear();
+
+    incr_blocked_task_waiting_time();
+}
+
+void Manager::incr_blocked_task_waiting_time()
+{
+    for (auto &blocked_task : blocked_tasks_table_)
+    {
+        blocked_task->increment_cycles_waiting(cycle_);
+    }
+}
+
+void Manager::decr_delay_countdowns()
+{
+    for (int i = 0; i < task_table_.size(); i++)
+    {
+        int id = i + 1;
+        task_table_.access_task_by_id(id)->do_latest_activity_delay_countdown();
+    }
 }
 
 } // namespace manager

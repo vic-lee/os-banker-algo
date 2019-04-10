@@ -61,25 +61,6 @@ bool Banker::is_state_safe()
     return is_state_safe;
 }
 
-void Banker::before_cycle_setup()
-{
-    if (visit_table_.size() > 0)
-        visit_table_.clear();
-
-    visit_table_ = create_visit_status_table_for_all_tasks();
-
-    decr_delay_countdowns();
-}
-
-void Banker::after_cycle_teardown()
-{
-    resource_table_.release_pending_resources();
-
-    visit_table_.clear();
-
-    incr_blocked_task_waiting_time();
-}
-
 void Banker::do_latest_requests()
 {
     do_latest_requests_from_blocked_tasks();
@@ -187,23 +168,6 @@ void Banker::mark_as_visited(task::Task *t)
 bool Banker::has_visited(task::Task *t)
 {
     return visit_table_.at(t->id());
-}
-
-void Banker::incr_blocked_task_waiting_time()
-{
-    for (auto &blocked_task : blocked_tasks_table_)
-    {
-        blocked_task->increment_cycles_waiting(cycle_);
-    }
-}
-
-void Banker::decr_delay_countdowns()
-{
-    for (int i = 0; i < task_table_.size(); i++)
-    {
-        int id = i + 1;
-        task_table_.access_task_by_id(id)->do_latest_activity_delay_countdown();
-    }
 }
 
 void Banker::update_resources_available_vector(

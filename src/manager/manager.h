@@ -11,23 +11,30 @@ namespace manager
 
 class Manager
 {
-  public:
+public:
     Manager(task::TaskTable task_table, task::ResourceTable resource_table, bool debug);
     virtual ~Manager();
     virtual void do_tasks();
     virtual void print();
 
-  protected:
+protected:
     bool debug_;
     int cycle_;
     task::TaskTable task_table_;
     std::vector<task::Task *> blocked_tasks_table_;
     task::ResourceTable resource_table_;
+    std::map<int, bool> visit_table_;
     bool should_check_safety_;
 
     bool is_in_blocked_table(int id);
     void block(task::Task *t);
     void remove_from_blocked_table(task::Task *t);
+
+    void before_cycle_setup();
+    void after_cycle_teardown();
+
+    void incr_blocked_task_waiting_time();
+    void decr_delay_countdowns();
 
     std::map<int, bool> create_visit_status_table_for_all_tasks();
 

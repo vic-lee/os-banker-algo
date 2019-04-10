@@ -5,18 +5,15 @@ namespace manager
 
 class Banker : public Manager
 {
-  public:
+public:
     Banker(task::TaskTable task_table, task::ResourceTable resource_table, bool debug);
     virtual ~Banker();
     void do_tasks();
 
-  private:
+private:
     void iterate_cycle();
     bool is_state_safe();
     void update_resources_available_vector(std::vector<int> &resources_available, std::vector<int> resources_released);
-
-    void before_cycle_setup();
-    void after_cycle_teardown();
 
     void do_latest_initiates();
     void do_latest_terminates();
@@ -31,11 +28,5 @@ class Banker : public Manager
 
     void mark_as_visited(task::Task *t);
     bool has_visited(task::Task *t);
-
-    void incr_blocked_task_waiting_time();
-    void decr_delay_countdowns();
-
-    std::map<int, bool> visit_table_;
-
 };
 } // namespace manager

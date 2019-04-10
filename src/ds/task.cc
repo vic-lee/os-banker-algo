@@ -29,6 +29,7 @@ Task::Task(int id)
 {
     this->id_ = id;
     aborted_ = false;
+    blocked_ = false;
     terminated_ = false;
     initiation_cycle_ = 0;
     cycles_waiting_ = 0;
@@ -66,6 +67,8 @@ Activity *Task::get_latest_activity()
     if (latest_activity_index_ == -1)
         return nullptr;
 
+    // std::cout << "Latest activity type is " << activities_table_[latest_activity_index_]->type() << std::endl;
+
     return activities_table_[latest_activity_index_];
 }
 
@@ -96,7 +99,7 @@ bool Task::determine_latest_activity_type(std::string target_type)
 
     Activity *latest_actvity = get_latest_activity();
 
-    if (target_type == "initate")
+    if (target_type == "initiate")
         return latest_actvity->is_initiate();
 
     else if (target_type == "request")
@@ -167,6 +170,11 @@ int Task::id()
 bool Task::is_terminated()
 {
     return terminated_;
+}
+
+bool Task::is_active()
+{
+    return !terminated_;
 }
 
 bool Task::is_computing()

@@ -24,6 +24,7 @@ bool Request::dispatch(ResourceTable *resource_table, bool check_legal)
 bool Request::is_request_legal()
 {
     int max_addl_demand = target_task_->check_unmet_demand_for_resource(request_resource_type_);
+
     if (request_count_ > max_addl_demand)
     {
         std::cout << "Task " << target_task_->id() << "'s request of RT"

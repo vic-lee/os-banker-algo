@@ -5,11 +5,12 @@
 
 namespace manager
 {
-Manager::Manager(task::TaskTable task_table, task::ResourceTable resource_table)
+Manager::Manager(task::TaskTable task_table, task::ResourceTable resource_table, bool debug)
 {
     cycle_ = 0;
     this->task_table_ = task_table;
     this->resource_table_ = resource_table;
+    this->debug_ = debug;
 }
 
 Manager::~Manager() {}

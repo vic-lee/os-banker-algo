@@ -6,8 +6,8 @@
 
 namespace manager
 {
-Banker::Banker(task::TaskTable task_table, task::ResourceTable resource_table)
-    : Manager(task_table, resource_table)
+Banker::Banker(task::TaskTable task_table, task::ResourceTable resource_table, bool debug)
+    : Manager(task_table, resource_table, debug)
 {
     this->should_check_safety_ = true;
 }

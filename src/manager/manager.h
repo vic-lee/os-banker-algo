@@ -12,12 +12,13 @@ namespace manager
 class Manager
 {
   public:
-    Manager(task::TaskTable task_table, task::ResourceTable resource_table);
+    Manager(task::TaskTable task_table, task::ResourceTable resource_table, bool debug);
     virtual ~Manager();
     virtual void do_tasks();
     virtual void print();
 
   protected:
+    bool debug_;
     int cycle_;
     task::TaskTable task_table_;
     std::vector<task::Task *> blocked_tasks_table_;

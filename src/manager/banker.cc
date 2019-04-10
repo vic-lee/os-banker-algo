@@ -72,7 +72,10 @@ void Banker::before_cycle_setup()
 void Banker::after_cycle_teardown()
 {
     resource_table_.release_pending_resources();
+
     visit_table_.clear();
+    
+    incr_blocked_task_waiting_time();
 }
 
 void Banker::do_latest_requests()
@@ -186,6 +189,14 @@ void Banker::mark_as_visited(task::Task *t)
 bool Banker::has_visited(task::Task *t)
 {
     return visit_table_.at(t->id());
+}
+
+void Banker::incr_blocked_task_waiting_time()
+{
+    for (auto& blocked_task : blocked_tasks_table_)
+    {
+        blocked_task->increment_cycles_waiting(cycle_);
+    }
 }
 
 void Banker::update_resources_available_vector(

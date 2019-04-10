@@ -17,7 +17,7 @@ void Release::execute()
     // Activity::execute();
 }
 
-bool Release::dispatch(Task *target_task, ResourceTable *resource_table)
+bool Release::dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle)
 {
     resource_table->handle_new_release(this);
 

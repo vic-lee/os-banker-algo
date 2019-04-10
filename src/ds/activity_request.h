@@ -19,7 +19,7 @@ class Request : public Activity
     void execute();
     void print() override;
 
-    bool dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle);
+    bool dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle) override;
 
   private:
     int request_resource_type_;

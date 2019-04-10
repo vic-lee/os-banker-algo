@@ -12,12 +12,12 @@ class Release : public Activity
 {
   public:
     Release(int target_id, int delay, int release_resource_type, int release_count);
-    void print();
+    void print() override;
     void execute();
     int get_resource_type();
     int get_release_count();
 
-    bool dispatch(Task *target_task, ResourceTable *resource_table);
+    bool dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle) override;
 
   private:
     int release_resource_type;

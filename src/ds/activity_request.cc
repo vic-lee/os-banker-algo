@@ -23,7 +23,7 @@ bool Request::dispatch(Task *target_task, ResourceTable *resource_table, bool ch
     bool was_successful = resource_table->handle_new_request(this);
 
     if (was_successful)
-        target_task->update_resources_owned(this);
+        target_task->add_resource_owned(this);
     else
         target_task->increment_cycles_waiting(cycle);
 

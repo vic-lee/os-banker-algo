@@ -34,6 +34,7 @@ class Task
     bool is_latest_activity_terminate();
 
     bool is_terminated();
+    bool is_active();
     bool is_computing();
     bool terminate(int cycle);
     bool is_aborted();
@@ -52,9 +53,11 @@ class Task
     std::tuple<int, int> get_print_statistic();
 
   private:
-    bool initiate();
+    bool initiate(Activity *latest_activity);
     bool request(Activity *latest_activity, ResourceTable *resource_table, int cycle);
     bool release(Activity *latest_activity, ResourceTable *resource_table);
+    
+    void add_new_claim(Claim *claim);
 
     void set_latest_activity();
     bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle);

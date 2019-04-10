@@ -4,6 +4,7 @@
 #include "task.h"
 #include "claim.h"
 #include "activity.h"
+#include "activity_initiate.h"
 #include "activity_request.h"
 #include "activity_release.h"
 #include "activity_initiate.h"
@@ -43,12 +44,13 @@ void Task::set_latest_activity()
         latest_activity_index_ = -1;
         return;
     }
-
     for (int i = 0; i < activities_table_.size(); i++)
     {
         if (activities_table_[i]->is_active())
         {
+            std::cout << "Activity " << activities_table_[i]->type() << " is active? " << activities_table_[i]->is_active() << std::endl;
             latest_activity_index_ = i;
+            std::cout << "latest activity index is now " << latest_activity_index_ << std::endl;
             return;
         }
     }
@@ -117,9 +119,9 @@ bool Task::determine_latest_activity_type(std::string target_type)
 bool Task::do_latest_activity(ResourceTable *resource_table, int cycle)
 {
     bool is_successful = false;
-
+    std::cout << "Before setting latest activity" << std::endl;
     set_latest_activity();
-
+    std::cout << "After setting latest activity" << std::endl;
     if (latest_activity_index_ == -1)
         return is_successful;
 
@@ -144,7 +146,7 @@ bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_t
 {
     if (latest_activity->is_initiate())
     {
-        return initiate();
+        return initiate(latest_activity);
     }
     if (latest_activity->is_request())
     {
@@ -158,7 +160,7 @@ bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_t
     {
         return terminate(cycle);
     }
-    
+
     return false;
 }
 
@@ -208,8 +210,11 @@ void Task::unblock()
     blocked_ = false;
 }
 
-bool Task::initiate()
-{
+bool Task::initiate(Activity *latest_activity)
+{   
+    Claim *claim = static_cast<Initiate *>(latest_activity)->claim();
+
+    add_new_claim(claim);
     std::cout << "Initiating Task " << id_ << std::endl;
     return true;
 }
@@ -259,6 +264,16 @@ bool Task::terminate(int cycle)
     termination_cycle_ = cycle;
     std::cout << "Terminating Task " << id_ << std::endl;
     return true;
+}
+
+void Task::add_new_claim(Claim *claim)
+{
+    resources_claimed_.insert(
+        std::pair<int, Claim>(claim->claimed_resource_id, *claim));
+
+    std::cout << "Added new claim ";
+    claim->print();
+    std::cout << std::endl;
 }
 
 bool Task::is_aborted()
@@ -357,10 +372,25 @@ void Task::print_finished_status()
 std::vector<int> Task::generate_unmet_demand_vector()
 {
     std::vector<int> unmet_demand;
-
     for (int i = 0; i < resources_claimed_.size(); i++)
     {
-        int max_addl_claim = resources_claimed_.at(i).claim_count - resources_owned_.at(i);
+        int resource_id = i + 1;
+        int claim_count, own_count;
+        
+        claim_count = resources_claimed_.at(resource_id).claim_count;
+
+        if (resources_owned_.find(resource_id) == resources_owned_.end())
+        {
+            std::cout << "Task " << id_ << " has not owned Resource " << resource_id << " before." << std::endl;
+            own_count = 0;
+        }
+        else
+        {
+            own_count = resources_owned_.at(resource_id);
+        }
+        
+        int max_addl_claim = claim_count - own_count;
+        std::cout << "Max addl demand " << max_addl_claim << std::endl;
         unmet_demand.push_back(max_addl_claim);
     }
 

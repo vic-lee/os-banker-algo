@@ -106,46 +106,4 @@ void Banker::do_latest_requests_from_non_blocked_tasks()
     }
 }
 
-void Banker::do_latest_releases()
-{
-    for (int i = 0; i < task_table_.size(); i++)
-    {
-        int id = i + 1;
-        task::Task *task = task_table_.access_task_by_id(id);
-
-        if (should_visit_task(task) && task->is_latest_activity_release())
-        {
-            do_task_latest_activity(task);
-        }
-    }
-}
-
-void Banker::do_latest_initiates()
-{
-    for (int i = 0; i < task_table_.size(); i++)
-    {
-        int id = i + 1;
-        task::Task *task = task_table_.access_task_by_id(id);
-
-        if (should_visit_task(task) && task->is_latest_activity_initiate())
-        {
-            do_task_latest_activity(task);
-        }
-    }
-}
-
-void Banker::do_latest_terminates()
-{
-    for (int i = 0; i < task_table_.size(); i++)
-    {
-        int id = i + 1;
-        task::Task *task = task_table_.access_task_by_id(id);
-
-        if (should_visit_task(task) && task->is_latest_activity_terminate())
-        {
-            do_task_latest_activity(task);
-        }
-    }
-}
-
 } // namespace manager

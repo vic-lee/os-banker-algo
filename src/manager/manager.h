@@ -51,6 +51,10 @@ protected:
 
     bool is_request_safe(task::Task *task);
 
+    void do_latest_initiates();
+    void do_latest_terminates();
+    void do_latest_releases();
+
     void do_all_latest_initiates();
     void do_all_latest_terminates();
     void do_all_latest_releases();

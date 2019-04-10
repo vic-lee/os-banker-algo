@@ -14,9 +14,6 @@ private:
     void iterate_cycle();
     bool is_state_safe();
 
-    void do_latest_initiates();
-    void do_latest_terminates();
-    void do_latest_releases();
     void do_latest_requests();
     void do_latest_requests_from_blocked_tasks();
     void do_latest_requests_from_non_blocked_tasks();

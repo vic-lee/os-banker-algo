@@ -20,7 +20,6 @@ class Task
 {
 public:
     Task(int id);
-    Task(int id, Claim claim);
 
     int id();
     void increment_cycles_waiting(int current_cycle);

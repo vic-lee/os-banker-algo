@@ -11,7 +11,10 @@ namespace manager
 {
 OptimisticManager::OptimisticManager(
     task::TaskTable task_table,
-    task::ResourceTable resource_table) : Manager(task_table, resource_table) {}
+    task::ResourceTable resource_table) : Manager(task_table, resource_table)
+{
+    this->should_check_safety_ = false;
+}
 
 void OptimisticManager::do_tasks()
 {

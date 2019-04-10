@@ -12,6 +12,7 @@ class Initiate : public Activity
 {
   public:
     Initiate(int target_id, Claim claim);
+    bool dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal);
     Claim * claim();
 
   private:

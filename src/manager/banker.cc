@@ -29,7 +29,7 @@ void Banker::do_tasks()
      * Release. 
      */
 
-    while (!task_table_.is_all_task_terminated() && cycle_ < 6)
+    while (!task_table_.is_all_task_terminated())
     {
         iterate_cycle();
     }
@@ -67,6 +67,8 @@ void Banker::before_cycle_setup()
         visit_table_.clear();
 
     visit_table_ = create_visit_status_table_for_all_tasks();
+
+    decr_delay_countdowns();
 }
 
 void Banker::after_cycle_teardown()
@@ -74,7 +76,7 @@ void Banker::after_cycle_teardown()
     resource_table_.release_pending_resources();
 
     visit_table_.clear();
-    
+
     incr_blocked_task_waiting_time();
 }
 
@@ -115,7 +117,8 @@ void Banker::do_latest_requests_from_non_blocked_tasks()
                 }
                 else
                 {
-                    block(task);
+                    if (!task->is_computing())
+                        block(task);
                 }
             }
         }
@@ -166,18 +169,13 @@ void Banker::do_latest_terminates()
 
 bool Banker::do_task_latest_activity(task::Task *t)
 {
-    bool was_successful = t->do_latest_activity(&resource_table_, cycle_);
+    bool was_successful = t->do_latest_activity(&resource_table_, cycle_, should_check_safety_);
     mark_as_visited(t);
     return was_successful;
 }
 
 bool Banker::should_visit_task(task::Task *t)
 {
-    /**
-     *  Technically has_visit is redundant here; because the algorithm 
-     * only visits blocked tasks before visiting non-blocked tasks. 
-     * However, for safety's sake, it is checked one more time here. 
-     */
     return (!is_in_blocked_table(t->id()) && !has_visited(t) && t->is_active());
 }
 
@@ -193,9 +191,18 @@ bool Banker::has_visited(task::Task *t)
 
 void Banker::incr_blocked_task_waiting_time()
 {
-    for (auto& blocked_task : blocked_tasks_table_)
+    for (auto &blocked_task : blocked_tasks_table_)
     {
         blocked_task->increment_cycles_waiting(cycle_);
+    }
+}
+
+void Banker::decr_delay_countdowns()
+{
+    for (int i = 0; i < task_table_.size(); i++)
+    {
+        int id = i + 1;
+        task_table_.access_task_by_id(id)->do_latest_activity_delay_countdown();
     }
 }
 

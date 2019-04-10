@@ -33,6 +33,7 @@ class Banker : public Manager
     bool has_visited(task::Task *t);
 
     void incr_blocked_task_waiting_time();
+    void decr_delay_countdowns();
 
     std::map<int, bool> visit_table_;
 

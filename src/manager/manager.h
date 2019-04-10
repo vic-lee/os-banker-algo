@@ -25,6 +25,7 @@ class Manager
     bool should_check_safety_;
 
     bool is_in_blocked_table(int id);
+    void block(task::Task *t);
     void remove_from_blocked_table(task::Task *t);
 
     std::map<int, bool> create_visit_status_table_for_all_tasks();

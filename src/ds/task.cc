@@ -22,6 +22,43 @@ Task::Task(int id)
     latest_cycle_waited_ = -1;
 }
 
+bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool should_check_safety)
+{
+    bool is_successful = false;
+
+    set_latest_activity();
+
+    if (latest_activity_index_ == -1)
+        return is_successful;
+
+    Activity *latest_activity = get_latest_activity();
+
+    if (latest_activity->is_time_to_execute())
+    {
+        is_successful = execute_activity(latest_activity, resource_table, cycle, should_check_safety);
+        latest_activity->update_completion_state_after_execute(is_successful);
+    }
+
+    return is_successful;
+}
+
+bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
+{
+    return latest_activity->dispatch(this, resource_table, should_check_safety, cycle);
+}
+
+Activity *Task::get_latest_activity()
+{
+    set_latest_activity();
+
+    if (latest_activity_index_ == -1)
+        return nullptr;
+
+    // std::cout << "Latest activity type is " << activities_table_[latest_activity_index_]->type() << std::endl;
+
+    return activities_table_[latest_activity_index_];
+}
+
 void Task::set_latest_activity()
 {
     if (aborted_ || terminated_)
@@ -52,94 +89,12 @@ void Task::add_new_activity(Activity *activity)
     activities_table_.push_back(activity);
 }
 
-Activity *Task::get_latest_activity()
-{
-    set_latest_activity();
-
-    if (latest_activity_index_ == -1)
-        return nullptr;
-
-    // std::cout << "Latest activity type is " << activities_table_[latest_activity_index_]->type() << std::endl;
-
-    return activities_table_[latest_activity_index_];
-}
-
-bool Task::is_latest_activity_request()
-{
-    return determine_latest_activity_type("request");
-}
-
-bool Task::is_latest_activity_release()
-{
-    return determine_latest_activity_type("release");
-}
-
-bool Task::is_latest_activity_initiate()
-{
-    return determine_latest_activity_type("initiate");
-}
-
-bool Task::is_latest_activity_terminate()
-{
-    return determine_latest_activity_type("terminate");
-}
-
-bool Task::determine_latest_activity_type(std::string target_type)
-{
-    if (terminated_)
-        return false;
-
-    Activity *latest_actvity = get_latest_activity();
-
-    if (latest_actvity == NULL)
-        return false;
-
-    if (target_type == "initiate")
-        return latest_actvity->is_initiate();
-
-    else if (target_type == "request")
-        return latest_actvity->is_request();
-
-    else if (target_type == "release")
-        return latest_actvity->is_release();
-
-    else if (target_type == "terminate")
-        return latest_actvity->is_termination();
-
-    return false;
-}
-
 void Task::do_latest_activity_delay_countdown()
 {
     Activity *latest_activity = get_latest_activity();
 
     if (latest_activity != NULL)
         latest_activity->update_time_remaining_before_execute();
-}
-
-bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool should_check_safety)
-{
-    bool is_successful = false;
-
-    set_latest_activity();
-
-    if (latest_activity_index_ == -1)
-        return is_successful;
-
-    Activity *latest_activity = get_latest_activity();
-
-    if (latest_activity->is_time_to_execute())
-    {
-        is_successful = execute_activity(latest_activity, resource_table, cycle, should_check_safety);
-        latest_activity->update_completion_state_after_execute(is_successful);
-    }
-
-    return is_successful;
-}
-
-bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
-{
-    return latest_activity->dispatch(this, resource_table, should_check_safety, cycle);
 }
 
 void Task::add_new_claim(Claim *claim)
@@ -228,33 +183,6 @@ void Task::release_resource_owned(Release *release)
     resources_owned_.at(resource_type) -= release_count;
 }
 
-std::tuple<int, int> Task::get_print_statistic()
-{
-    if (is_aborted())
-        return std::make_tuple(0, 0);
-
-    int total_time_spent = termination_cycle_ - initiation_cycle_;
-    return std::make_tuple(total_time_spent, cycles_waiting_);
-}
-
-void Task::print_finished_status()
-{
-    std::cout << "Task " << id_ << "\t    ";
-
-    if (!is_aborted())
-    {
-        int total_time_spent = termination_cycle_ - initiation_cycle_;
-        std::cout << std::setw(4) << total_time_spent
-                  << std::setw(4) << cycles_waiting_
-                  << std::setw(4) << (int)nearbyint(100 * cycles_waiting_ / ((double)total_time_spent)) << "%"
-                  << std::endl;
-    }
-    else
-    {
-        std::cout << "Aborted" << std::endl;
-    }
-}
-
 std::vector<int> Task::generate_unmet_demand_vector()
 {
     std::vector<int> unmet_demand;
@@ -302,6 +230,51 @@ bool Task::is_request_legal(int request_resource_type, int request_count)
         return false;
     }
     return true;
+}
+
+bool Task::is_latest_activity_request()
+{
+    return determine_latest_activity_type("request");
+}
+
+bool Task::is_latest_activity_release()
+{
+    return determine_latest_activity_type("release");
+}
+
+bool Task::is_latest_activity_initiate()
+{
+    return determine_latest_activity_type("initiate");
+}
+
+bool Task::is_latest_activity_terminate()
+{
+    return determine_latest_activity_type("terminate");
+}
+
+bool Task::determine_latest_activity_type(std::string target_type)
+{
+    if (terminated_)
+        return false;
+
+    Activity *latest_actvity = get_latest_activity();
+
+    if (latest_actvity == NULL)
+        return false;
+
+    if (target_type == "initiate")
+        return latest_actvity->is_initiate();
+
+    else if (target_type == "request")
+        return latest_actvity->is_request();
+
+    else if (target_type == "release")
+        return latest_actvity->is_release();
+
+    else if (target_type == "terminate")
+        return latest_actvity->is_termination();
+
+    return false;
 }
 
 int Task::id()
@@ -370,6 +343,33 @@ void Task::print()
     for (auto &activity : activities_table_)
     {
         activity->print();
+    }
+}
+
+std::tuple<int, int> Task::get_print_statistic()
+{
+    if (is_aborted())
+        return std::make_tuple(0, 0);
+
+    int total_time_spent = termination_cycle_ - initiation_cycle_;
+    return std::make_tuple(total_time_spent, cycles_waiting_);
+}
+
+void Task::print_finished_status()
+{
+    std::cout << "Task " << id_ << "\t    ";
+
+    if (!is_aborted())
+    {
+        int total_time_spent = termination_cycle_ - initiation_cycle_;
+        std::cout << std::setw(4) << total_time_spent
+                  << std::setw(4) << cycles_waiting_
+                  << std::setw(4) << (int)nearbyint(100 * cycles_waiting_ / ((double)total_time_spent)) << "%"
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "Aborted" << std::endl;
     }
 }
 

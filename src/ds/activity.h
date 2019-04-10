@@ -15,7 +15,7 @@ class Activity
      */
 
   public:
-    Activity(std::string type, int target_id, int delay, Task *task);
+    Activity(std::string type, int target_id, int delay);
     virtual ~Activity() {}
     int get_target_id();
     void update_time_remaining_before_execute();
@@ -24,6 +24,7 @@ class Activity
     bool is_computing();
     bool is_time_to_execute();
     void set_to_complete();
+    virtual bool dispatch();
     virtual void print();
 
     std::string type();
@@ -35,7 +36,6 @@ class Activity
   protected:
     std::string type_;
     int target_id;
-    task::Task *target_task_;
     int delay;
     int time_remaining_;
     bool has_begun_;

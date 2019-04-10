@@ -12,7 +12,7 @@ class ResourceTable;
 class Request : public Activity
 {
   public:
-    Request(int target_id, int delay, int request_resource_type, int request_count, Task *task);
+    Request(int target_id, int delay, int request_resource_type, int request_count);
     int get_resource_type();
     int get_request_count();
     bool is_request_legal();

@@ -11,7 +11,7 @@ class ResourceTable;
 class Release : public Activity
 {
   public:
-    Release(int target_id, int delay, int release_resource_type, int release_count, Task *task);
+    Release(int target_id, int delay, int release_resource_type, int release_count);
     void print();
     void execute();
     int get_resource_type();

@@ -13,7 +13,7 @@ class OptimisticManager : public Manager
     void print();
 
   private:
-    bool does_deadlock_exist(std::map<int, bool> visit_status);
+    bool does_deadlock_exist();
     void handle_deadlock();
     void iterate_cycle();
     task::Task *find_lowest_task_with_request();

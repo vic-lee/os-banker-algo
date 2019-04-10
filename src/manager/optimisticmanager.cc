@@ -27,26 +27,26 @@ void OptimisticManager::iterate_cycle()
 {
     // std::cout << "\n----- Cycle " << cycle_ << "-" << cycle_ + 1 << " -----" << std::endl;
 
-    std::map<int, bool> visit_status = create_visit_status_table_for_all_tasks();
+    before_cycle_setup();
 
-    do_all_latest_releases(visit_status);
-    do_all_latest_initiates(visit_status);
-    do_all_latest_terminates(visit_status);
+    do_all_latest_releases();
+    do_all_latest_initiates();
+    do_all_latest_terminates();
 
-    while (does_deadlock_exist(visit_status))
+    while (does_deadlock_exist())
     {
         std::cout << "DEADLOCKED!!!" << std::endl;
         handle_deadlock();
     }
 
-    do_all_latest_requests(visit_status);
+    do_all_latest_requests();
 
-    resource_table_.release_pending_resources();
+    after_cycle_teardown();
 
     cycle_++;
 }
 
-bool OptimisticManager::does_deadlock_exist(std::map<int, bool> visit_status)
+bool OptimisticManager::does_deadlock_exist()
 {
     bool does_deadlock_exist = true;
 
@@ -56,7 +56,7 @@ bool OptimisticManager::does_deadlock_exist(std::map<int, bool> visit_status)
     {
         task::Task *task = task_table_.access_task_by_id(i);
 
-        if (visit_status.at(i) == true)
+        if (visit_table_.at(i) == true)
         {
             does_deadlock_exist = false;
             continue;

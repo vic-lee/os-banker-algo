@@ -38,17 +38,17 @@ protected:
 
     std::map<int, bool> create_visit_status_table_for_all_tasks();
 
-    void do_all_latest_requests(std::map<int, bool> &visit_status);
-    void do_latest_requests_from_blocked_tasks(std::map<int, bool> &visit_status);
-    void do_latest_requests_from_non_blocked_tasks(std::map<int, bool> &visit_status);
+    void do_all_latest_requests();
+    void do_latest_requests_from_blocked_tasks();
+    void do_latest_requests_from_non_blocked_tasks();
 
     bool is_request_safe(task::Task *task);
 
-    void do_all_latest_initiates(std::map<int, bool> &visit_status);
-    void do_all_latest_terminates(std::map<int, bool> &visit_status);
-    void do_all_latest_releases(std::map<int, bool> &visit_status);
-    void do_all_latest_activity_of_type(std::string type, std::map<int, bool> &visit_status);
-    bool do_one_latest_activity_of_type(std::string type, std::map<int, bool> &visit_status, task::Task *task, bool from_blocked);
+    void do_all_latest_initiates();
+    void do_all_latest_terminates();
+    void do_all_latest_releases();
+    void do_all_latest_activity_of_type(std::string type);
+    bool do_one_latest_activity_of_type(std::string type, task::Task *task, bool from_blocked);
 };
 } // namespace manager
 

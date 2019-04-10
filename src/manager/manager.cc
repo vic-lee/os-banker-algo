@@ -103,13 +103,13 @@ bool Manager::is_request_safe(task::Task *task)
     return is_request_safe;
 }
 
-void Manager::do_all_latest_requests(std::map<int, bool> &visit_status)
+void Manager::do_all_latest_requests()
 {
-    do_latest_requests_from_blocked_tasks(visit_status);
-    do_latest_requests_from_non_blocked_tasks(visit_status);
+    do_latest_requests_from_blocked_tasks();
+    do_latest_requests_from_non_blocked_tasks();
 }
 
-void Manager::do_latest_requests_from_blocked_tasks(std::map<int, bool> &visit_status)
+void Manager::do_latest_requests_from_blocked_tasks()
 {
     int i = 0;
     while (i < blocked_tasks_table_.size())
@@ -121,12 +121,12 @@ void Manager::do_latest_requests_from_blocked_tasks(std::map<int, bool> &visit_s
         {
             if (is_request_safe(task))
             {
-                is_task_unblocked = do_one_latest_activity_of_type("request", visit_status, task, true);
+                is_task_unblocked = do_one_latest_activity_of_type("request", task, true);
             }
         }
         else /*  FIFO  */
         {
-            is_task_unblocked = do_one_latest_activity_of_type("request", visit_status, task, true);
+            is_task_unblocked = do_one_latest_activity_of_type("request", task, true);
         }
 
         if (is_task_unblocked)
@@ -135,45 +135,44 @@ void Manager::do_latest_requests_from_blocked_tasks(std::map<int, bool> &visit_s
     }
 }
 
-void Manager::do_latest_requests_from_non_blocked_tasks(std::map<int, bool> &visit_status)
+void Manager::do_latest_requests_from_non_blocked_tasks()
 {
     for (int i = 1; i < (task_table_.size() + 1); i++)
     {
         task::Task *task = task_table_.access_task_by_id(i);
-        do_one_latest_activity_of_type("request", visit_status, task, false);
+        do_one_latest_activity_of_type("request", task, false);
     }
 }
 
-void Manager::do_all_latest_initiates(std::map<int, bool> &visit_status)
+void Manager::do_all_latest_initiates()
 {
-    do_all_latest_activity_of_type("initiate", visit_status);
+    do_all_latest_activity_of_type("initiate");
 }
 
-void Manager::do_all_latest_terminates(std::map<int, bool> &visit_status)
+void Manager::do_all_latest_terminates()
 {
-    do_all_latest_activity_of_type("terminate", visit_status);
+    do_all_latest_activity_of_type("terminate");
 }
 
-void Manager::do_all_latest_releases(std::map<int, bool> &visit_status)
+void Manager::do_all_latest_releases()
 {
-    do_all_latest_activity_of_type("release", visit_status);
+    do_all_latest_activity_of_type("release");
 }
 
-void Manager::do_all_latest_activity_of_type(std::string type, std::map<int, bool> &visit_status)
+void Manager::do_all_latest_activity_of_type(std::string type)
 {
     for (int i = 1; i < (task_table_.size() + 1); i++)
     {
         task::Task *task = task_table_.access_task_by_id(i);
-        do_one_latest_activity_of_type(type, visit_status, task, false);
+        do_one_latest_activity_of_type(type, task, false);
     }
 }
 
-bool Manager::do_one_latest_activity_of_type(
-    std::string type, std::map<int, bool> &visit_status, task::Task *task, bool from_blocked)
+bool Manager::do_one_latest_activity_of_type(std::string type, task::Task *task, bool from_blocked)
 {
     int id = task->id();
 
-    bool should_do_task = !task->is_terminated() && visit_status.at(id) == false;
+    bool should_do_task = !task->is_terminated() && visit_table_.at(id) == false;
 
     if (!from_blocked)
         should_do_task = !is_in_blocked_table(id) && should_do_task;
@@ -185,7 +184,7 @@ bool Manager::do_one_latest_activity_of_type(
         if (activity->type() == type)
         {
             bool is_successful = task->do_latest_activity(&resource_table_, cycle_, should_check_safety_);
-            visit_status.at(id) = true;
+            visit_table_.at(id) = true;
 
             if (!is_successful && !task->is_computing() && !task->is_aborted() && !from_blocked)
             {

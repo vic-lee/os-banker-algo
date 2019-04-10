@@ -56,8 +56,6 @@ void do_optimistic_manager(int argc, char **argv)
     optimistic_manager->print();
 
     delete optimistic_manager;
-
-    std::cout << "\n" << std::endl;
 }
 
 void do_banker(int argc, char **argv)

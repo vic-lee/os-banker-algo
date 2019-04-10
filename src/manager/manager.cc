@@ -40,7 +40,7 @@ void Manager::print()
     std::cout << "Total\t    "
               << std::setw(4) << cumulative_time_spent
               << std::setw(4) << cumulative_time_waiting
-              << std::setw(4) << (int)nearbyint(100 * cumulative_time_waiting / ((double)cumulative_time_spent)) << "%"
+              << std::setw(4) << (int)nearbyint(100 * cumulative_time_waiting / ((double)cumulative_time_spent)) << "%\n"
               << std::endl;
 }
 

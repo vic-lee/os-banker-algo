@@ -18,15 +18,23 @@ void Banker::do_tasks()
 {
     /**
      * Algorithm:
+     * 
      * Requests:
      *      First, check if it is safe to satisfy blocked tasks' requests.
      *          If safe, satisfy & remove from blocked. 
-     *      Second, check if it is safe to satisfy regular tasks' requests.
+     *      Second, check if it is safe to satisfy non-blocked tasks' requests.
      *          If safe, satisfy
      *          If not safe, add to blocked list and incr. wait time. 
      * Initiate. 
      * Terminate. 
      * Release. 
+     * 
+     * Notes: 
+     * - Each task is visited only once in a cycle. A visit table is set up at 
+     * the beginning of a cycle to track each task's visit status. The visit 
+     * table is reset at the end of a cycle. 
+     * 
+     * - Resources to be released are also released at the end of a cycle. 
      */
 
     while (!task_table_.is_all_task_terminated())

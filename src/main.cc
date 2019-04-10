@@ -62,6 +62,7 @@ void do_banker(int argc, char **argv)
     std::string input_fpath;
     bool debug = false;
     std::tie(input_fpath, debug) = banker::read_cmd_arg(argc, argv);    
+    
     io::TaskReader task_reader(input_fpath);
     task::TaskTable task_table = task_reader.to_tasktable();
     task::ResourceTable resource_table = task_reader.to_resourcetable();

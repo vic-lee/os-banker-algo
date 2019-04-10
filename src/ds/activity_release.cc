@@ -19,6 +19,7 @@ void Release::execute()
 bool Release::dispatch(ResourceTable *resource_table)
 {
     resource_table->handle_new_release(this);
+    return true;
 }
 
 int Release::get_resource_type()

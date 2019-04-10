@@ -12,7 +12,6 @@ public:
 
 private:
     void iterate_cycle();
-    bool is_state_safe();
 
     void do_latest_requests() override;
     void do_latest_requests_from_blocked_tasks();

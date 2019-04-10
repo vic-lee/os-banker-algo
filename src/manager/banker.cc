@@ -45,26 +45,16 @@ void Banker::do_tasks()
 
 void Banker::iterate_cycle()
 {
-    before_cycle_setup();
+    before_cycle_setup();       /* Decr. delays */
 
     do_latest_requests();
     do_latest_releases();
     do_latest_initiates();
     do_latest_terminates();
 
-    after_cycle_teardown();
+    after_cycle_teardown();     /* Reset visit table; Release resources; Incr. waiting time */
 
     cycle_++;
-}
-
-bool Banker::is_state_safe()
-{
-    bool is_state_safe = false;
-
-    std::vector<std::vector<int>> unmet_demand = task_table_.generate_unmet_demand_matrix();
-    std::vector<int> resource_available = resource_table_.generate_resource_available_vector();
-
-    return is_state_safe;
 }
 
 void Banker::do_latest_requests()

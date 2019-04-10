@@ -1,4 +1,5 @@
 #include <iostream>
+#include "task.h"
 #include "resourcetable.h"
 #include "activity_release.h"
 
@@ -16,9 +17,12 @@ void Release::execute()
     // Activity::execute();
 }
 
-bool Release::dispatch(ResourceTable *resource_table)
+bool Release::dispatch(Task *target_task, ResourceTable *resource_table)
 {
     resource_table->handle_new_release(this);
+
+    target_task->release_resource_owned(this);
+
     return true;
 }
 

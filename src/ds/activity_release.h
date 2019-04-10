@@ -17,7 +17,7 @@ class Release : public Activity
     int get_resource_type();
     int get_release_count();
 
-    bool dispatch(ResourceTable *resource_table);
+    bool dispatch(Task *target_task, ResourceTable *resource_table);
 
   private:
     int release_resource_type;

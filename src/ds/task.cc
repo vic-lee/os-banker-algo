@@ -45,7 +45,7 @@ void Task::set_latest_activity()
         latest_activity_index_ = -1;
         return;
     }
-    for (int i = 0; i < activities_table_.size(); i++)
+    for (unsigned int i = 0; i < activities_table_.size(); i++)
     {
         if (activities_table_[i]->is_active())
         {
@@ -394,9 +394,10 @@ void Task::print()
     }
 
     std::cout << "------------- Activities --------------" << std::endl;
-    for (int i = 0; i < activities_table_.size(); i++)
+    // for (int i = 0; i < activities_table_.size(); i++)
+    for (auto& activity : activities_table_)
     {
-        activities_table_[i]->print();
+        activity->print();
     }
 }
 
@@ -431,7 +432,7 @@ std::vector<int> Task::generate_unmet_demand_vector()
 {
     std::vector<int> unmet_demand;
 
-    for (int i = 0; i < resources_claimed_.size(); i++)
+    for (unsigned int i = 0; i < resources_claimed_.size(); i++)
     {
         int resource_id = i + 1;
         int claim_count, own_count;

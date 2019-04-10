@@ -111,7 +111,7 @@ void OptimisticManager::do_all_latest_requests()
 
 void OptimisticManager::do_latest_requests_from_blocked_tasks()
 {
-    int i = 0;
+    unsigned int i = 0;
     while (i < blocked_tasks_table_.size())
     {
         task::Task *task = blocked_tasks_table_[i];

@@ -50,9 +50,9 @@ void ResourceTable::handle_new_release(Release *release)
 
 void ResourceTable::release_pending_resources()
 {
-    for (int i = 0; i < resource_table_.size(); i++)
+    for (auto& resource : resource_table_)
     {
-        resource_table_[i]->clear_to_be_added_units();
+        resource->clear_to_be_added_units();
     }
 }
 
@@ -60,9 +60,9 @@ std::vector<int> ResourceTable::generate_resource_available_vector()
 {
     std::vector<int> resource_available;
 
-    for (int i = 0; i < resource_table_.size(); i++)
+    for (auto& resource : resource_table_)
     {
-        int availability = resource_table_[i]->remaining_unit_count();
+        int availability = resource->remaining_unit_count();
         resource_available.push_back(availability);
     }
     
@@ -76,9 +76,7 @@ void ResourceTable::add(Resource *resource)
 
 void ResourceTable::print()
 {
-    for (int i = 0; i < resource_table_.size(); i++)
-    {
-        resource_table_[i]->print();
-    }
+    for (auto& resource : resource_table_)
+        resource->print();
 }
 } // namespace task

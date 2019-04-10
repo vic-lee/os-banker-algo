@@ -46,7 +46,7 @@ void Manager::print()
 
 void Manager::remove_from_blocked_table(task::Task *t)
 {
-    for (int i = 0; i < blocked_tasks_table_.size(); i++)
+    for (unsigned int i = 0; i < blocked_tasks_table_.size(); i++)
     {
         if (blocked_tasks_table_[i]->id() == t->id())
             blocked_tasks_table_.erase(blocked_tasks_table_.begin() + i);
@@ -61,9 +61,10 @@ void Manager::block(task::Task *t)
 
 bool Manager::is_in_blocked_table(int id)
 {
-    for (int i = 0; i < blocked_tasks_table_.size(); i++)
+    // for (int i = 0; i < blocked_tasks_table_.size(); i++)
+    for (auto &blocked_task : blocked_tasks_table_)    
     {
-        if (blocked_tasks_table_[i]->id() == id)
+        if (blocked_task->id() == id)
             return true;
     }
     return false;
@@ -89,7 +90,7 @@ bool Manager::is_request_safe(task::Task *task)
     if (max_addl_demand.size() != current_resource_availability.size())
         std::cout << "Max demand and Availability vector has different sizes." << std::endl;
 
-    for (int i = 0; i < max_addl_demand.size(); i++)
+    for (unsigned int i = 0; i < max_addl_demand.size(); i++)
     {
         if (max_addl_demand[i] > current_resource_availability[i])
         {

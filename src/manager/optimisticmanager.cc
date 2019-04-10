@@ -169,28 +169,4 @@ bool OptimisticManager::do_one_latest_request(task::Task *task, bool from_blocke
     return false;
 }
 
-void OptimisticManager::print()
-{
-    std::cout << "\n/******** FIFO ********/" << std::endl;
-
-    int cumulative_time_spent = 0;
-    int cumulative_time_waiting = 0;
-
-    for (int i = 1; i < (task_table_.size() + 1); i++)
-    {
-        task::Task *current_task = task_table_.access_task_by_id(i);
-        current_task->print_finished_status();
-
-        int time_spent, time_waiting;
-        std::tie(time_spent, time_waiting) = current_task->get_print_statistic();
-        cumulative_time_spent += time_spent;
-        cumulative_time_waiting += time_waiting;
-    }
-    std::cout << "Total\t    "
-              << std::setw(4) << cumulative_time_spent
-              << std::setw(4) << cumulative_time_waiting
-              << std::setw(4) << (int)nearbyint(100 * cumulative_time_waiting / ((double)cumulative_time_spent)) << "%"
-              << std::endl;
-}
-
 } // namespace manager

@@ -10,7 +10,6 @@ class OptimisticManager : public Manager
 public:
     OptimisticManager(task::TaskTable task_table, task::ResourceTable resource_table, bool debug);
     void do_tasks();
-    void print();
 
 private:
     bool does_deadlock_exist();

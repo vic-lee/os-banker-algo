@@ -148,7 +148,7 @@ bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_t
     }
     else if (latest_activity->is_request())
     {
-        return request(latest_activity, resource_table, cycle);
+        return request(latest_activity, resource_table, cycle, should_check_safety);
     }
     else if (latest_activity->is_release())
     {
@@ -209,7 +209,7 @@ void Task::unblock()
 }
 
 bool Task::initiate(Activity *latest_activity, ResourceTable *resource_table, bool should_check_safety)
-{   
+{
     Claim *claim = static_cast<Initiate *>(latest_activity)->claim();
 
     if (should_check_safety)
@@ -225,15 +225,24 @@ bool Task::initiate(Activity *latest_activity, ResourceTable *resource_table, bo
     return true;
 }
 
-bool Task::request(Activity *latest_activity, ResourceTable *resource_table, int cycle)
+bool Task::request(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
+    // bool was_request_satisfied = dynamic_cast<Request *>(latest_activity)
+    //  ->dispatch(resource_table, should_check_safety);
+
+    int resource_type = static_cast<Request *>(latest_activity)->get_resource_type();
+    int request_count = static_cast<Request *>(latest_activity)->get_request_count();
+
+    if (should_check_safety && !is_request_legal(resource_type, request_count))
+    {
+        abort(resource_table);
+        return false;
+    }
+
     bool can_satisfy_request = resource_table->handle_new_request(static_cast<Request *>(latest_activity));
 
     if (can_satisfy_request)
     {
-        int resource_type = static_cast<Request *>(latest_activity)->get_resource_type();
-        int request_count = static_cast<Request *>(latest_activity)->get_request_count();
-
         if (resources_owned_.find(resource_type) == resources_owned_.end())
             resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
         else
@@ -377,11 +386,12 @@ void Task::print_finished_status()
 std::vector<int> Task::generate_unmet_demand_vector()
 {
     std::vector<int> unmet_demand;
+
     for (int i = 0; i < resources_claimed_.size(); i++)
     {
         int resource_id = i + 1;
         int claim_count, own_count;
-        
+
         claim_count = resources_claimed_.at(resource_id).claim_count;
 
         if (resources_owned_.find(resource_id) == resources_owned_.end())
@@ -393,7 +403,7 @@ std::vector<int> Task::generate_unmet_demand_vector()
         {
             own_count = resources_owned_.at(resource_id);
         }
-        
+
         int max_addl_claim = claim_count - own_count;
         unmet_demand.push_back(max_addl_claim);
     }
@@ -404,7 +414,22 @@ std::vector<int> Task::generate_unmet_demand_vector()
 int Task::check_unmet_demand_for_resource(int resource_id)
 {
     std::vector<int> unmet_demand = generate_unmet_demand_vector();
-    return unmet_demand[resource_id];
+    return unmet_demand[resource_id - 1];
+}
+
+bool Task::is_request_legal(int request_resource_type, int request_count)
+{
+    // std::cout << "Ready to check unmet demand" << std::endl;
+    int max_addl_demand = check_unmet_demand_for_resource(request_resource_type);
+    // std::cout << "Checked unmet demand" << std::endl;
+
+    if (request_count > max_addl_demand)
+    {
+        std::cout << "Task " << id_ << "'s request of RT"
+                  << request_resource_type << " is not legal;" << std::endl;
+        return false;
+    }
+    return true;
 }
 
 } // namespace task

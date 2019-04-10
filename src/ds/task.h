@@ -18,7 +18,7 @@ typedef int resource_id, claim_count;
 
 class Task
 {
-  public:
+public:
     Task(int id);
     Task(int id, Claim claim);
 
@@ -52,17 +52,19 @@ class Task
     void print_finished_status();
     std::tuple<int, int> get_print_statistic();
 
-  private:
+private:
     bool initiate(Activity *latest_activity, ResourceTable *resource_table, bool should_check_safety);
-    bool request(Activity *latest_activity, ResourceTable *resource_table, int cycle);
+    bool request(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety);
     bool release(Activity *latest_activity, ResourceTable *resource_table);
-    
+
     void add_new_claim(Claim *claim);
 
     void set_latest_activity();
     bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety);
     void release_resources(ResourceTable *resource_table);
     bool determine_latest_activity_type(std::string target_type);
+    bool is_request_legal(int request_resource_type, int request_count);
+
 
     int id_;
     int latest_activity_index_;

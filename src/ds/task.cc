@@ -157,54 +157,6 @@ bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_t
     return latest_activity->dispatch(this, resource_table, should_check_safety, cycle);
 }
 
-int Task::id()
-{
-    return id_;
-}
-
-bool Task::is_terminated()
-{
-    return terminated_;
-}
-
-bool Task::is_active()
-{
-    return !terminated_;
-}
-
-bool Task::is_computing()
-{
-    Activity *activity = get_latest_activity();
-
-    if (activity != NULL)
-        return activity->is_computing();
-
-    return false;
-}
-
-bool Task::is_blocked()
-{
-    return blocked_;
-}
-
-void Task::block()
-{
-    blocked_ = true;
-}
-
-void Task::unblock()
-{
-    blocked_ = false;
-}
-
-bool Task::terminate(int cycle)
-{
-    terminated_ = true;
-    termination_cycle_ = cycle;
-    // std::cout << "Terminating Task " << id_ << std::endl;
-    return true;
-}
-
 void Task::add_new_claim(Claim *claim)
 {
     resources_claimed_.insert(
@@ -291,27 +243,6 @@ void Task::release_resource_owned(Release *release)
     resources_owned_.at(resource_type) -= release_count;
 }
 
-void Task::print()
-{
-    std::cout << std::endl;
-
-    std::cout << "Task ID: " << id_ << std::endl;
-
-    std::cout << "---------------- Claims ---------------" << std::endl;
-    std::map<int, Claim>::iterator it;
-    for (it = resources_claimed_.begin(); it != resources_claimed_.end(); it++)
-    {
-        it->second.print();
-    }
-
-    std::cout << "------------- Activities --------------" << std::endl;
-    // for (int i = 0; i < activities_table_.size(); i++)
-    for (auto &activity : activities_table_)
-    {
-        activity->print();
-    }
-}
-
 std::tuple<int, int> Task::get_print_statistic()
 {
     if (is_aborted())
@@ -386,6 +317,75 @@ bool Task::is_request_legal(int request_resource_type, int request_count)
         return false;
     }
     return true;
+}
+
+int Task::id()
+{
+    return id_;
+}
+
+bool Task::is_terminated()
+{
+    return terminated_;
+}
+
+bool Task::is_active()
+{
+    return !terminated_;
+}
+
+bool Task::is_computing()
+{
+    Activity *activity = get_latest_activity();
+
+    if (activity != NULL)
+        return activity->is_computing();
+
+    return false;
+}
+
+bool Task::is_blocked()
+{
+    return blocked_;
+}
+
+void Task::block()
+{
+    blocked_ = true;
+}
+
+void Task::unblock()
+{
+    blocked_ = false;
+}
+
+bool Task::terminate(int cycle)
+{
+    terminated_ = true;
+    termination_cycle_ = cycle;
+    // std::cout << "Terminating Task " << id_ << std::endl;
+    return true;
+}
+
+void Task::print()
+{
+    std::cout << std::endl;
+
+    std::cout << "Task ID: " << id_ << std::endl;
+
+    std::cout << "---------------- Claims ---------------" << std::endl;
+    std::map<int, Claim>::iterator it;
+    for (it = resources_claimed_.begin(); it != resources_claimed_.end(); it++)
+    {
+        it->second.print();
+    }
+
+    std::cout << "------------- Activities --------------" << std::endl;
+    // for (int i = 0; i < activities_table_.size(); i++)
+    for (auto &activity : activities_table_)
+    {
+        activity->print();
+    }
 }
 
 } // namespace task

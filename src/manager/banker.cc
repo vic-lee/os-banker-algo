@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 #include "banker.h"
 #include "../ds/task.h"
@@ -28,7 +29,7 @@ void Banker::do_tasks()
      * Release. 
      */
 
-    while (!task_table_.is_all_task_terminated())
+    while (!task_table_.is_all_task_terminated() && cycle_ < 6)
     {
         iterate_cycle();
     }
@@ -36,15 +37,7 @@ void Banker::do_tasks()
 
 void Banker::iterate_cycle()
 {
-    // do_latest_requests()    // abort if request > total unit
-    // {
-    //     do_blocked_tasks_requests();
-    //     do_regular_tasks_requests();
-    // }
-    // do_initiates();     // abort if claim > total unit
-    // do_terminates();
-    // do_releases();
-    std::map<int, bool> visit_status = create_visit_status_table_for_all_tasks();
+    std::cout << "\n------ Cycle " << cycle_ << "-" << (cycle_ + 1) << " ------" << std::endl;
 
     before_cycle_setup();
 
@@ -53,16 +46,10 @@ void Banker::iterate_cycle()
     do_latest_initiates();
     do_latest_terminates();
 
-    // do_all_latest_initiates(visit_status);
-    // do_all_latest_terminates(visit_status);
-    // do_all_latest_releases(visit_status);
-
     after_cycle_teardown();
 
     cycle_++;
 }
-
-void Banker::print() {}
 
 bool Banker::is_state_safe()
 {
@@ -84,6 +71,7 @@ void Banker::before_cycle_setup()
 
 void Banker::after_cycle_teardown()
 {
+    resource_table_.release_pending_resources();
     visit_table_.clear();
 }
 
@@ -99,7 +87,7 @@ void Banker::do_latest_requests_from_blocked_tasks()
     {
         if (is_request_safe(blocked_task))
         {
-            bool did_successfully_request = blocked_task->do_latest_activity(&resource_table_, cycle_);
+            bool did_successfully_request = do_task_latest_activity(blocked_task);
 
             if (did_successfully_request)
                 remove_from_blocked_table(blocked_task);
@@ -116,12 +104,68 @@ void Banker::do_latest_requests_from_non_blocked_tasks()
 
         if (should_visit_task(task))
         {
-            bool was_activity_successful = task->do_latest_activity(&resource_table_, cycle_);
-
-            if (!was_activity_successful)
-                block(task);
+            if (task->is_latest_activity_request())
+            {
+                if (is_request_safe(task))
+                {
+                    do_task_latest_activity(task);
+                }
+                else
+                {
+                    block(task);
+                }
+            }
         }
     }
+}
+
+void Banker::do_latest_releases()
+{
+    for (int i = 0; i < task_table_.size(); i++)
+    {
+        int id = i + 1;
+        task::Task *task = task_table_.access_task_by_id(id);
+
+        if (should_visit_task(task) && task->is_latest_activity_release())
+        {
+            do_task_latest_activity(task);
+        }
+    }
+}
+
+void Banker::do_latest_initiates()
+{
+    for (int i = 0; i < task_table_.size(); i++)
+    {
+        int id = i + 1;
+        task::Task *task = task_table_.access_task_by_id(id);
+
+        if (should_visit_task(task) && task->is_latest_activity_initiate())
+        {
+            do_task_latest_activity(task);
+        }
+    }
+}
+
+void Banker::do_latest_terminates()
+{
+    for (int i = 0; i < task_table_.size(); i++)
+    {
+        int id = i + 1;
+        task::Task *task = task_table_.access_task_by_id(id);
+
+        if (should_visit_task(task) && task->is_latest_activity_terminate())
+        {
+            do_task_latest_activity(task);
+        }
+    }
+}
+
+bool Banker::do_task_latest_activity(task::Task *t)
+{
+    bool was_successful = t->do_latest_activity(&resource_table_, cycle_);
+    mark_as_visited(t);
+    return was_successful;
 }
 
 bool Banker::should_visit_task(task::Task *t)

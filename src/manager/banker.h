@@ -9,7 +9,6 @@ class Banker : public Manager
     Banker(task::TaskTable task_table, task::ResourceTable resource_table);
     virtual ~Banker();
     void do_tasks();
-    void print();
 
   private:
     void iterate_cycle();
@@ -25,6 +24,8 @@ class Banker : public Manager
     void do_latest_requests();
     void do_latest_requests_from_blocked_tasks();
     void do_latest_requests_from_non_blocked_tasks();
+
+    bool do_task_latest_activity(task::Task *t);
 
     bool should_visit_task(task::Task *t);
 

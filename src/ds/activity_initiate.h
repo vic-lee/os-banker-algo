@@ -12,9 +12,10 @@ class Initiate : public Activity
 {
   public:
     Initiate(int target_id, Claim claim, Task *task);
+    Claim * claim();
 
   private:
-    Claim claim;
+    Claim claim_;
 };
 
 } // namespace task

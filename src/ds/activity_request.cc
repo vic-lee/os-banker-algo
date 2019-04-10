@@ -1,6 +1,7 @@
 #include <iostream>
 #include "task.h"
 #include "activity_request.h"
+#include "../manager/manager.h"
 
 namespace task
 {
@@ -11,23 +12,31 @@ Request::Request(int target_id, int delay, int request_resource_type, int reques
     this->request_count_ = request_count;
 }
 
-bool Request::dispatch(ResourceTable *resource_table, bool check_legal)
+bool Request::dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle)
 {
-    if ((check_legal && is_request_legal()) || !check_legal)
+    if (check_legal && !is_request_legal(target_task))
     {
-        bool is_successful = resource_table->handle_new_request(this);
-        return is_successful;
+        target_task->abort(resource_table);
+        return false;
     }
+
+    bool was_successful = resource_table->handle_new_request(this);
+
+    if (was_successful)
+        target_task->update_resources_owned(this);
+    else
+        target_task->increment_cycles_waiting(cycle);
+
     return false;
 }
 
-bool Request::is_request_legal()
+bool Request::is_request_legal(Task *target_task)
 {
-    int max_addl_demand = target_task_->check_unmet_demand_for_resource(request_resource_type_);
+    int max_addl_demand = target_task->check_unmet_demand_for_resource(request_resource_type_);
 
     if (request_count_ > max_addl_demand)
     {
-        std::cout << "Task " << target_task_->id() << "'s request of RT"
+        std::cout << "Task " << target_task->id() << "'s request of RT"
                   << request_resource_type_ << " is not legal;"
                   << "Requested " << request_count_
                   << "; MaxAddlDemand: " << max_addl_demand << std::endl;

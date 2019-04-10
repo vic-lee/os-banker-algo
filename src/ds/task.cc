@@ -11,21 +11,6 @@
 
 namespace task
 {
-
-Task::Task(int id, Claim claim)
-{
-    this->id_ = id;
-    aborted_ = false;
-    blocked_ = false;
-    terminated_ = false;
-    initiation_cycle_ = 0;
-    cycles_waiting_ = 0;
-    latest_cycle_waited_ = -1;
-
-    resources_claimed_.insert(
-        std::pair<int, Claim>(claim.claimed_resource_id, claim));
-}
-
 Task::Task(int id)
 {
     this->id_ = id;

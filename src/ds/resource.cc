@@ -115,8 +115,12 @@ void Resource::add_release_next_cycle(int unit_count)
 
 void Resource::clear_to_be_added_units()
 {
-    std::cout << "Release " << units_to_be_added_next_cycle_
-              << " units of RT" << id_ << std::endl;
+    if (units_to_be_added_next_cycle_ > 0)
+    {
+        std::cout << "Release " << units_to_be_added_next_cycle_
+                  << " units of RT" << id_ << std::endl;
+    }
+
     remaining_unit_count_ += units_to_be_added_next_cycle_;
     units_to_be_added_next_cycle_ = 0;
 }

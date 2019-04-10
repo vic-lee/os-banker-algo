@@ -60,12 +60,12 @@ std::vector<int> ResourceTable::generate_resource_available_vector()
 {
     std::vector<int> resource_available;
 
-    for (int i = 0; resource_table_.size(); i++)
+    for (int i = 0; i < resource_table_.size(); i++)
     {
         int availability = resource_table_[i]->remaining_unit_count();
         resource_available.push_back(availability);
     }
-
+    
     return resource_available;
 }
 

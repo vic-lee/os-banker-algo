@@ -21,3 +21,8 @@ Create a data structure that stores statistics regarding each task for inter-mod
 ## TODO
 1. Make `cycle` a private data member of OptimisticManager, not a var in function.
 2. Migrate final printing functions to `TaskPrinter.cc`.
+
+## Zipping and testing
+```
+zip -r lab3.zip lab3c/ -x "*.git*" -x "*.ipch" -x "*.vscode*"
+```

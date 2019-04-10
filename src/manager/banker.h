@@ -12,6 +12,26 @@ class Banker : public Manager
     void print();
 
   private:
+    void iterate_cycle();
     bool is_state_safe();
+    void update_resources_available_vector(std::vector<int> &resources_available, std::vector<int> resources_released);
+
+    void before_cycle_setup();
+    void after_cycle_teardown();
+
+    void do_latest_initiates();
+    void do_latest_terminates();
+    void do_latest_releases();
+    void do_latest_requests();
+    void do_latest_requests_from_blocked_tasks();
+    void do_latest_requests_from_non_blocked_tasks();
+
+    bool should_visit_task(task::Task *t);
+
+    void mark_as_visited(task::Task *t);
+    bool has_visited(task::Task *t);
+
+    std::map<int, bool> visit_table_;
+
 };
 } // namespace manager

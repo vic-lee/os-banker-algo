@@ -48,6 +48,11 @@ public:
     std::vector<int> generate_unmet_demand_vector();
     int check_unmet_demand_for_resource(int resource_id);
 
+    void add_new_claim(Claim *claim);
+
+    void add_resource_owned(Request *request);
+    void release_resource_owned(Release *release);
+
     void print();
     std::string to_string();
     void print_finished_status();
@@ -58,13 +63,15 @@ private:
     bool request(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety);
     bool release(Activity *latest_activity, ResourceTable *resource_table);
 
-    void add_new_claim(Claim *claim);
 
     void set_latest_activity();
     bool execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety);
-    void release_resources(ResourceTable *resource_table);
+    void release_all_resources(ResourceTable *resource_table);
     bool determine_latest_activity_type(std::string target_type);
     bool is_request_legal(int request_resource_type, int request_count);
+
+    void add_resource_owned(int resource_type, int request_count);
+    void release_resource_owned(int resource_type, int release_count);
 
 
     int id_;

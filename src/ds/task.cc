@@ -236,9 +236,6 @@ bool Task::initiate(Activity *latest_activity, ResourceTable *resource_table, bo
 
 bool Task::request(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
-    // bool was_request_satisfied = dynamic_cast<Request *>(latest_activity)
-    //  ->dispatch(resource_table, should_check_safety);
-
     int resource_type = static_cast<Request *>(latest_activity)->get_resource_type();
     int request_count = static_cast<Request *>(latest_activity)->get_request_count();
 
@@ -252,10 +249,11 @@ bool Task::request(Activity *latest_activity, ResourceTable *resource_table, int
 
     if (can_satisfy_request)
     {
-        if (resources_owned_.find(resource_type) == resources_owned_.end())
-            resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
-        else
-            resources_owned_.at(resource_type) += request_count;
+        // if (resources_owned_.find(resource_type) == resources_owned_.end())
+        //     resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
+        // else
+        //     resources_owned_.at(resource_type) += request_count;
+        add_resource_owned(resource_type, request_count);
     }
     else
     {
@@ -272,7 +270,7 @@ bool Task::release(Activity *latest_activity, ResourceTable *resource_table)
     int resource_type = static_cast<Release *>(latest_activity)->get_resource_type();
     int release_count = static_cast<Release *>(latest_activity)->get_release_count();
 
-    resources_owned_.at(resource_type) -= release_count;
+    release_resource_owned(resource_type, release_count);
 
     if (resources_owned_.at(resource_type) < 0)
         std::cout << "Debug: [negative resource ownership]; "
@@ -309,10 +307,10 @@ void Task::abort(ResourceTable *resource_table)
     std::cout << "Aborting Task " << id_ << std::endl;
     aborted_ = true;
     terminated_ = true;
-    release_resources(resource_table);
+    release_all_resources(resource_table);
 }
 
-void Task::release_resources(ResourceTable *resource_table)
+void Task::release_all_resources(ResourceTable *resource_table)
 {
     std::map<int, int>::iterator it;
 
@@ -343,6 +341,37 @@ void Task::increment_cycles_waiting(int current_cycle)
         std::cout << " to " << cycles_waiting_ << std::endl;
         return;
     }
+}
+
+void Task::add_resource_owned(int resource_type, int request_count)
+{
+    if (resources_owned_.find(resource_type) == resources_owned_.end())
+        resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
+    else
+        resources_owned_.at(resource_type) += request_count;
+}
+
+void Task::add_resource_owned(Request *request)
+{
+    int resource_type = request->get_resource_type();
+    int request_count = request->get_request_count();
+
+    if (resources_owned_.find(resource_type) == resources_owned_.end())
+        resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
+    else
+        resources_owned_.at(resource_type) += request_count;
+}
+
+void Task::release_resource_owned(int resource_type, int release_count)
+{
+    resources_owned_.at(resource_type) -= release_count;
+}
+
+void Task::release_resource_owned(Release *release)
+{
+    int resource_type = release->get_resource_type();
+    int release_count = release->get_release_count();
+    resources_owned_.at(resource_type) -= release_count;
 }
 
 void Task::print()

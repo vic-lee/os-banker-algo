@@ -27,6 +27,7 @@ public:
 
     void add_new_activity(Activity *activity);
     Activity *get_latest_activity();
+    void do_latest_activity_delay_countdown();
     bool do_latest_activity(ResourceTable *resource_table, int cycle, bool should_check_safety);
     bool is_latest_activity_initiate();
     bool is_latest_activity_request();

@@ -114,6 +114,14 @@ bool Task::determine_latest_activity_type(std::string target_type)
     return false;
 }
 
+void Task::do_latest_activity_delay_countdown()
+{
+    Activity *latest_activity = get_latest_activity();
+
+    if (latest_activity != NULL)
+        latest_activity->update_time_remaining_before_execute();
+}
+
 bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
     bool is_successful = false;
@@ -125,7 +133,7 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool sho
 
     Activity *latest_activity = get_latest_activity();
 
-    latest_activity->update_time_remaining_before_execute();
+    // latest_activity->update_time_remaining_before_execute();
 
     if (latest_activity->is_time_to_execute())
     {

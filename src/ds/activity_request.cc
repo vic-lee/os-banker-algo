@@ -27,7 +27,7 @@ bool Request::dispatch(Task *target_task, ResourceTable *resource_table, bool ch
     else
         target_task->increment_cycles_waiting(cycle);
 
-    return false;
+    return was_successful;
 }
 
 bool Request::is_request_legal(Task *target_task)
@@ -36,10 +36,10 @@ bool Request::is_request_legal(Task *target_task)
 
     if (request_count_ > max_addl_demand)
     {
-        std::cout << "Task " << target_task->id() << "'s request of RT"
-                  << request_resource_type_ << " is not legal;"
-                  << "Requested " << request_count_
-                  << "; MaxAddlDemand: " << max_addl_demand << std::endl;
+        // std::cout << "Task " << target_task->id() << "'s request of RT"
+        //           << request_resource_type_ << " is not legal;"
+        //           << "Requested " << request_count_
+        //           << "; MaxAddlDemand: " << max_addl_demand << std::endl;
         return false;
     }
     return true;

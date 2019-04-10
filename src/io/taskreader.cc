@@ -60,7 +60,7 @@ task::ResourceTable TaskReader::read_in_resources(std::vector<std::string> parse
         resource_table.add(resource);
     }
 
-    resource_table.print();
+    // resource_table.print();
     return resource_table;
 }
 
@@ -108,7 +108,7 @@ std::tuple<task::TaskTable, task::ResourceTable> TaskReader::import()
     {
         std::cout << "Cannot open file." << std::endl;
     }
-    task_table.print();
+    // task_table.print();
     return std::make_tuple(task_table, resource_table);
 }
 

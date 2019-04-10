@@ -56,9 +56,10 @@ void Activity::update_completion_state_after_execute(bool is_successful)
      * immeidately after `time_remaining_` has been updated, but has
      * yet been executed. 
      */
-
     if (is_successful && has_begun_ && time_remaining_ == 0)
+    {
         completed_ = true;
+    }
 }
 
 bool Activity::is_active()
@@ -73,10 +74,10 @@ bool Activity::is_computing()
 
 bool Activity::is_time_to_execute()
 {
-    if (time_remaining_ == 0)
-        std::cout << "Time to execute Task " << target_id << std::endl;
-    else
-        std::cout << "Computing Task " << target_id << std::endl;
+    // if (time_remaining_ == 0)
+    //     std::cout << "Time to execute Task " << target_id << std::endl;
+    // else
+    //     std::cout << "Computing Task " << target_id << std::endl;
     return time_remaining_ == 0;
 }
 
@@ -109,7 +110,8 @@ void Activity::print()
 {
     std::cout << type_ << ":\t"
               << " Target ID: " << target_id
-              << " Delay: " << delay << std::endl;
+              << " Delay: " << delay 
+              << " Completed: " << completed_ << std::endl;
 }
 
 bool Activity::dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle) 

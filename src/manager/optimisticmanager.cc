@@ -25,7 +25,7 @@ void OptimisticManager::do_tasks()
 
 void OptimisticManager::iterate_cycle()
 {
-    std::cout << "\n----- Cycle " << cycle_ << "-" << cycle_ + 1 << " -----" << std::endl;
+    // std::cout << "\n----- Cycle " << cycle_ << "-" << cycle_ + 1 << " -----" << std::endl;
 
     std::map<int, bool> visit_status = create_visit_status_table_for_all_tasks();
 

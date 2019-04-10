@@ -20,7 +20,7 @@ int str_to_int(std::string s)
 std::tuple<Task *, int> TaskTable::get_next_active_task(int prior_id)
 {
     int id = prior_id++;
-    std::cout << "Doing ID " << id << std::endl;
+    // std::cout << "Doing ID " << id << std::endl;
     while (id <= task_table_.size())
     {
         Task *task = access_task_by_id(id);
@@ -49,10 +49,8 @@ void TaskTable::handle_new_initiate(std::vector<std::string> parsed_line)
     int claimed_resource_type = str_to_int(parsed_line[3]);
     int claimed_resource_count = str_to_int(parsed_line[4]);
 
-    Task *task = access_task_by_id(task_id);
-
     task::Claim claim(claimed_resource_type, claimed_resource_count);
-    Initiate *initiate = new Initiate(task_id, claim, task);
+    Initiate *initiate = new Initiate(task_id, claim);
     this->add_new_activity_to_task(initiate);
 }
 

@@ -41,6 +41,7 @@ void Task::set_latest_activity()
 {
     if (aborted_ || terminated_)
     {
+        // std::cout << "Task " << id_ << " is either aborted or terminated" << std::endl;
         latest_activity_index_ = -1;
         return;
     }
@@ -49,9 +50,16 @@ void Task::set_latest_activity()
         if (activities_table_[i]->is_active())
         {
             latest_activity_index_ = i;
+            // std::cout << activities_table_[i]->type() << " activity is active" << std::endl;
             return;
         }
+        else
+        {
+            // std::cout << activities_table_[i]->type() << " activity is NOT active" << std::endl;
+        }
+        
     }
+    std::cout << "Activities table size is " << activities_table_.size() << std::endl;
     latest_activity_index_ = -1;
 }
 
@@ -98,6 +106,9 @@ bool Task::determine_latest_activity_type(std::string target_type)
         return false;
 
     Activity *latest_actvity = get_latest_activity();
+
+    if (latest_actvity == NULL)
+        return false;
 
     if (target_type == "initiate")
         return latest_actvity->is_initiate();
@@ -151,6 +162,8 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool sho
 
 bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
+    return latest_activity->dispatch(this, resource_table, should_check_safety, cycle);
+
     if (latest_activity->is_initiate())
     {
         return initiate(latest_activity, resource_table, should_check_safety);
@@ -203,16 +216,16 @@ bool Task::is_blocked()
 
 void Task::block()
 {
-    if (blocked_)
-        std::cout << "Debug warning: Process is already blocked before setting to block." << std::endl;
+    // if (blocked_)
+    //     std::cout << "Debug warning: Process is already blocked before setting to block." << std::endl;
 
     blocked_ = true;
 }
 
 void Task::unblock()
 {
-    if (!blocked_)
-        std::cout << "Debug warning: Process is already unblocked before disabling block." << std::endl;
+    // if (!blocked_)
+    //     std::cout << "Debug warning: Process is already unblocked before disabling block." << std::endl;
 
     blocked_ = false;
 }
@@ -230,7 +243,7 @@ bool Task::initiate(Activity *latest_activity, ResourceTable *resource_table, bo
     }
 
     add_new_claim(claim);
-    std::cout << "Initiating Task " << id_ << std::endl;
+    // std::cout << "Initiating Task " << id_ << std::endl;
     return true;
 }
 
@@ -249,10 +262,6 @@ bool Task::request(Activity *latest_activity, ResourceTable *resource_table, int
 
     if (can_satisfy_request)
     {
-        // if (resources_owned_.find(resource_type) == resources_owned_.end())
-        //     resources_owned_.insert(std::pair<int, int>(resource_type, request_count));
-        // else
-        //     resources_owned_.at(resource_type) += request_count;
         add_resource_owned(resource_type, request_count);
     }
     else
@@ -272,10 +281,10 @@ bool Task::release(Activity *latest_activity, ResourceTable *resource_table)
 
     release_resource_owned(resource_type, release_count);
 
-    if (resources_owned_.at(resource_type) < 0)
-        std::cout << "Debug: [negative resource ownership]; "
-                  << "Own " << resources_owned_.at(resource_type)
-                  << " of RT" << resource_type << std::endl;
+    // if (resources_owned_.at(resource_type) < 0)
+    //     std::cout << "Debug: [negative resource ownership]; "
+    //               << "Own " << resources_owned_.at(resource_type)
+    //               << " of RT" << resource_type << std::endl;
 
     return true;
 }
@@ -284,7 +293,7 @@ bool Task::terminate(int cycle)
 {
     terminated_ = true;
     termination_cycle_ = cycle;
-    std::cout << "Terminating Task " << id_ << std::endl;
+    // std::cout << "Terminating Task " << id_ << std::endl;
     return true;
 }
 
@@ -293,8 +302,8 @@ void Task::add_new_claim(Claim *claim)
     resources_claimed_.insert(
         std::pair<int, Claim>(claim->claimed_resource_id, *claim));
 
-    std::cout << "Added new claim ";
-    claim->print();
+    // std::cout << "Added new claim ";
+    // claim->print();
 }
 
 bool Task::is_aborted()
@@ -329,16 +338,16 @@ void Task::release_all_resources(ResourceTable *resource_table)
 
 void Task::increment_cycles_waiting(int current_cycle)
 {
-    std::cout << "Incrementing cycle for Task " << id_;
+    // std::cout << "Incrementing cycle for Task " << id_;
     if (latest_cycle_waited_ == -1 || latest_cycle_waited_ < current_cycle)
     {
         latest_cycle_waited_ = current_cycle;
         cycles_waiting_++;
-        std::cout << " to " << cycles_waiting_ << std::endl;
+        // std::cout << " to " << cycles_waiting_ << std::endl;
     }
     else if (latest_cycle_waited_ == current_cycle)
     {
-        std::cout << " to " << cycles_waiting_ << std::endl;
+        // std::cout << " to " << cycles_waiting_ << std::endl;
         return;
     }
 }
@@ -434,7 +443,7 @@ std::vector<int> Task::generate_unmet_demand_vector()
 
         if (resources_owned_.find(resource_id) == resources_owned_.end())
         {
-            std::cout << "Task " << id_ << " has not owned RT" << resource_id << " before." << std::endl;
+            // std::cout << "Task " << id_ << " has not owned RT" << resource_id << " before." << std::endl;
             own_count = 0;
         }
         else
@@ -463,8 +472,8 @@ bool Task::is_request_legal(int request_resource_type, int request_count)
 
     if (request_count > max_addl_demand)
     {
-        std::cout << "Task " << id_ << "'s request of RT"
-                  << request_resource_type << " is not legal;" << std::endl;
+        // std::cout << "Task " << id_ << "'s request of RT"
+        //           << request_resource_type << " is not legal;" << std::endl;
         return false;
     }
     return true;

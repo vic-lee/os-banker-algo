@@ -24,6 +24,15 @@ Task::Task(int id)
 
 bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
+    /**
+     * This function executes a task's latest activity (initiate, request, release, or terminate),
+     * and returns a boolean describing whether an activity was successfully performed. 
+     * 
+     * If there's no activity remaining, the function terminates. 
+     * Otherwise, if the task has no delay remaining (it is time to execute it), an activity 
+     * is executed. The execution success status is returned. 
+     */ 
+
     bool is_successful = false;
 
     set_latest_activity();
@@ -44,6 +53,11 @@ bool Task::do_latest_activity(ResourceTable *resource_table, int cycle, bool sho
 
 bool Task::execute_activity(Activity *latest_activity, ResourceTable *resource_table, int cycle, bool should_check_safety)
 {
+    /**
+     * This function dispatches the latest activity. Dispatch is a polymorphic function 
+     * for classes derived from the Activity class (Initiate, Release, Request, Terminate).
+     */ 
+
     return latest_activity->dispatch(this, resource_table, should_check_safety, cycle);
 }
 
@@ -61,9 +75,18 @@ Activity *Task::get_latest_activity()
 
 void Task::set_latest_activity()
 {
+    /**
+     * This function finds the latest activity associated with a task by updating
+     * the index of the latest activiy. 
+     * 
+     * -1 is the identifier for no active activities exist. 
+     * 
+     * The function is called in many places in the program to ensure that 
+     * functions perform action on the latest activity. 
+     */
+     
     if (aborted_ || terminated_)
     {
-        // std::cout << "Task " << id_ << " is either aborted or terminated" << std::endl;
         latest_activity_index_ = -1;
         return;
     }
@@ -72,15 +95,9 @@ void Task::set_latest_activity()
         if (activities_table_[i]->is_active())
         {
             latest_activity_index_ = i;
-            // std::cout << activities_table_[i]->type() << " activity is active" << std::endl;
             return;
         }
-        else
-        {
-            // std::cout << activities_table_[i]->type() << " activity is NOT active" << std::endl;
-        }
     }
-    std::cout << "Activities table size is " << activities_table_.size() << std::endl;
     latest_activity_index_ = -1;
 }
 
@@ -101,9 +118,6 @@ void Task::add_new_claim(Claim *claim)
 {
     resources_claimed_.insert(
         std::pair<int, Claim>(claim->claimed_resource_id, *claim));
-
-    // std::cout << "Added new claim ";
-    // claim->print();
 }
 
 bool Task::is_aborted()
@@ -138,16 +152,13 @@ void Task::release_all_resources(ResourceTable *resource_table)
 
 void Task::increment_cycles_waiting(int current_cycle)
 {
-    // std::cout << "Incrementing cycle for Task " << id_;
     if (latest_cycle_waited_ == -1 || latest_cycle_waited_ < current_cycle)
     {
         latest_cycle_waited_ = current_cycle;
         cycles_waiting_++;
-        // std::cout << " to " << cycles_waiting_ << std::endl;
     }
     else if (latest_cycle_waited_ == current_cycle)
     {
-        // std::cout << " to " << cycles_waiting_ << std::endl;
         return;
     }
 }
@@ -196,7 +207,6 @@ std::vector<int> Task::generate_unmet_demand_vector()
 
         if (resources_owned_.find(resource_id) == resources_owned_.end())
         {
-            // std::cout << "Task " << id_ << " has not owned RT" << resource_id << " before." << std::endl;
             own_count = 0;
         }
         else
@@ -219,9 +229,7 @@ int Task::check_unmet_demand_for_resource(int resource_id)
 
 bool Task::is_request_legal(int request_resource_type, int request_count)
 {
-    // std::cout << "Ready to check unmet demand" << std::endl;
     int max_addl_demand = check_unmet_demand_for_resource(request_resource_type);
-    // std::cout << "Checked unmet demand" << std::endl;
 
     if (request_count > max_addl_demand)
     {

@@ -70,6 +70,13 @@ bool Manager::is_in_blocked_table(int id)
 
 std::map<int, bool> Manager::create_visit_status_table_for_all_tasks()
 {
+    /**
+     * This function creates a visit table for all tasks. 
+     * 
+     * The table is a mapping between task_id and a boolean describing 
+     * whether the task has been visited. 
+     */
+
     std::map<int, bool> visit_table;
 
     for (int i = 1; i < (task_table_.size() + 1); i++)
@@ -144,6 +151,12 @@ void Manager::do_latest_requests() {}
 
 bool Manager::do_task_latest_activity(task::Task *t)
 {
+    /**
+     * This function groups doing activity and marking the visit status into 
+     * an atomic action. No task should be called to perform an activity 
+     * without marking as visited. 
+     */ 
+
     bool was_successful = t->do_latest_activity(&resource_table_, cycle_, should_check_safety_);
     mark_as_visited(t);
     return was_successful;
@@ -151,6 +164,13 @@ bool Manager::do_task_latest_activity(task::Task *t)
 
 bool Manager::should_visit_task(task::Task *t)
 {
+    /**
+     * We should only perform actions on tasks if they are 
+     * 1) not in the blocked table (they are visited before regular tasks are considered)
+     * 2) not been visited in the cycle (multiple functions may iterate the entire task table)
+     * 3) the task is active (i.e. not terminated or aborted)
+     */
+
     return (!is_in_blocked_table(t->id()) && !has_visited(t) && t->is_active());
 }
 

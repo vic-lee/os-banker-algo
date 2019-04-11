@@ -65,6 +65,12 @@ void Banker::do_latest_requests()
 
 void Banker::do_latest_requests_from_blocked_tasks()
 {
+    /**
+     * This function considers if blocked tasks' requests can be fulfilled. 
+     * If the request is safe and resources are indeed successfully assigned,
+     * the task will be removed from the blocked table.
+     */ 
+
     for (auto &blocked_task : blocked_tasks_table_)
     {
         if (is_request_safe(blocked_task))
@@ -79,6 +85,16 @@ void Banker::do_latest_requests_from_blocked_tasks()
 
 void Banker::do_latest_requests_from_non_blocked_tasks()
 {
+    /**
+     * This function considers if non-blocked tasks' requests can be fulfilled. 
+     * If a request is safe, the request is granted; otherwise, the task is 
+     * blocked and added to the blocked table. 
+     * 
+     * All tasks are in the task table (i.e. blocked table is a subset of tasks
+     * in the task table). Therefore we should only visit tasks in the task 
+     * table but *not* in the blocked table.
+     */ 
+    
     for (int i = 0; i < task_table_.size(); i++)
     {
         int id = i + 1;

@@ -18,6 +18,18 @@ typedef int resource_id, claim_count;
 
 class Task
 {
+
+    /**
+     * This class encapsulates data and actions related to a Task. 
+     * 
+     * A task owns a number of activities, stored in the activities table, 
+     * has claims on a number of resources, stored in the resource claimed table, 
+     * has acquired a number of resources, stored in the resources owned table, 
+     * and has a number of states, (blocked, terminated, aborted).
+     * 
+     * To execute activities, an algorithm asks the TaskTable to delegate the 
+     * task to Task (this class), and this task dispatches the latest activity.
+     */ 
 public:
     Task(int id);
 

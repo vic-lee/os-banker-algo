@@ -8,10 +8,15 @@ class ResourceTable;
 
 class Claim
 {
-  public:
+    /**
+     * This is a simple data structure storing the two elements that define a claim:
+     * what resource is the claim on, and how many units does it claim. 
+     */
+
+public:
     int claimed_resource_id;
     int claim_count;
-    Claim() {};
+    Claim(){};
     Claim(int claimed_resource_id, int claim_count)
     {
         this->claimed_resource_id = claimed_resource_id;

@@ -13,6 +13,10 @@ class Activity
 
     /**
      * This is a base class for Initiate, Request, Release, and Termination. 
+     * 
+     * Dispatch is a polymorphic function that is overriden by the derived 
+     * classes. The function performs each activity's respective action, 
+     * (release resources, terminate the task, etc.).
      */
 
 public:

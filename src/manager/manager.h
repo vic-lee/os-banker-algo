@@ -53,8 +53,6 @@ protected:
 
     std::map<int, bool> create_visit_status_table_for_all_tasks();
 
-    bool is_request_safe(task::Task *task);
-
     void do_latest_initiates();
     void do_latest_terminates();
     void do_latest_releases();

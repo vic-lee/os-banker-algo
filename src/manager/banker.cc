@@ -45,14 +45,14 @@ void Banker::do_tasks()
 
 void Banker::iterate_cycle()
 {
-    before_cycle_setup();       /* Decr. delays */
+    before_cycle_setup(); /* Decr. delays */
 
     do_latest_requests();
     do_latest_releases();
     do_latest_initiates();
     do_latest_terminates();
 
-    after_cycle_teardown();     /* Reset visit table; Release resources; Incr. waiting time */
+    after_cycle_teardown(); /* Reset visit table; Release resources; Incr. waiting time */
 
     cycle_++;
 }
@@ -69,7 +69,7 @@ void Banker::do_latest_requests_from_blocked_tasks()
      * This function considers if blocked tasks' requests can be fulfilled. 
      * If the request is safe and resources are indeed successfully assigned,
      * the task will be removed from the blocked table.
-     */ 
+     */
 
     for (auto &blocked_task : blocked_tasks_table_)
     {
@@ -93,8 +93,8 @@ void Banker::do_latest_requests_from_non_blocked_tasks()
      * All tasks are in the task table (i.e. blocked table is a subset of tasks
      * in the task table). Therefore we should only visit tasks in the task 
      * table but *not* in the blocked table.
-     */ 
-    
+     */
+
     for (int i = 0; i < task_table_.size(); i++)
     {
         int id = i + 1;
@@ -116,6 +116,26 @@ void Banker::do_latest_requests_from_non_blocked_tasks()
             }
         }
     }
+}
+
+bool Banker::is_request_safe(task::Task *task)
+{
+    bool is_request_safe = true;
+    std::vector<int> max_addl_demand = task->generate_unmet_demand_vector();
+    std::vector<int> current_resource_availability = resource_table_.generate_resource_available_vector();
+
+    for (unsigned int i = 0; i < max_addl_demand.size(); i++)
+    {
+        if (max_addl_demand[i] > current_resource_availability[i])
+        {
+            is_request_safe = false;
+            // std::cout << "Request from Task " << task->id() << " is not safe; "
+            //           << "Max addl demand for RT" << i << " is " << max_addl_demand[i] << "; "
+            //           << "Availability: " << current_resource_availability[i] << std::endl;
+        }
+    }
+
+    return is_request_safe;
 }
 
 } // namespace manager

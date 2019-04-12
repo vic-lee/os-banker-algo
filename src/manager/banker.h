@@ -22,5 +22,7 @@ private:
     void do_latest_requests() override;
     void do_latest_requests_from_blocked_tasks();
     void do_latest_requests_from_non_blocked_tasks();
+
+    bool is_request_safe(task::Task *task);
 };
 } // namespace manager

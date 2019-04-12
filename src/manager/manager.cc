@@ -87,26 +87,6 @@ std::map<int, bool> Manager::create_visit_status_table_for_all_tasks()
     return visit_table;
 }
 
-bool Manager::is_request_safe(task::Task *task)
-{
-    bool is_request_safe = true;
-    std::vector<int> max_addl_demand = task->generate_unmet_demand_vector();
-    std::vector<int> current_resource_availability = resource_table_.generate_resource_available_vector();
-
-    for (unsigned int i = 0; i < max_addl_demand.size(); i++)
-    {
-        if (max_addl_demand[i] > current_resource_availability[i])
-        {
-            is_request_safe = false;
-            // std::cout << "Request from Task " << task->id() << " is not safe; "
-            //           << "Max addl demand for RT" << i << " is " << max_addl_demand[i] << "; "
-            //           << "Availability: " << current_resource_availability[i] << std::endl;
-        }
-    }
-
-    return is_request_safe;
-}
-
 void Manager::do_latest_releases()
 {
     for (int i = 0; i < task_table_.size(); i++)

@@ -7,6 +7,7 @@ namespace manager
 
     /**
      * The OptimisticManager class extends the Manager base class. 
+     * 
      * It encapsulates functionalities specific to the FIFO algorithm, notably
      * functions that checks if a deadlock exists and, if so, handles the 
      * deadlock by aborting task(s).

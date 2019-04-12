@@ -144,9 +144,9 @@ void Task::release_all_resources(ResourceTable *resource_table)
         Resource *target = resource_table->find_resource_by_id(resource_type);
         target->add_release_next_cycle(units_owned);
 
-        std::cout << "Task " << id_ << " will release "
-                  << units_owned << " of RT" << resource_type
-                  << " next cycle" << std::endl;
+        // std::cout << "Task " << id_ << " will release "
+        //           << units_owned << " of RT" << resource_type
+        //           << " next cycle" << std::endl;
     }
 }
 

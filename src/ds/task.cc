@@ -68,8 +68,6 @@ Activity *Task::get_latest_activity()
     if (latest_activity_index_ == -1)
         return nullptr;
 
-    // std::cout << "Latest activity type is " << activities_table_[latest_activity_index_]->type() << std::endl;
-
     return activities_table_[latest_activity_index_];
 }
 
@@ -127,7 +125,6 @@ bool Task::is_aborted()
 
 void Task::abort(ResourceTable *resource_table)
 {
-    // std::cout << "Aborting Task " << id_ << std::endl;
     aborted_ = true;
     terminated_ = true;
     release_all_resources(resource_table);
@@ -143,10 +140,6 @@ void Task::release_all_resources(ResourceTable *resource_table)
         int units_owned = it->second;
         Resource *target = resource_table->find_resource_by_id(resource_type);
         target->add_release_next_cycle(units_owned);
-
-        // std::cout << "Task " << id_ << " will release "
-        //           << units_owned << " of RT" << resource_type
-        //           << " next cycle" << std::endl;
     }
 }
 
@@ -234,8 +227,6 @@ bool Task::is_request_legal(int request_resource_type, int request_count)
 
     if (request_count > max_addl_demand)
     {
-        // std::cout << "Task " << id_ << "'s request of RT"
-        //           << request_resource_type << " is not legal;" << std::endl;
         return false;
     }
     return true;
@@ -330,7 +321,6 @@ bool Task::terminate(int cycle)
 {
     terminated_ = true;
     termination_cycle_ = cycle;
-    // std::cout << "Terminating Task " << id_ << std::endl;
     return true;
 }
 

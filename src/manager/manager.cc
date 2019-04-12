@@ -15,78 +15,6 @@ Manager::Manager(task::TaskTable task_table, task::ResourceTable resource_table,
 
 Manager::~Manager() {}
 
-void Manager::iterate_cycle() {}
-
-void Manager::do_tasks() {}
-
-void Manager::print()
-{
-    if (should_check_safety_ == true)
-        std::cout << "\n/******** BANKER ********/" << std::endl;
-    else
-        std::cout << "\n/******** FIFO ********/" << std::endl;
-
-    int cumulative_time_spent = 0;
-    int cumulative_time_waiting = 0;
-
-    for (int i = 1; i < (task_table_.size() + 1); i++)
-    {
-        task::Task *current_task = task_table_.access_task_by_id(i);
-        current_task->print_finished_status();
-
-        int time_spent, time_waiting;
-        std::tie(time_spent, time_waiting) = current_task->get_print_statistic();
-        cumulative_time_spent += time_spent;
-        cumulative_time_waiting += time_waiting;
-    }
-    std::cout << "Total\t    "
-              << std::setw(4) << cumulative_time_spent
-              << std::setw(4) << cumulative_time_waiting
-              << std::setw(4) << (int)nearbyint(100 * cumulative_time_waiting / ((double)cumulative_time_spent)) << "%\n"
-              << std::endl;
-}
-
-void Manager::remove_from_blocked_table(task::Task *t)
-{
-    for (unsigned int i = 0; i < blocked_tasks_table_.size(); i++)
-    {
-        if (blocked_tasks_table_[i]->id() == t->id())
-            blocked_tasks_table_.erase(blocked_tasks_table_.begin() + i);
-    }
-}
-
-void Manager::block(task::Task *t)
-{
-    blocked_tasks_table_.push_back(t);
-}
-
-bool Manager::is_in_blocked_table(int id)
-{
-    for (auto &blocked_task : blocked_tasks_table_)
-    {
-        if (blocked_task->id() == id)
-            return true;
-    }
-    return false;
-}
-
-std::map<int, bool> Manager::create_visit_status_table_for_all_tasks()
-{
-    /**
-     * This function creates a visit table for all tasks. 
-     * 
-     * The table is a mapping between task_id and a boolean describing 
-     * whether the task has been visited. 
-     */
-
-    std::map<int, bool> visit_table;
-
-    for (int i = 1; i < (task_table_.size() + 1); i++)
-        visit_table.insert(std::pair<int, bool>(i, false));
-
-    return visit_table;
-}
-
 void Manager::do_latest_releases()
 {
     for (int i = 0; i < task_table_.size(); i++)
@@ -156,6 +84,47 @@ bool Manager::should_visit_task(task::Task *t)
     return (!is_in_blocked_table(t->id()) && !has_visited(t) && t->is_active());
 }
 
+void Manager::block(task::Task *t)
+{
+    blocked_tasks_table_.push_back(t);
+}
+
+bool Manager::is_in_blocked_table(int id)
+{
+    for (auto &blocked_task : blocked_tasks_table_)
+    {
+        if (blocked_task->id() == id)
+            return true;
+    }
+    return false;
+}
+
+void Manager::remove_from_blocked_table(task::Task *t)
+{
+    for (unsigned int i = 0; i < blocked_tasks_table_.size(); i++)
+    {
+        if (blocked_tasks_table_[i]->id() == t->id())
+            blocked_tasks_table_.erase(blocked_tasks_table_.begin() + i);
+    }
+}
+
+std::map<int, bool> Manager::create_visit_status_table_for_all_tasks()
+{
+    /**
+     * This function creates a visit table for all tasks. 
+     * 
+     * The table is a mapping between task_id and a boolean describing 
+     * whether the task has been visited. 
+     */
+
+    std::map<int, bool> visit_table;
+
+    for (int i = 1; i < (task_table_.size() + 1); i++)
+        visit_table.insert(std::pair<int, bool>(i, false));
+
+    return visit_table;
+}
+
 bool Manager::has_visited(task::Task *t)
 {
     return visit_table_.at(t->id());
@@ -200,6 +169,37 @@ void Manager::decr_delay_countdowns()
         int id = i + 1;
         task_table_.access_task_by_id(id)->do_latest_activity_delay_countdown();
     }
+}
+
+void Manager::iterate_cycle() {}
+
+void Manager::do_tasks() {}
+
+void Manager::print()
+{
+    if (should_check_safety_ == true)
+        std::cout << "\n/******** BANKER ********/" << std::endl;
+    else
+        std::cout << "\n/******** FIFO ********/" << std::endl;
+
+    int cumulative_time_spent = 0;
+    int cumulative_time_waiting = 0;
+
+    for (int i = 1; i < (task_table_.size() + 1); i++)
+    {
+        task::Task *current_task = task_table_.access_task_by_id(i);
+        current_task->print_finished_status();
+
+        int time_spent, time_waiting;
+        std::tie(time_spent, time_waiting) = current_task->get_print_statistic();
+        cumulative_time_spent += time_spent;
+        cumulative_time_waiting += time_waiting;
+    }
+    std::cout << "Total\t    "
+              << std::setw(4) << cumulative_time_spent
+              << std::setw(4) << cumulative_time_waiting
+              << std::setw(4) << (int)nearbyint(100 * cumulative_time_waiting / ((double)cumulative_time_spent)) << "%\n"
+              << std::endl;
 }
 
 } // namespace manager

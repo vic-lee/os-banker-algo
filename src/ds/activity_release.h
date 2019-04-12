@@ -10,6 +10,18 @@ class ResourceTable;
 
 class Release : public Activity
 {
+
+    /**
+     * The Release class is a subclass of the Activity class. 
+     * 
+     * A release is defined if and only if resource release type and number
+     * of units to release are specified. 
+     * 
+     * The dispatch function, overriden here, is responsible for carrying 
+     * out the Release. This entails updating both the resource table and 
+     * the task's resource ownership table. 
+     */
+
 public:
     Release(int target_id, int delay, int release_resource_type, int release_count);
     void print() override;

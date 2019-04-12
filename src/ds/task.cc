@@ -152,6 +152,7 @@ void Task::release_all_resources(ResourceTable *resource_table)
 
 void Task::increment_cycles_waiting(int current_cycle)
 {
+    /* Only increment if this function has not been called this cycle */
     if (latest_cycle_waited_ == -1 || latest_cycle_waited_ < current_cycle)
     {
         latest_cycle_waited_ = current_cycle;

@@ -11,9 +11,17 @@ namespace manager
 
 class Manager
 {
+
+    /**
+     * The Manager class is a base class for the FIFO and Banker algorithm. 
+     * It encapsulates shared functionalities and data members for the two
+     * algorithms. 
+     */
+
 public:
     Manager(task::TaskTable task_table, task::ResourceTable resource_table, bool debug);
     virtual ~Manager();
+    virtual void iterate_cycle();
     virtual void do_tasks();
     virtual void print();
 
@@ -51,8 +59,6 @@ protected:
     void do_latest_terminates();
     void do_latest_releases();
     virtual void do_latest_requests();
-
-    bool do_one_latest_request(task::Task *task, bool from_blocked);
 };
 } // namespace manager
 

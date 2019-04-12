@@ -15,6 +15,8 @@ Manager::Manager(task::TaskTable task_table, task::ResourceTable resource_table,
 
 Manager::~Manager() {}
 
+void Manager::iterate_cycle() {}
+
 void Manager::do_tasks() {}
 
 void Manager::print()
@@ -96,9 +98,9 @@ bool Manager::is_request_safe(task::Task *task)
         if (max_addl_demand[i] > current_resource_availability[i])
         {
             is_request_safe = false;
-            std::cout << "Request from Task " << task->id() << " is not safe; "
-                      << "Max addl demand for RT" << i << " is " << max_addl_demand[i] << "; "
-                      << "Availability: " << current_resource_availability[i] << std::endl;
+            // std::cout << "Request from Task " << task->id() << " is not safe; "
+            //           << "Max addl demand for RT" << i << " is " << max_addl_demand[i] << "; "
+            //           << "Availability: " << current_resource_availability[i] << std::endl;
         }
     }
 
@@ -155,7 +157,7 @@ bool Manager::do_task_latest_activity(task::Task *t)
      * This function groups doing activity and marking the visit status into 
      * an atomic action. No task should be called to perform an activity 
      * without marking as visited. 
-     */ 
+     */
 
     bool was_successful = t->do_latest_activity(&resource_table_, cycle_, should_check_safety_);
     mark_as_visited(t);

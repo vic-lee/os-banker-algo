@@ -8,6 +8,19 @@
 namespace task
 {
 
+    /**
+     * The Initiate class is a subclass of the Activity class. 
+     * 
+     * Critically, one Initiate is responsible for initiating one claim
+     * associated with a task. As such, this class has a data member that
+     * stores a claim. See claim.h for the Claim class's functionalities. 
+     * 
+     * The dispatch function, overriden here, is responsible for carrying 
+     * out the Initiate (i.e. registering a new claim in a task). The function 
+     * checks if the claim is valid (i.e claim < max resource unit count)
+     * if necessary. 
+     */
+
 class Initiate : public Activity
 {
 public:

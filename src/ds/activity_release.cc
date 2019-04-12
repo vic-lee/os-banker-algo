@@ -14,6 +14,16 @@ Release::Release(int target_id, int delay, int release_resource_type, int releas
 
 bool Release::dispatch(Task *target_task, ResourceTable *resource_table, bool check_legal, int cycle)
 {
+    /**
+     * This function releases resources. 
+     * 
+     * Releasing a resource is composed of two actions: 
+     * 
+     * 1. Adding the number of units restored back to the resource table (Available next cycle)
+     * 
+     * 2. Removing the number of units from the Task's resource ownership table. 
+     */
+
     resource_table->handle_new_release(this);
 
     target_task->release_resource_owned(this);

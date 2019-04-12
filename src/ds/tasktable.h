@@ -11,8 +11,8 @@ class TaskTable
 {
     /**
      * This class stores all the tasks in the system. To perform actions on 
-     * tasks or activities associated with a task, the algorithm talks to
-     * the TaskTable first. The table then delegates the thing to do to 
+     * tasks or activities associated with a task, the algorithm (FIFO or Banker) 
+     * talks to the TaskTable first. The table then delegates the thing to do to 
      * the correct Task (identified through the tasks' IDs).
      */
 

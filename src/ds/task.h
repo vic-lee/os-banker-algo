@@ -30,6 +30,7 @@ class Task
      * To execute activities, an algorithm asks the TaskTable to delegate the 
      * task to Task (this class), and this task dispatches the latest activity.
      */ 
+    
 public:
     Task(int id);
 

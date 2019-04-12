@@ -14,9 +14,9 @@ bool Claim::is_claim_legal(ResourceTable *resource_table)
 
     if (!is_legal)
     {
-        std::cout << "Claim of " << claim_count
-                  << " RT" << claimed_resource_id << " is not legal; "
-                  << "Total unit count: " << max_num_of_units << std::endl;
+        // std::cout << "Claim of " << claim_count
+        //           << " RT" << claimed_resource_id << " is not legal; "
+        //           << "Total unit count: " << max_num_of_units << std::endl;
     }
 
     return is_legal;

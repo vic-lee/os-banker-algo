@@ -43,7 +43,7 @@ void OptimisticManager::iterate_cycle()
 
     while (does_deadlock_exist())   /* Tasks are aborted until a deadlock no longer exist. */
     {
-        std::cout << "Deadlocked!" << std::endl;
+        // std::cout << "Deadlocked!" << std::endl;
         handle_deadlock();
     }
 

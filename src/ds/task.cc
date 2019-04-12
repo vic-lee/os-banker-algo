@@ -127,7 +127,7 @@ bool Task::is_aborted()
 
 void Task::abort(ResourceTable *resource_table)
 {
-    std::cout << "Aborting Task " << id_ << std::endl;
+    // std::cout << "Aborting Task " << id_ << std::endl;
     aborted_ = true;
     terminated_ = true;
     release_all_resources(resource_table);
